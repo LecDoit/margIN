@@ -1,0 +1,58 @@
+{
+  "homepage": "http://LecDoit.github.io/margIN",
+  "proxy": "http://localhost:10000",
+  "name": "margIN",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@hookform/error-message": "^2.0.1",
+    "@hookform/resolvers": "^3.9.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.7",
+    "chart.js": "^4.4.2",
+    "faker": "^6.6.6",
+    "framer-motion": "^11.2.13",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.52.1",
+    "react-router-dom": "^6.23.1",
+    "react-scripts": "5.0.1",
+    "react-use-websocket": "^4.5.0",
+    "web-vitals": "^2.1.4",
+    "ws": "^8.16.0",
+    "yup": "^1.4.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "gh-pages": "^6.1.1"
+  }
+}
