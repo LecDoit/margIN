@@ -4,6 +4,7 @@ import axios from'axios';
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import WebSocket from '../components/WebSocket'
+import WebSocket2 from '../components/WebSocket2'
 import Navbar from '../components/Navbar'
 import { useStocksContext } from "../hooks/useStocksContext";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -44,7 +45,7 @@ const Home = () => {
           const json = await response.json()
           if (response.ok){
 
-            console.log(json.stocks)
+            // console.log(json.stocks)
             dispatch({type:"SET_STOCKS",payload:json.stocks})
             setLoaded(true)
           }
@@ -93,7 +94,8 @@ const Home = () => {
         home
         <div>
 
-        { loaded ? <WebSocket user={userXtb} pwd = {passwordXtb}/> :<div></div>}
+        {/* { loaded ? <WebSocket user={userXtb} pwd = {passwordXtb}/> :<div></div>} */}
+        { loaded ? <WebSocket2 user={userXtb} pwd = {passwordXtb}/> :<div></div>}
 
 
         </div>

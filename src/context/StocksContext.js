@@ -8,7 +8,7 @@ export const stocksReducer = (state,action)=>{
     switch (action.type){
         case 'SET_STOCKS':
             // console.log('SET STOCKS');
-            console.log(action.payload)
+            // console.log(action.payload)
             return {
                 
                 stocks:action.payload

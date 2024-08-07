@@ -1,65 +1,14 @@
 import React,{useEffect,useState,useCallback} from 'react';
-import { isCompositeComponent } from 'react-dom/test-utils';
+
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { useStocksContext } from "../hooks/useStocksContext";
 import LineChart from "./LineChart"
 import StockSearch from './StockSearch';
 
+import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '../helpers/webSocketHelpers'
 
 
-const chartRangeFactory = (start,end,symbol,ticks,period)=>{
-    const chartRange = {
-        "command": "getChartRangeRequest",
-        "arguments": {
-            "info": {
-                "end": end,
-                "period": period,
-                "start": start,
-                "symbol": symbol,
-                "ticks": ticks
-            }
-        }
-    }
-
-    return chartRange
-}
-
-const lineChartFactory = (arg,arg2)=>{
-
-    const labels = []
-    const datasets = [{
-        label:arg2.symbol,
-        data:[],
-        backgroundColor:["magenta"],
-        borderColor:'black',
-        borderWidth:2
-        
-    }]
-
-    // const year = new Date(arg.returnData.rateInfos[0].ctm).getFullYear()
-    // const month = new Date(arg.returnData.rateInfos[0].ctm).getMonth()
-
-   
-    for (let i = 0;i<arg.returnData.rateInfos.length;i++){
-        const year = new Date(arg.returnData.rateInfos[i].ctm).getFullYear()
-        const month = new Date(arg.returnData.rateInfos[i].ctm).getMonth()
-        const open = (arg.returnData.rateInfos[i].open)
-        const combine = `${year}`+`,`+`${month}`
-        labels.push(combine)
-        datasets[0].data.push(open)
-        
-    
-    }
-
-    const chartjsObj = {
-        labels:labels,
-        datasets:datasets
-
-    }
-
-    return chartjsObj
-}
 
 function WebSocket({user,pwd}) {
 
@@ -84,7 +33,23 @@ function WebSocket({user,pwd}) {
 
     const { sendMessage,sendJsonMessage, lastMessage, readyState ,lastJsonMessage} = useWebSocket(socketUrl,{
         onOpen: ()=> console.log('opened'),
-        shouldReconnect: (CloseEvent)=>true,
+        onClose: ()=> console.log('closed'),
+        // onMessage: (e)=>console.log(e)
+        shouldReconnect: (closeEvent)=>true,
+        heartbeat: {
+            message:`{
+                "command": "ping"
+            }`,
+            
+            // {
+            //     "command": "ping",
+            //     "streamSessionId": `${logId.streamSessionId}`
+            // },
+            returnMessage: 'pong',
+            timeout: 60000, // 1 minute, if no response is received, the connection will be closed
+            interval: 5000, // every 25 seconds, a ping message will be sent
+          },
+        
     });
     
     const connectionStatus = {
@@ -101,33 +66,12 @@ function WebSocket({user,pwd}) {
 
     
 
-    
-
-    const getAllSymbols = {"command":"getAllSymbols"}
-    const getEurUSD = {
-        "command": "getSymbol",
-        "arguments": {
-            "symbol": "EURPLN"
-        }
-    }
-
-
-
-    const logIn = {
-        "command": "login",
-        "arguments": {
-            "userId": user,
-            "password": pwd,
-
-        }
-    }
-
 // CATCHING MESSAGES CONTROLLER
     
     useEffect(() => {
 
         if (lastMessage !== null) {
-        setMessageHistory((prev) => prev.concat(lastJsonMessage))
+            setMessageHistory((prev) => prev.concat(lastJsonMessage))
 
             if (operation==='login'){
                 setLogId((lastJsonMessage))              
@@ -157,7 +101,7 @@ function WebSocket({user,pwd}) {
 
         }        
 
-        
+    // console.log(lastJsonMessage)        
     }, [lastMessage]);
 
 
@@ -177,7 +121,7 @@ function WebSocket({user,pwd}) {
 
         // geting All Symbols
         if (operation===''){
-            sendJsonMessage(logIn)
+            sendJsonMessage(logIn(user,pwd))
             setOperation('login')  
             // console.log('1. it should be first')
         } else if (operation==='getAllSymbolsReceived' ){
@@ -234,23 +178,33 @@ function WebSocket({user,pwd}) {
 
     const printAllSymbols = ()=>{
         console.log({readyToBeSent,stocks,xtbStocks,operation})
+        // console.log(logId.streamSessionId)
+        
 
        
 
     }
     useEffect(()=>{
+        // console.log("1",xtbStocks)
+        // if (xtbStocks.status===undefined){
+        //     console.log("2",xtbStocks)
+        //     setOperation('')
+            
+        // } else {
+
         if (stocks.length===xtbStocks.length){
             // console.log('cos tutaj sie dzieje tutaj ma byc rowna dlugosc i loopuje')
             setReadyToBeSent([])
            
             for (let i =0;i<stocks.length;i++){
-              
-          
+                // console.log("3",xtbStocks)
                 setReadyToBeSent((prevState)=>([...prevState,lineChartFactory(xtbStocks[i],stocks[i])]))  
-              
-             }
         
+             }
+
+            
         }
+    // }
     },[stocks,xtbStocks])
 
     useEffect(()=>{
