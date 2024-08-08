@@ -42,7 +42,6 @@ const useWebSocketHook = (xtbMessageArg) => {
                                               
                                                       }
 
-
     const { sendMessage,sendJsonMessage, lastMessage, readyState ,lastJsonMessage} = useWebSocket(socketUrl,{
         // onOpen: ()=> console.log('opened'),
         // onClose: ()=> console.log('closed'),
@@ -52,21 +51,21 @@ const useWebSocketHook = (xtbMessageArg) => {
         
     });
 
-    const connectionStatus = {
-        [ReadyState.CONNECTING]: 'Connecting',
-        [ReadyState.OPEN]: 'Open',
-        [ReadyState.CLOSING]: 'Closing',
-        [ReadyState.CLOSED]: 'Closed',
-        [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-      }[readyState];
+    // const connectionStatus = {
+    //     [ReadyState.CONNECTING]: 'Connecting',
+    //     [ReadyState.OPEN]: 'Open',
+    //     [ReadyState.CLOSING]: 'Closing',
+    //     [ReadyState.CLOSED]: 'Closed',
+    //     [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+    //   }[readyState];
 
 //  get the XTB credentials from API
     useEffect(() => {
-        console.log('initial')
+        // console.log('initial')
 
         if (user){
             fetchCredentials()
-            console.log('fetching crede and setting up the argument to send')
+            // console.log('fetching crede and setting up the argument to send')
         }
     }, []);
 
@@ -83,17 +82,17 @@ const useWebSocketHook = (xtbMessageArg) => {
 
         // for streamSession ID message
         if(lastJsonMessage?.status===true && lastJsonMessage !== undefined && lastJsonMessage?.streamSessionId){
-            console.log('this is happening')
+            // console.log('this is happening')
             setStreamSessionId(lastJsonMessage.streamSessionId)
         } 
 
         // for any other requested Data
         if  (lastJsonMessage?.returnData  ){
             setData(lastJsonMessage)   
-            console.log('what is happening here?',lastJsonMessage)
+            // console.log('what is happening here?',lastJsonMessage)
         }
 
-        console.log(lastJsonMessage)
+        // console.log(lastJsonMessage)
         
     },[lastJsonMessage,sendJsonMessage])
 
@@ -112,6 +111,7 @@ const useWebSocketHook = (xtbMessageArg) => {
 
     //     console.log(data)
     // },[data])
+
 
 
   return {data,error}

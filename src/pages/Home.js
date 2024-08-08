@@ -4,13 +4,15 @@ import axios from'axios';
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import WebSocket from '../components/WebSocket'
-import WebSocket2 from '../components/WebSocket2'
 import Navbar from '../components/Navbar'
 import { useStocksContext } from "../hooks/useStocksContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 import {StockDetails} from '../components/Stock'
 import Loading from '../components/Loading'
 import { useSignup } from '../hooks/useSignup'
+
+import StockSearch from "../components/StockSearch";
+import StockGroup from "../components/StockGroup";
 
 const Home = () => {
 
@@ -77,7 +79,7 @@ const Home = () => {
 
         if (user){
             fetchStocks()
-            fetchCredentials()
+            // fetchCredentials()
         }
 
     },[dispatch,user])
@@ -95,7 +97,10 @@ const Home = () => {
         <div>
 
         {/* { loaded ? <WebSocket user={userXtb} pwd = {passwordXtb}/> :<div></div>} */}
-        { loaded ? <WebSocket2 user={userXtb} pwd = {passwordXtb}/> :<div></div>}
+        { loaded ? <StockSearch/> :<div>Stock Search placeholder</div>}
+        {loaded ? <StockGroup/>:<div>Stock Group placeholder</div>}
+        
+  
 
 
         </div>

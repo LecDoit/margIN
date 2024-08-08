@@ -16,7 +16,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 
 
 
-function LineChart({chartData,userProps,pwd,stock}) {
+function LineChart({chartData,stock}) {
 
     const {stocks,dispatch} = useStocksContext()
     const {user} = useAuthContext()
@@ -43,173 +43,174 @@ function LineChart({chartData,userProps,pwd,stock}) {
 
 
 
-    useState(()=>{
-        if (stock===undefined){
+    // useState(()=>{
+    //     if (stock===undefined){
 
-        }else {
-            setBuy(Number(stock.buy))
-            setSell(Number(stock.sell))
-            setSymbols(stock.symbol)
-            setPeriod(stock.period)
-            setTicks(stock.ticks)
-            setStartDate(stock.start)
-            setEndDate(new Date().getTime())
-            if (stock.buy===0){
-            } else {
-            setBuyLine({beforeDatasetsDraw(chart){
-                            const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
-                            ctx.save();
+    //     }else {
+    //         setBuy(Number(stock.buy))
+    //         setSell(Number(stock.sell))
+    //         setSymbols(stock.symbol)
+    //         setPeriod(stock.period)
+    //         setTicks(stock.ticks)
+    //         setStartDate(stock.start)
+    //         setEndDate(new Date().getTime())
+    //         if (stock.buy===0){
+    //         } else {
+    //         setBuyLine({beforeDatasetsDraw(chart){
+    //                         const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
+    //                         ctx.save();
 
-                            // success line
-                            ctx.strokeStyle = 'green';
+    //                         // success line
+    //                         ctx.strokeStyle = 'green';
 
-                            ctx.strokeRect(left,y.getPixelForValue(stock.buy),width,0)
-                            ctx.restore()
+    //                         ctx.strokeRect(left,y.getPixelForValue(stock.buy),width,0)
+    //                         ctx.restore()
 
-                            // success backgroud
-                            ctx.fillStyle = 'rgba(0,200,0,0.2'
-                            ctx.fillRect(left,bottom,width,y.getPixelForValue(stock.buy)-bottom)
-                            ctx.restore()
+    //                         // success backgroud
+    //                         ctx.fillStyle = 'rgba(0,200,0,0.2'
+    //                         ctx.fillRect(left,bottom,width,y.getPixelForValue(stock.buy)-bottom)
+    //                         ctx.restore()
 
-                            // success text
-                            ctx.font = '12px Arial'
-                            ctx.fillStyle = ('green')
-                            ctx.fillText('Buy', width,y.getPixelForValue(stock.buy))
+    //                         // success text
+    //                         ctx.font = '12px Arial'
+    //                         ctx.fillStyle = ('green')
+    //                         ctx.fillText('Buy', width,y.getPixelForValue(stock.buy))
 
 
         
-                            }   
-                        })
-                    }
-            if (stock.sell===0){
+    //                         }   
+    //                     })
+    //                 }
+    //         if (stock.sell===0){
 
-            } else{
-            setSellLine({beforeDatasetsDraw(chart){
-                            const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
-                            ctx.save();
+    //         } else{
+    //         setSellLine({beforeDatasetsDraw(chart){
+    //                         const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
+    //                         ctx.save();
 
-                            //success line
-                            ctx.strokeStyle = 'red';
-                            ctx.strokeRect(left,y.getPixelForValue(stock.sell),width,0)
-                            ctx.restore()
+    //                         //success line
+    //                         ctx.strokeStyle = 'red';
+    //                         ctx.strokeRect(left,y.getPixelForValue(stock.sell),width,0)
+    //                         ctx.restore()
 
 
-                            // success backgroud
+    //                         // success backgroud
 
-                            ctx.fillStyle = 'rgba(255,0,0,0.2'
-                            ctx.fillRect(left,top,width,y.getPixelForValue(stock.sell)-top)
-                            ctx.restore()
+    //                         ctx.fillStyle = 'rgba(255,0,0,0.2'
+    //                         ctx.fillRect(left,top,width,y.getPixelForValue(stock.sell)-top)
+    //                         ctx.restore()
 
-                            // success text
-                            ctx.font = '12px Arial'
-                            ctx.fillStyle = ('red')
-                            ctx.fillText('Sell', width,y.getPixelForValue(stock.sell))
+    //                         // success text
+    //                         ctx.font = '12px Arial'
+    //                         ctx.fillStyle = ('red')
+    //                         ctx.fillText('Sell', width,y.getPixelForValue(stock.sell))
 
           
-                            }   
-                        })
-            }
-        }
-    },[stock,stocks])
+    //                         }   
+    //                     })
+    //         }
+    //     }
+    // },[stock,stocks])
 
 
 
-    const handleClickDeleteStock = async (e) =>{
+    // const handleClickDeleteStock = async (e) =>{
  
-        const filteredArray = stocks.filter((s)=>s._id !== stock._id)
-        const currObj = {email:user.email,stocks:filteredArray}
+    //     const filteredArray = stocks.filter((s)=>s._id !== stock._id)
+    //     const currObj = {email:user.email,stocks:filteredArray}
 
 
-        e.preventDefault();
-        axios.patch('https://xtbbackend.onrender.com/stocks/deleteStock',
-        // axios.patch('http://localhost:10000/stocks/deleteStock',
+    //     e.preventDefault();
+    //     axios.patch('https://xtbbackend.onrender.com/stocks/deleteStock',
+    //     // axios.patch('http://localhost:10000/stocks/deleteStock',
         
-        currObj,
-        {
-            headers:{
-            'Content-Type':'application/json',
-            'Authorization':`Bearer ${user.token}`
-            }
-          }
-        )
-            .then((response)=>{
-                // console.log(response.data)
-                const json = response.data.stocks
-                dispatch({type:'DELETE_STOCK',payload:json}) 
+    //     currObj,
+    //     {
+    //         headers:{
+    //         'Content-Type':'application/json',
+    //         'Authorization':`Bearer ${user.token}`
+    //         }
+    //       }
+    //     )
+    //         .then((response)=>{
+    //             // console.log(response.data)
+    //             const json = response.data.stocks
+    //             dispatch({type:'DELETE_STOCK',payload:json}) 
            
 
-            })
+    //         })
             
 
         
 
 
-    }
+    // }
 
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        const endDateYear = new Date(endDate).getFullYear()
-        const endDateMonth = new Date(endDate).getMonth()+1
-        const endDateDay = new Date(endDate).getDay()
+    //     const endDateYear = new Date(endDate).getFullYear()
+    //     const endDateMonth = new Date(endDate).getMonth()+1
+    //     const endDateDay = new Date(endDate).getDay()
 
-        setLastYear(new Date(`${endDateYear-1}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-        setLast5Year(new Date(`${endDateYear-5}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-        setLast10Year(new Date(`${endDateYear-10}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-        setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
+    //     setLastYear(new Date(`${endDateYear-1}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+    //     setLast5Year(new Date(`${endDateYear-5}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+    //     setLast10Year(new Date(`${endDateYear-10}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+    //     setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
 
 
-    },[endDate])
+    // },[endDate])
     
 
-    const handleSetPrice = (e)=>{
-        e.preventDefault()
+    // const handleSetPrice = (e)=>{
+    //     e.preventDefault()
 
 
 
-    }
+    // }
 
-    const updateUser = async (e)=>{
-        e.preventDefault()
+    // const updateUser = async (e)=>{
+    //     e.preventDefault()
 
-        const filteredArray = stocks.filter((s)=>s._id !== stock._id)
+    //     const filteredArray = stocks.filter((s)=>s._id !== stock._id)
 
-        stock.buy=buy
-        stock.sell=sell
-        stock.period=period
-        stock.ticks=ticks
-        stock.start=startDate
+    //     stock.buy=buy
+    //     stock.sell=sell
+    //     stock.period=period
+    //     stock.ticks=ticks
+    //     stock.start=startDate
 
-        filteredArray.push(stock)
+    //     filteredArray.push(stock)
  
 
-        axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
-        // axios.patch('http://localhost:10000/stocks/updateUserSellNBuy',
+    //     axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
+    //     // axios.patch('http://localhost:10000/stocks/updateUserSellNBuy',
         
         
-        {"email":user.email,"stocks":filteredArray},
-        {
-            headers:{
-            'Content-Type':'application/json',
-            'Authorization':`Bearer ${user.token}`
-            }
-        }
+    //     {"email":user.email,"stocks":filteredArray},
+    //     {
+    //         headers:{
+    //         'Content-Type':'application/json',
+    //         'Authorization':`Bearer ${user.token}`
+    //         }
+    //     }
 
-        )
-            .then((response)=>{
+    //     )
+    //         .then((response)=>{
 
-                const json = response.data.stocks
-                dispatch({type:`DELETE_STOCK`,payload:json})
+    //             const json = response.data.stocks
+    //             dispatch({type:`DELETE_STOCK`,payload:json})
              
 
-            })
+    //         })
 
                
-    }
+    // }
 
     useEffect(()=>{
+        console.log(chartData,stock)
 
-    },[stocks])
+    },[stocks,chartData])
 
     const getDetails = () =>{
 
@@ -219,7 +220,7 @@ function LineChart({chartData,userProps,pwd,stock}) {
 
     return(
         <div>
-        {stock ?  <div style={{width:300}}>
+        {/* {stock ?  <div style={{width:300}}>
 
             <button onClick={handleClickDeleteStock}>Delete</button>
             <Line data={chartData}  plugins={
@@ -281,7 +282,7 @@ function LineChart({chartData,userProps,pwd,stock}) {
             </div>
         </div> 
         
-        : <div>no</div>}
+        : <div>no</div>} */}
 
         </div>
     )
