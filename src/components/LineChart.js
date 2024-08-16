@@ -12,15 +12,17 @@ import {Chart as ChartJS,
 
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
+import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '../helpers/webSocketHelpers'
 
 
 
 
-function LineChart({chartData,stock}) {
+function LineChart({chartData,stock,chartRangeArgument,refreshFunc}) {
 
     const {stocks,dispatch} = useStocksContext()
     const {user} = useAuthContext()
 
+    const [particularStock,setParticularStock] = useState('')
     const [buy,setBuy] = useState(0)
     const [sell,setSell] = useState(0)
     const [period,setPeriod] = useState(0)
@@ -29,7 +31,7 @@ function LineChart({chartData,stock}) {
     const [symbol,setSymbols] = useState('')
     const [buyLine,setBuyLine] = useState('')
     const [sellLine,setSellLine] = useState('')
-    const [showDetails,setShowDetails] = useState(false)
+    const [showDetails,setShowDetails] = useState(true)
 
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
@@ -39,199 +41,231 @@ function LineChart({chartData,stock}) {
     const [last10Year, setLast10Year] = useState('')
     const [lastMonth, setLastMonth] = useState('')
 
+
+    const [test, setTest] = useState('')
+
     // const startDate = new Date('January 1, 2022').getTime()
+    useEffect(()=>{
+        console.log('line chart refreshed')
+        console.log(chartRangeArgument.arguments.info)
+      },[chartRangeArgument])
+  
 
 
 
-    // useState(()=>{
-    //     if (stock===undefined){
+    const returnStockProp = (prop)=>{
+        let returnVal
+        stocks.filter((stock)=>{
+            if (stock.symbol === chartRangeArgument.arguments.info.symbol){
+                returnVal = stock[prop]
+            }
+        })
+        return returnVal
 
-    //     }else {
-    //         setBuy(Number(stock.buy))
-    //         setSell(Number(stock.sell))
-    //         setSymbols(stock.symbol)
-    //         setPeriod(stock.period)
-    //         setTicks(stock.ticks)
-    //         setStartDate(stock.start)
-    //         setEndDate(new Date().getTime())
-    //         if (stock.buy===0){
-    //         } else {
-    //         setBuyLine({beforeDatasetsDraw(chart){
-    //                         const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
-    //                         ctx.save();
+    }
 
-    //                         // success line
-    //                         ctx.strokeStyle = 'green';
+    useState(()=>{
+        console.log(stock)
+       
+            console.log('it runs as well')
+            setBuy(returnStockProp("buy"))
+            setSell(returnStockProp("sell"))
+            setSymbols(chartRangeArgument.arguments.info.symbol)
+            setParticularStock(stocks.filter((stock)=> {
+                return stock.symbol === chartRangeArgument.arguments.info.symbol}))
+            
+            setPeriod(chartRangeArgument.arguments.info.period)
+            setTicks(chartRangeArgument.arguments.info.ticks)
+            setStartDate(chartRangeArgument.arguments.info.start)
+            setEndDate(new Date().getTime())
+            if (buy!==0){
+            } else {
+            setBuyLine({beforeDatasetsDraw(chart){
+                            const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
+                            ctx.save();
 
-    //                         ctx.strokeRect(left,y.getPixelForValue(stock.buy),width,0)
-    //                         ctx.restore()
+                            // success line
+                            ctx.strokeStyle = 'green';
 
-    //                         // success backgroud
-    //                         ctx.fillStyle = 'rgba(0,200,0,0.2'
-    //                         ctx.fillRect(left,bottom,width,y.getPixelForValue(stock.buy)-bottom)
-    //                         ctx.restore()
+                            ctx.strokeRect(left,y.getPixelForValue(buy),width,0)
+                            ctx.restore()
 
-    //                         // success text
-    //                         ctx.font = '12px Arial'
-    //                         ctx.fillStyle = ('green')
-    //                         ctx.fillText('Buy', width,y.getPixelForValue(stock.buy))
+                            // success backgroud
+                            ctx.fillStyle = 'rgba(0,200,0,0.2'
+                            ctx.fillRect(left,bottom,width,y.getPixelForValue(buy)-bottom)
+                            ctx.restore()
+
+                            // success text
+                            ctx.font = '12px Arial'
+                            ctx.fillStyle = ('green')
+                            ctx.fillText('Buy', width,y.getPixelForValue(buy))
 
 
         
-    //                         }   
-    //                     })
-    //                 }
-    //         if (stock.sell===0){
+                            }   
+                        })
+                    }
+            if (sell!==0){
 
-    //         } else{
-    //         setSellLine({beforeDatasetsDraw(chart){
-    //                         const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
-    //                         ctx.save();
+            } else{
+            setSellLine({beforeDatasetsDraw(chart){
+                            const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
+                            ctx.save();
 
-    //                         //success line
-    //                         ctx.strokeStyle = 'red';
-    //                         ctx.strokeRect(left,y.getPixelForValue(stock.sell),width,0)
-    //                         ctx.restore()
+                            //success line
+                            ctx.strokeStyle = 'red';
+                            ctx.strokeRect(left,y.getPixelForValue(sell),width,0)
+                            ctx.restore()
 
 
-    //                         // success backgroud
+                            // success backgroud
 
-    //                         ctx.fillStyle = 'rgba(255,0,0,0.2'
-    //                         ctx.fillRect(left,top,width,y.getPixelForValue(stock.sell)-top)
-    //                         ctx.restore()
+                            ctx.fillStyle = 'rgba(255,0,0,0.2'
+                            ctx.fillRect(left,top,width,y.getPixelForValue(sell)-top)
+                            ctx.restore()
 
-    //                         // success text
-    //                         ctx.font = '12px Arial'
-    //                         ctx.fillStyle = ('red')
-    //                         ctx.fillText('Sell', width,y.getPixelForValue(stock.sell))
+                            // success text
+                            ctx.font = '12px Arial'
+                            ctx.fillStyle = ('red')
+                            ctx.fillText('Sell', width,y.getPixelForValue(sell))
 
           
-    //                         }   
-    //                     })
-    //         }
-    //     }
-    // },[stock,stocks])
-
-
-
-    // const handleClickDeleteStock = async (e) =>{
- 
-    //     const filteredArray = stocks.filter((s)=>s._id !== stock._id)
-    //     const currObj = {email:user.email,stocks:filteredArray}
-
-
-    //     e.preventDefault();
-    //     axios.patch('https://xtbbackend.onrender.com/stocks/deleteStock',
-    //     // axios.patch('http://localhost:10000/stocks/deleteStock',
+                            }   
+                        })
+            }
         
-    //     currObj,
-    //     {
-    //         headers:{
-    //         'Content-Type':'application/json',
-    //         'Authorization':`Bearer ${user.token}`
-    //         }
-    //       }
-    //     )
-    //         .then((response)=>{
-    //             // console.log(response.data)
-    //             const json = response.data.stocks
-    //             dispatch({type:'DELETE_STOCK',payload:json}) 
+    },[stocks])
+
+
+
+    const handleClickDeleteStock = async (e) =>{
+ 
+        const filteredArray = stocks.filter((s)=>s._id !== particularStock[0]._id)
+
+        const currObj = {email:user.email,stocks:filteredArray}
+
+
+        e.preventDefault();
+        axios.patch('https://xtbbackend.onrender.com/stocks/deleteStock',
+        
+        currObj,
+        {
+            headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${user.token}`
+            }
+          }
+        )
+            .then((response)=>{
+                // console.log(response.data)
+                const json = response.data.stocks
+                dispatch({type:'DELETE_STOCK',payload:json}) 
            
 
-    //         })
+            })
             
 
         
 
+          
+    }
 
-    // }
-
-
-    // useEffect(()=>{
-
-    //     const endDateYear = new Date(endDate).getFullYear()
-    //     const endDateMonth = new Date(endDate).getMonth()+1
-    //     const endDateDay = new Date(endDate).getDay()
-
-    //     setLastYear(new Date(`${endDateYear-1}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-    //     setLast5Year(new Date(`${endDateYear-5}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-    //     setLast10Year(new Date(`${endDateYear-10}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-    //     setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
-
-
-    // },[endDate])
-    
-
-    // const handleSetPrice = (e)=>{
-    //     e.preventDefault()
-
-
-
-    // }
-
-    // const updateUser = async (e)=>{
-    //     e.preventDefault()
-
-    //     const filteredArray = stocks.filter((s)=>s._id !== stock._id)
-
-    //     stock.buy=buy
-    //     stock.sell=sell
-    //     stock.period=period
-    //     stock.ticks=ticks
-    //     stock.start=startDate
-
-    //     filteredArray.push(stock)
- 
-
-    //     axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
-    //     // axios.patch('http://localhost:10000/stocks/updateUserSellNBuy',
-        
-        
-    //     {"email":user.email,"stocks":filteredArray},
-    //     {
-    //         headers:{
-    //         'Content-Type':'application/json',
-    //         'Authorization':`Bearer ${user.token}`
-    //         }
-    //     }
-
-    //     )
-    //         .then((response)=>{
-
-    //             const json = response.data.stocks
-    //             dispatch({type:`DELETE_STOCK`,payload:json})
-             
-
-    //         })
-
-               
-    // }
 
     useEffect(()=>{
-        console.log(chartData,stock)
 
-    },[stocks,chartData])
+        const endDateYear = new Date(endDate).getFullYear()
+        const endDateMonth = new Date(endDate).getMonth()+1
+        const endDateDay = new Date(endDate).getDay()
+
+        setLastYear(new Date(`${endDateYear-1}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+        setLast5Year(new Date(`${endDateYear-5}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+        setLast10Year(new Date(`${endDateYear-10}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+        setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
+
+
+    },[endDate])
+    
+
+    const handleSetPrice = (e)=>{
+        e.preventDefault()
+
+
+
+    }
+
+    const updateUser = async (e)=>{
+        e.preventDefault()
+
+        const filteredStock = stocks.filter((s)=>s._id === particularStock[0]._id)
+        const filteredArray = stocks.filter((s)=>s._id !== particularStock[0]._id)
+ 
+
+        filteredStock[0].buy=buy
+        filteredStock[0].sell=sell
+        filteredStock[0].period=period
+        filteredStock[0].ticks=ticks
+        filteredStock[0].start=startDate
+
+        filteredArray.push(filteredStock[0])
+        
+
+
+        axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
+
+        
+        
+        {"email":user.email,"stocks":filteredArray},
+        {
+            headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${user.token}`
+            }
+        }
+
+        )
+            .then((response)=>{
+
+                const json = response.data.stocks
+                dispatch({type:`DELETE_STOCK`,payload:json})
+             
+
+            })
+
+            refreshFunc() 
+            setTest(10)
+
+    }
+
+    useEffect(()=>{
+        // console.log(stocks)
+
+    },[stocks])
 
     const getDetails = () =>{
 
         setShowDetails(value=>!value)
+        
      
     }
 
     return(
         <div>
-        {/* {stock ?  <div style={{width:300}}>
+        {stock ?  <div style={{width:300}}>
 
             <button onClick={handleClickDeleteStock}>Delete</button>
-            <Line data={chartData}  plugins={
-                [buyLine,sellLine]
-            }/>
+            { symbol ?
+            <Line data={lineChartFactory(chartData,symbol)}  /> :<div></div>}
+           
+           {/* plugins={  [buyLine,sellLine]} */}
+               
+              <button onClick={getDetails}>Get Details</button>
 
 
-            <button onClick={handleSetPrice}>Print stocks</button>
-            <button onClick={getDetails}>Get Details</button>
+            {/* <button onClick={handleSetPrice}>Print stocks</button>
+           */}
 
-            <div>{showDetails ? <div>
+            <div>
+                {showDetails ? <div>
                 
                 <form>
                     <div>Set Price</div>
@@ -240,7 +274,7 @@ function LineChart({chartData,stock}) {
                     <label>Price to Buy</label>
 
                     <input onChange={(e)=>setBuy(Number(e.target.value))} value={buy} type="number"></input>
-                    <button onClick={updateUser}>Set</button>
+                    <button onClick={updateUser}>Set prices</button>
                 </form>
 
                 <form>
@@ -256,6 +290,7 @@ function LineChart({chartData,stock}) {
                         <option value="10080">10080 minutes (1 week)</option>
                         <option value="43200" >43200 minutes (30 days)</option>
                     </select>
+                    <button onClick={updateUser}>update period</button>
                 </form>
 
                 <form>
@@ -264,7 +299,7 @@ function LineChart({chartData,stock}) {
                     <button onClick={updateUser}>update ticks</button>
                 </form>
 
-                <form>
+                {/* <form>
                     <label>Range</label>
                     <select value={startDate} onChange={(e)=>setStartDate(e.target.value)}>
                         <option value={last10Year}>10Y</option>
@@ -274,15 +309,16 @@ function LineChart({chartData,stock}) {
 
                     </select>
                      <button onClick={updateUser}>update ticks</button>
-                </form>
+                </form> */}
 
 
 
-            </div> :<div></div>}
-            </div>
+            </div> :<div>nope</div>}
+            
+        </div>
         </div> 
         
-        : <div>no</div>} */}
+        : <div>no</div>}
 
         </div>
     )

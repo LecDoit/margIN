@@ -14,6 +14,10 @@ const StockGroup = () => {
     const {stocks,dispatch} = useStocksContext() 
     const endDate = new Date().getTime()
 
+    useEffect(()=>{
+      console.log('stock group refreshed')
+    },stocks)
+
 
 
   return (

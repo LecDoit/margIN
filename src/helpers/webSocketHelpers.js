@@ -19,7 +19,7 @@ export const lineChartFactory = (arg,arg2)=>{
 
     const labels = []
     const datasets = [{
-        label:arg2.symbol,
+        label:arg2,
         data:[],
         backgroundColor:["magenta"],
         borderColor:'black',
