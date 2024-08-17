@@ -25,6 +25,12 @@ function App() {
       {/* <Navbar/> */}
       <div>
         <Routes>
+
+        <Route path='/margIN' 
+          element={user ? <Home /> : <Hero />}/>
+
+
+
           <Route path='/' 
           element={user ? <Home /> : <Hero />}/>
 
