@@ -259,8 +259,7 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
            {/* plugins={  [buyLine,sellLine]} */}
                
               <button onClick={getDetails}>Get Details</button>
-              {/* <button onClick={triggerReload}>trigger reload</button> */}
-         
+
 
 
             {/* <button onClick={handleSetPrice}>Print stocks</button>
