@@ -17,7 +17,7 @@ import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '
 
 
 
-function LineChart({chartData,stock,chartRangeArgument,refreshFunc}) {
+function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
 
     const {stocks,dispatch} = useStocksContext()
     const {user} = useAuthContext()
@@ -42,13 +42,12 @@ function LineChart({chartData,stock,chartRangeArgument,refreshFunc}) {
     const [lastMonth, setLastMonth] = useState('')
 
 
-    const [test, setTest] = useState('')
-
     // const startDate = new Date('January 1, 2022').getTime()
     useEffect(()=>{
-        console.log('line chart refreshed')
-        console.log(chartRangeArgument.arguments.info)
-      },[chartRangeArgument])
+        // console.log('line chart refreshed')
+        // console.log(chartRangeArgument.arguments.info.ticks)
+        // console.log(chartData)
+      },[stocks,chartData])
   
 
 
@@ -65,9 +64,9 @@ function LineChart({chartData,stock,chartRangeArgument,refreshFunc}) {
     }
 
     useState(()=>{
-        console.log(stock)
+        // console.log(stock)
        
-            console.log('it runs as well')
+            // console.log('it runs as well')
             setBuy(returnStockProp("buy"))
             setSell(returnStockProp("sell"))
             setSymbols(chartRangeArgument.arguments.info.symbol)
@@ -231,19 +230,19 @@ function LineChart({chartData,stock,chartRangeArgument,refreshFunc}) {
 
             })
 
-            refreshFunc() 
-            setTest(10)
-
+          
+         
     }
 
     useEffect(()=>{
         // console.log(stocks)
 
     },[stocks])
-
+    
     const getDetails = () =>{
 
         setShowDetails(value=>!value)
+        // console.log(ticks)
         
      
     }
@@ -253,12 +252,15 @@ function LineChart({chartData,stock,chartRangeArgument,refreshFunc}) {
         {stock ?  <div style={{width:300}}>
 
             <button onClick={handleClickDeleteStock}>Delete</button>
-            { symbol ?
+            { chartData ?
             <Line data={lineChartFactory(chartData,symbol)}  /> :<div></div>}
+
            
            {/* plugins={  [buyLine,sellLine]} */}
                
               <button onClick={getDetails}>Get Details</button>
+              {/* <button onClick={triggerReload}>trigger reload</button> */}
+         
 
 
             {/* <button onClick={handleSetPrice}>Print stocks</button>
@@ -299,7 +301,7 @@ function LineChart({chartData,stock,chartRangeArgument,refreshFunc}) {
                     <button onClick={updateUser}>update ticks</button>
                 </form>
 
-                {/* <form>
+                <form>
                     <label>Range</label>
                     <select value={startDate} onChange={(e)=>setStartDate(e.target.value)}>
                         <option value={last10Year}>10Y</option>
@@ -309,7 +311,7 @@ function LineChart({chartData,stock,chartRangeArgument,refreshFunc}) {
 
                     </select>
                      <button onClick={updateUser}>update ticks</button>
-                </form> */}
+                </form>
 
 
 

@@ -22,6 +22,14 @@ const useWebSocketHook = (xtbMessageArg) => {
     const [passwordXtb,setPasswordXtb] = useState('')
     const [streamSessionId, setStreamSessionId] = useState(null)
 
+    const [reload,setReload] = useState(false);
+
+
+
+    useEffect(()=>{
+        // console.log(reload)
+    },[xtbMessageArg])
+
 
 
     const fetchCredentials = async()=>{
@@ -61,28 +69,30 @@ const useWebSocketHook = (xtbMessageArg) => {
 
 //  get the XTB credentials from API
     useEffect(() => {
-        // console.log('initial')
+        // console.log('initial',xtbMessageArg)
 
         if (user){
+            // console.log('user is true',xtbMessageArg)
             fetchCredentials()
             // console.log('fetching crede and setting up the argument to send')
         }
-    }, []);
+    }, [xtbMessageArg]);
 
 // since we received the credentials from API we can now log into the XTB WebSocket
     useEffect(()=>{
         if(userXtb){
             sendJsonMessage(logIn(userXtb, passwordXtb));
         }
-    },[userXtb])
+    },[userXtb,xtbMessageArg])
 
   
 // component for gathering the neccessary messages
     useEffect(()=>{
+        // console.log('this is running every single time lastjson message has beeen sent or received',lastJsonMessage)
 
         // for streamSession ID message
         if(lastJsonMessage?.status===true && lastJsonMessage !== undefined && lastJsonMessage?.streamSessionId){
-            // console.log('this is happening')
+            // console.log('this is checking if status is true and got streamsessionid')
             setStreamSessionId(lastJsonMessage.streamSessionId)
         } 
 
@@ -97,24 +107,26 @@ const useWebSocketHook = (xtbMessageArg) => {
     },[lastJsonMessage,sendJsonMessage])
 
 
+
+
 // execute this code right after we log in into the XTB WebSocket
     useEffect(()=>{
         if (streamSessionId){
+            // console.log('wysylam',xtbMessage,lastJsonMessage)
+
             sendJsonMessage(xtbMessage)
         }
      
 
-    },[setStreamSessionId,streamSessionId])
+    },[setStreamSessionId,streamSessionId,xtbMessage])
 
 
-    // useEffect(()=>{
-
-    //     console.log(data)
-    // },[data])
-
+    const triggerReload = ()=> {
+        setReload(!reload)}
+        // console.log(lastJsonMessage)
 
 
-  return {data,error}
+  return {data,error,triggerReload}
 }
 
 export default useWebSocketHook

@@ -15,7 +15,7 @@ const StockGroup = () => {
     const endDate = new Date().getTime()
 
     useEffect(()=>{
-      console.log('stock group refreshed')
+      // console.log('stock group refreshed')
     },stocks)
 
 

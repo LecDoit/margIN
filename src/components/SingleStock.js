@@ -10,13 +10,9 @@ import StockSearch from './StockSearch';
 const SingleStock = ({chartRangeArgument}) => {
 
   const {stocks,dispatch} = useStocksContext() 
-  const {data,error} = useWebsocketHook(chartRangeArgument)
+  const {data,error,triggerReload} = useWebsocketHook(chartRangeArgument)
   const [keyValue,setKeyValue] = useState(0)
 
-  const increment = ()=>{
-    setKeyValue(keyValue=>keyValue+1)
-    console.log(keyValue)
-  }
 
 
   useEffect(()=>{
@@ -24,13 +20,14 @@ const SingleStock = ({chartRangeArgument}) => {
         // console.log('StockGroup',data,chartRangeArgument)
         // console.log(chartRangeArgument.arguments.info.symbol)
     }
-    console.log('being refreshed')
+    // console.log('being refreshed')
   },[data])
 
 
   useEffect(()=>{
-    console.log('single stock refreshed')
-  },stocks)
+    // triggerReload()
+    // console.log('reload triggered',chartRangeArgument.arguments.info)
+  },[chartRangeArgument])
 
 
 //   lineChartFactory(xtbStocks[i],stocks[i])
@@ -38,7 +35,7 @@ const SingleStock = ({chartRangeArgument}) => {
     <div>
 
   
-        <LineChart refreshFunc={increment} stock={data} chartData={data} chartRangeArgument={chartRangeArgument}/> 
+        <LineChart triggerReload={triggerReload} stock={data} chartData={data} chartRangeArgument={chartRangeArgument}/> 
     </div>
 
   )
