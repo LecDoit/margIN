@@ -28,12 +28,10 @@ const StockSearch = ({symbols}) => {
     useEffect(()=>{
         const endDateYear = new Date(endDate).getFullYear()
         const endDateMonth = new Date(endDate).getMonth()+1
-        let endDateDay = new Date(endDate).getDay()
+        let endDateDay = new Date(endDate).getDate()
 
 
-        if (endDateDay===0){
-          endDateDay=6
-        }
+    
         setLast2Year(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
 
     },[endDate])

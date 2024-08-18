@@ -17,7 +17,7 @@ import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '
 
 
 
-function LineChart({chartData,chartRangeArgument}) {
+function BasicLineChart({chartData,chartRangeArgument}) {
 
     const {stocks,dispatch} = useStocksContext()
     const {user} = useAuthContext()
@@ -165,14 +165,18 @@ function LineChart({chartData,chartRangeArgument}) {
 
         const endDateYear = new Date(endDate).getFullYear()
         const endDateMonth = new Date(endDate).getMonth()+1
-        let endDateDay = new Date(endDate).getDate()
+        let endDateDay = new Date(endDate).getDay()
 
-   
+        if (endDateDay===0){
+            endDateDay=6
+        }
 
         setLastYear(new Date(`${endDateYear-1}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
         setLast5Year(new Date(`${endDateYear-5}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
         setLast10Year(new Date(`${endDateYear-10}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-        setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
+        setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime
+        
+        ())
 
 
 
@@ -307,4 +311,4 @@ function LineChart({chartData,chartRangeArgument}) {
 
 }
 
-export default LineChart
+export default BasicLineChart
