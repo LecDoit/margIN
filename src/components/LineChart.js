@@ -17,7 +17,7 @@ import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '
 
 
 
-function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
+function LineChart({chartData,chartRangeArgument}) {
 
     const {stocks,dispatch} = useStocksContext()
     const {user} = useAuthContext()
@@ -31,7 +31,7 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
     const [symbol,setSymbols] = useState('')
     const [buyLine,setBuyLine] = useState('')
     const [sellLine,setSellLine] = useState('')
-    const [showDetails,setShowDetails] = useState(true)
+    const [showDetails,setShowDetails] = useState(false)
 
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
@@ -44,10 +44,10 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
 
     // const startDate = new Date('January 1, 2022').getTime()
     useEffect(()=>{
-        // console.log('line chart refreshed')
+   
         // console.log(chartRangeArgument.arguments.info.ticks)
         // console.log(chartData)
-      },[stocks,chartData])
+      },[stocks])
   
 
 
@@ -64,9 +64,7 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
     }
 
     useState(()=>{
-        // console.log(stock)
-       
-            // console.log('it runs as well')
+
             setBuy(returnStockProp("buy"))
             setSell(returnStockProp("sell"))
             setSymbols(chartRangeArgument.arguments.info.symbol)
@@ -143,7 +141,6 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
 
         const currObj = {email:user.email,stocks:filteredArray}
 
-
         e.preventDefault();
         axios.patch('https://xtbbackend.onrender.com/stocks/deleteStock',
         
@@ -160,13 +157,7 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
                 const json = response.data.stocks
                 dispatch({type:'DELETE_STOCK',payload:json}) 
            
-
-            })
-            
-
-        
-
-          
+            })   
     }
 
 
@@ -174,12 +165,19 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
 
         const endDateYear = new Date(endDate).getFullYear()
         const endDateMonth = new Date(endDate).getMonth()+1
-        const endDateDay = new Date(endDate).getDay()
+        let endDateDay = new Date(endDate).getDay()
+
+        if (endDateDay===0){
+            endDateDay=6
+        }
 
         setLastYear(new Date(`${endDateYear-1}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
         setLast5Year(new Date(`${endDateYear-5}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
         setLast10Year(new Date(`${endDateYear-10}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-        setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
+        setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime
+        
+        ())
+
 
 
     },[endDate])
@@ -187,8 +185,6 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
 
     const handleSetPrice = (e)=>{
         e.preventDefault()
-
-
 
     }
 
@@ -207,12 +203,8 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
 
         filteredArray.push(filteredStock[0])
         
-
-
         axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
 
-        
-        
         {"email":user.email,"stocks":filteredArray},
         {
             headers:{
@@ -234,24 +226,19 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
          
     }
 
-    useEffect(()=>{
-        // console.log(stocks)
 
-    },[stocks])
     
     const getDetails = () =>{
 
         setShowDetails(value=>!value)
-        // console.log(ticks)
-        
      
     }
 
     return(
         <div>
-        {stock ?  <div style={{width:300}}>
+        {chartData ?  <div style={{width:300}}> 
 
-            <button onClick={handleClickDeleteStock}>Delete</button>
+            <button onClick={handleClickDeleteStock}>x</button>
             { chartData ?
             <Line data={lineChartFactory(chartData,symbol)}  /> :<div></div>}
 
@@ -260,10 +247,6 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
                
               <button onClick={getDetails}>Get Details</button>
 
-
-
-            {/* <button onClick={handleSetPrice}>Print stocks</button>
-           */}
 
             <div>
                 {showDetails ? <div>
@@ -314,7 +297,7 @@ function LineChart({chartData,stock,chartRangeArgument,triggerReload}) {
 
 
 
-            </div> :<div>nope</div>}
+            </div> :<div></div>}
             
         </div>
         </div> 

@@ -121,12 +121,10 @@ const useWebSocketHook = (xtbMessageArg) => {
     },[setStreamSessionId,streamSessionId,xtbMessage])
 
 
-    const triggerReload = ()=> {
-        setReload(!reload)}
-        // console.log(lastJsonMessage)
 
 
-  return {data,error,triggerReload}
+
+  return {data,error}
 }
 
 export default useWebSocketHook
