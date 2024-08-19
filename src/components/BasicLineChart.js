@@ -1,7 +1,7 @@
 import React,{useEffect,useState,useCallback} from 'react';
 import {Bar,Line} from 'react-chartjs-2'
 import { useStocksContext } from "../hooks/useStocksContext";
-
+import Delete from './Delete'
 
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -85,7 +85,8 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine}) {
             {chartData ?
                 <Line data={lineChartFactory(chartData,symbol,colorLine)} options={options} />
               :<div></div>}   
-            <div onClick={handleClickDeleteStock}>x</div>
+             
+            <div className='delete--stock' onClick={handleClickDeleteStock}><Delete/></div>
         </div> 
         
         : <div>no</div>}

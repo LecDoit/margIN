@@ -10,6 +10,7 @@ import Hero from './pages/Hero'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Navbar from './components/Navbar'
+import Test from './pages/Test'
 
 
 
@@ -26,7 +27,7 @@ function App() {
       <div>
         <Routes>
 
-        <Route path='/margIN' 
+          <Route path='/margIN' 
           element={user ? <Home /> : <Hero />}/>
 
 
@@ -40,6 +41,8 @@ function App() {
 
           <Route path='/signup' 
           element={!user ? <Signup /> : <Navigate to='/'/> }/>
+
+          <Route path='/test' element={<Test/>}/>
 
 
         </Routes>

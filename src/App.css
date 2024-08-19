@@ -649,6 +649,9 @@ input:focus{
 .stockGroup--table--name,.stockGroup--table--price,.stockGroup--table--24,.stockGroup--table--7{
   width: 200px;
 }
+.stockGroup--table--name{
+  font-weight: 600;
+}
 .stockGroup--table--graph{
   width:200px;
   margin-left:80px;
@@ -660,4 +663,16 @@ input:focus{
   width:320px;
   height:100px;
   margin-left:80px;
+}
+
+.delete--stock{
+  /* border:1px solid var(--DARKBLUE); */
+  width:98px;
+  margin-left: 20px;
+  height: 98px;
+  display: grid;
+  justify-content: center;
+  line-height: 90px;
+  border-radius:10px;
+
 }
