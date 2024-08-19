@@ -97,7 +97,7 @@ const Home = () => {
         <div>
 
         {/* { loaded ? <WebSocket user={userXtb} pwd = {passwordXtb}/> :<div></div>} */}
-        { loaded ? <StockSearch/> :<div>Stock Search placeholder</div>}
+        {loaded ? <StockSearch/> :<div>Stock Search placeholder</div>}
         {loaded ? <StockGroup/>:<div>Stock Group placeholder</div>}
         
   

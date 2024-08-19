@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react'
 import axios from'axios';
 import { useStocksContext } from "../hooks/useStocksContext";
 import { useAuthContext } from '../hooks/useAuthContext';
-import { isCompositeComponent } from 'react-dom/test-utils';
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {getAllSymbols} from '../helpers/webSocketHelpers'
+import LoadingSmall from '../components/LoadingSmall'
 
 const StockSearch = ({symbols}) => {
 
 
     const {user} = useAuthContext()
-    const {data,error} = useWebsocketHook(getAllSymbols)
+    const {data,error,isLoading} = useWebsocketHook(getAllSymbols)
 
     const [inputValue,setInputValue] = useState('');
     const [chosenSymbol,setChosenSymbol] = useState('')
@@ -88,7 +88,12 @@ const StockSearch = ({symbols}) => {
  
   return (
     <div>
-{ data?       <div>
+      {isLoading ?  <LoadingSmall/> :
+      
+  
+    <div>
+      {data ?
+        <div>
           <div>
               <input type="text" value={inputValue} onChange={onChange}></input>
               <button onClick={()=>addStocks(chosenSymbol)} disabled={toggleButton}>Add stock</button>
@@ -100,13 +105,17 @@ const StockSearch = ({symbols}) => {
                   const fullSymbol = item.symbol.toLowerCase()
                   return searchTerm &&  fullDesc.includes(searchTerm) && fullDesc !=searchTerm ||searchTerm &&  fullSymbol.includes(searchTerm) && fullSymbol !=searchTerm
               }).map((item,i)=>
-              <div onClick={()=>onSearch(item)} key={i}>{item.description} </div>
+          <div onClick={()=>onSearch(item)} key={i}>{item.description} </div>
               
           )
               }
           </div>
         </div>
-      :<div></div>  }
+      :
+        <div></div>
+      }
+      </div>
+        }
     </div>
   )
 }

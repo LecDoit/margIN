@@ -574,8 +574,17 @@ input:focus{
 
   width:100vw;
   height: 100vh;
-  background-color: var(--LOADINGLIGHTGRAY);
+  background-color: var(--LIGHTGRAY);
   opacity: 0.7;
+}
+
+.loading--small{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--LIGHTGRAY);
+  height: 100px;
+
 }
 
 .loading--logo{
@@ -589,25 +598,66 @@ input:focus{
 .stockGroup{
   display: grid;
   grid-template-columns: 2fr 4fr 4fr 2fr;
-  grid-template-rows: 1fr 1fr;
-  border: 1px solid black;
+  /* grid-template-rows: 1fr 1fr; */
+  /* border: 1px solid black; */
+  text-align: center;
+  gap:10px;
+ 
+ 
+  
 }
 .stockGroup--table--header{
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: flex-start;
   grid-column-start: 2;
   grid-column-end: 4;
   grid-row-start: 1;
   grid-row-end: 1;
+  height: 50px;
+  line-height: 50px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--LIGHTBLUE);
+  
   
 
 }
 .stockGroup--table--content{
   display: grid;
   grid-column-start: 2;
-  grid-column-end: 3;
+  grid-column-end: 4;
   grid-row-start: 2;
   grid-row-end: 2;
+  height: 100px;
+  line-height: 100px;
+ 
 
+}
+
+.singleStock{
+  display: flex;
+  /* flex-direction: row; */
+  justify-content: flex-start;
+  height: 100px;
+  margin-top:10px;
+  border-bottom: 2px solid var(--LIGHTGRAY);
+
+}
+.stockGroup--table--no{
+  width: 30px;
+}
+.stockGroup--table--name,.stockGroup--table--price,.stockGroup--table--24,.stockGroup--table--7{
+  width: 200px;
+}
+.stockGroup--table--graph{
+  width:200px;
+  margin-left:80px;
+}
+
+.basicLineChart{
+  display: flex;
+  flex-direction: row;
+  width:320px;
+  height:100px;
+  margin-left:80px;
 }

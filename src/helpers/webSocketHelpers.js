@@ -15,15 +15,16 @@ export const chartRangeFactory = (start,end,symbol,ticks,period)=>{
     return chartRange
 }
 
-export const lineChartFactory = (arg,arg2)=>{
+export const lineChartFactory = (arg,arg2,arg3)=>{
 
     const labels = []
     const datasets = [{
         label:arg2,
         data:[],
-        backgroundColor:["magenta"],
-        borderColor:'black',
-        borderWidth:2
+        backgroundColor:["rgba(0,0,0,0"],
+        borderColor:arg3,
+        borderWidth:1,
+        tension:0.5
         
     }]
 

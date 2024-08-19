@@ -21,8 +21,7 @@ const useWebSocketHook = (xtbMessageArg) => {
     const [userXtb,setUserXtb] = useState('')
     const [passwordXtb,setPasswordXtb] = useState('')
     const [streamSessionId, setStreamSessionId] = useState(null)
-
-    const [reload,setReload] = useState(false);
+    const [isLoading,setIsLoading] = useState(null)
 
 
 
@@ -69,6 +68,7 @@ const useWebSocketHook = (xtbMessageArg) => {
 
 //  get the XTB credentials from API
     useEffect(() => {
+        setIsLoading(true)
         // console.log('initial',xtbMessageArg)
 
         if (user){
@@ -99,6 +99,7 @@ const useWebSocketHook = (xtbMessageArg) => {
         // for any other requested Data
         if  (lastJsonMessage?.returnData  ){
             setData(lastJsonMessage)   
+            setIsLoading(false)
             // console.log('what is happening here?',lastJsonMessage)
         }
 
@@ -124,7 +125,7 @@ const useWebSocketHook = (xtbMessageArg) => {
 
 
 
-  return {data,error}
+  return {data,error,isLoading}
 }
 
 export default useWebSocketHook

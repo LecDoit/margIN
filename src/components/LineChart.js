@@ -232,7 +232,7 @@ function LineChart({chartData,chartRangeArgument}) {
 
     return(
         <div>
-        {chartData ?  <div style={{width:300}}> 
+        {chartData ?  <div> 
 
             <button onClick={handleClickDeleteStock}>x</button>
             { chartData ?

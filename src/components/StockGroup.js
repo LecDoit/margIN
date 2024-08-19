@@ -20,8 +20,6 @@ const StockGroup = () => {
 
     useEffect(()=>{
 
-      // const endDateYear = new Date(endDate).getFullYear()
-      // const endDateMonth = new Date(endDate).getMonth()
       let endDateDay = new Date(endDate).getDay()
       const sevenDaysInMilliseconds = 7*24*60*60*1000
       const twoDaysInMilliseconds = 2*24*60*60*1000
@@ -34,34 +32,20 @@ const StockGroup = () => {
           const sevenDaysBack = newEndDate-sevenDaysInMilliseconds
           setEndDate(newEndDate)
           setStartDate(Number(sevenDaysBack))
-          console.log(new Date(newEndDate))
-          console.log(new Date(sevenDaysBack))
+
 
       } else if (endDateDay===6){
-        // enddate - do piatku wyrownac i wtedy -7
+        const newEndDate = (endDate-oneDaysInMilliseconds)
+        const sevenDaysBack = newEndDate-sevenDaysInMilliseconds
+        setEndDate(newEndDate)
+        setStartDate(Number(sevenDaysBack))
+
       } else{
         const sevenDaysBack = endDate-sevenDaysInMilliseconds
         setStartDate(Number(sevenDaysBack))
       }
     
-
-      // const startDate = (new Date(`${endDateYear}`+  `,${endDateMonth}` + `,${endDateDay}`))
-      // setStartDate((startDate))
-
-
- 
-
   },[])
-
-
-  useEffect(()=>{
-    console.log( new Date(endDate))
-    // console.log(new Date(stocks[0].start))
-    
-    
-    
-    
-  },[endDate])
 
 
 
@@ -70,17 +54,18 @@ const StockGroup = () => {
   return (
     <div className='stockGroup'>
       <div className='stockGroup--table--header'>
-        <div>#</div>
-        <div>Name</div>
-        <div>Price</div>
-        <div>24h %</div>
-        <div>7d %</div>
+        <div className='stockGroup--table--no'>#</div>
+        <div className='stockGroup--table--name'>Name</div>
+        <div className='stockGroup--table--price'>Price</div>
+        <div className='stockGroup--table--24'>24h %</div>
+        <div className='stockGroup--table--7'>7d %</div>
+        <div className='stockGroup--table--graph'>Last 7 Days</div>
 
       </div>
       <div className='stockGroup--table--content'>{stocks.length>0 ? <div>
           {stocks.map((item,a)=>{
               return <SingleStock key={a} chartRangeArgument={
-                  chartRangeFactory(startDate,endDate,stocks[a].symbol,1000,60) 
+                  chartRangeFactory(startDate,endDate,stocks[a].symbol,1000,1440) 
          
               }
               order={a+1}
