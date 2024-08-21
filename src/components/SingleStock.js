@@ -6,6 +6,7 @@ import LineChart from "./LineChart"
 import BasicLineChart from "./BasicLineChart"
 import StockSearch from './StockSearch';
 import LoadingSmall from '../components/LoadingSmall'
+import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
 
 
 
@@ -57,7 +58,12 @@ const SingleStock = ({chartRangeArgument,order}) => {
   }
 
   return (
-    <div >
+    <motion.div
+    whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',
+    boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
+    transition={{type:"tween",duration:0.1}}
+    whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}} 
+    >
       {isLoading ? 
       <LoadingSmall/> :
       <div className='singleStock'>
@@ -71,7 +77,7 @@ const SingleStock = ({chartRangeArgument,order}) => {
         <BasicLineChart className='stockGroup--table--graph' colorLine={colorLine} chartData={data} chartRangeArgument={chartRangeArgument}/> 
       </div>
           }
-    </div>
+    </motion.div>
 
   )
 }
