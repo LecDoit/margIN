@@ -11,6 +11,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Navbar from './components/Navbar'
 import Test from './pages/Test'
+import TestforLoggedIn from './pages/TestforLoggedIn';
 
 
 
@@ -43,6 +44,9 @@ function App() {
           element={!user ? <Signup /> : <Navigate to='/'/> }/>
 
           <Route path='/test' element={<Test/>}/>
+
+          <Route path='/testforloggedin' 
+          element={user ? <TestforLoggedIn /> : <TestforLoggedIn /> }/>
 
 
         </Routes>

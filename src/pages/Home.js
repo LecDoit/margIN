@@ -1,10 +1,11 @@
-import  React ,{ useRef,useState,useEffect,useCallback } from "react";
+import  React ,{ useRef,useState,useEffect,useCallback,BrowserRouter,Routes,Route} from "react";
 import axios from'axios';
 
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import WebSocket from '../components/WebSocket'
 import Navbar from '../components/Navbar'
+import Sidebar from "../components/Sidebar";
 import { useStocksContext } from "../hooks/useStocksContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 import {StockDetails} from '../components/Stock'
@@ -13,6 +14,10 @@ import { useSignup } from '../hooks/useSignup'
 
 import StockSearch from "../components/StockSearch";
 import StockGroup from "../components/StockGroup";
+
+import Test from './Test'
+import TestforLoggedIn from './TestforLoggedIn';
+
 
 const Home = () => {
 
@@ -23,7 +28,12 @@ const Home = () => {
   const [userXtb,setUserXtb] = useState('')
   const [passwordXtb,setPasswordXtb] = useState('')
 
+  const [sidebarOn,setSidebarOn] = useState(true)
+
   const {signup,error,isLoading} = useSignup()
+
+  const [bottom,setBottom] =useState('dashboard')
+
 
 
   
@@ -84,30 +94,59 @@ const Home = () => {
 
     },[dispatch,user])
 
+    const openSideBar =()=>{
+      setSidebarOn(!sidebarOn)
+
+    }
+
+    useEffect(()=>{
+
+      console.log(bottom)
+    },[bottom])
+
+const hugeFunc=(arg)=>{
+  if (arg=='stocks'){
+    return loaded ? <div><StockSearch/><StockGroup/></div> :<div>Stock Search placeholder</div>
+  } else if (arg=='dashboard'){
+    return <div>here will be dashbard</div>
+  }
+
+
+}
   return (
-    <div>
-        <Navbar id={'home--nav'}/>
+    <div className="home">
+ 
+      <Navbar id={'home--nav'}/>
+      <Sidebar onSelect={setBottom} />
+      {/* <div>{hugeFunc(bottom)}</div> */}
+
+        
         {
         isLoading ?<Loading/>
         :
-      
-
-      <div>
-        home
-        <div>
-
-        {/* { loaded ? <WebSocket user={userXtb} pwd = {passwordXtb}/> :<div></div>} */}
-        {loaded ? <StockSearch/> :<div>Stock Search placeholder</div>}
-        {loaded ? <StockGroup/>:<div>Stock Group placeholder</div>}
-        
-  
-
-
+        <div className="home--content">
+          {hugeFunc(bottom)}
+          {/* {loaded ? <StockSearch/> :<div>Stock Search placeholder</div>}
+          // {loaded ? <StockGroup/>:<div>Stock Group placeholder</div>} */}
         </div>
-      </div>
+    
+
       }
+
     </div>
   )
 }
 
 export default Home
+
+
+// <BrowserRouter>
+// <Routes>
+//   {/* <Route path='/test' element={<Test/>}/> */}
+
+//   <Route path='/testforloggedin' 
+//   element={user ? <TestforLoggedIn /> : <TestforLoggedIn /> }/>
+  
+//   {/* <div className="home--content">seks</div> */}
+// </Routes>
+// </BrowserRouter>

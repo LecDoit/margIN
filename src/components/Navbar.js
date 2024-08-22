@@ -56,7 +56,8 @@ const Navbar = ({id}) => {
         >
 
             <div className='navbar--logo' href='/'>
-
+     
+        
                 <Link to='/' className='navbar--logo' >
                 <Logo className='navbar--logo-react' w={58} h={50} fill={simpleFunc().fill} background={'transparent'}/>
                     <div  className='navbar--logo--text' id={id}>MargIn</div>
