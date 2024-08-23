@@ -28,7 +28,8 @@ const Sidebar = ({onSelect}) => {
 
     const [isCollapsed,setIsCollapsed] = useState(true);
     const [isHover,setIsHover] = useState(false);
-    const [activeTab, setActiveTab] = useState(SIDEBAR_ITEMS[0].id);
+    const [activeTab, setActiveTab] = useState(SIDEBAR_ITEMS[1].id);
+    const [clickedTab, setClickedTab] = useState(SIDEBAR_ITEMS[1].id);
     const [showSidebar,setShowSidebar] = useState(false)
     const [pined,setPined] = useState('unpined')
 
@@ -63,7 +64,10 @@ const Sidebar = ({onSelect}) => {
 
     }
 
+    useEffect(()=>{
 
+        console.log(clickedTab)
+      },[clickedTab])
     
 
 
@@ -93,6 +97,8 @@ const Sidebar = ({onSelect}) => {
           item={item}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          setClickedTab={setClickedTab}
+          clickedTab={clickedTab}
         />
         </div>
       ))}

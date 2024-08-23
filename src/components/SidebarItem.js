@@ -2,8 +2,9 @@ import React from 'react'
 import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
 import clsx from "https://esm.sh/clsx";
 
-const SidebarItem = ({ item, activeTab, setActiveTab, isSidebarCollapsed }) => {
+const SidebarItem = ({ item, activeTab, setActiveTab, isSidebarCollapsed, setClickedTab, clickedTab }) => {
     const IconComponent = item.icon;
+
 
     return (
       <motion.div
@@ -14,14 +15,21 @@ const SidebarItem = ({ item, activeTab, setActiveTab, isSidebarCollapsed }) => {
         onFocus={() => setActiveTab(item.id)}
         onMouseOver={() => setActiveTab(item.id)}
         onMouseLeave={() => setActiveTab(item.id)}
+        onClick={()=>{setClickedTab(item.id)}}
       >
-   
+           {clickedTab === item.id ? (
+          <motion.div
+            // layoutId="sidebar-item-indicator"
+            className="sidebar-item__clicked"
+          />
+        ) : null}
         {activeTab === item.id ? (
           <motion.div
             layoutId="sidebar-item-indicator"
             className="sidebar-item__active-bg"
           />
         ) : null}
+
         <span className="sidebar-item__icon">
           <IconComponent />
         </span>

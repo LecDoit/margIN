@@ -117,8 +117,15 @@ a:visited{
   inset: 0px;
   border-radius: 8px;
   margin: 5px;
-  /* color: var(--DARKBLUE); */
+
   background-color: var(--WHITE);
+}
+.sidebar-item__clicked{
+  
+  width:2px;
+  height:100%;
+  background-color:var(--BLUE)
+
 }
 
 .sidebar-item__icon {
