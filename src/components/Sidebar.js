@@ -1,14 +1,8 @@
 import React,{useEffect,useState,useCallback} from 'react'
 import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
-import { LuChevronRight } from "https://esm.sh/react-icons/lu";
-import { LuChevronLeft } from "https://esm.sh/react-icons/lu";
-import { LuHome } from "https://esm.sh/react-icons/lu";
-import { LuMail } from "https://esm.sh/react-icons/lu";
-import { LuFolderClosed } from "https://esm.sh/react-icons/lu";
-import { LuStickyNote } from "https://esm.sh/react-icons/lu";
-import { LuBell } from "https://esm.sh/react-icons/lu";
-import { LuPin } from "https://esm.sh/react-icons/lu";
-import * as newz  from "https://esm.sh/react-icons/lu";
+import { LuHome ,LuMail,LuFolderClosed,LuStickyNote,LuBell,LuPin} from "react-icons/lu";
+
+// import * as newz  from "react-icons/lu";
 import SidebarItem from './SidebarItem.js';
 import { json, useFetcher } from 'react-router-dom';
 import { stringify } from 'json5';

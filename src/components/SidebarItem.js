@@ -1,6 +1,6 @@
 import React from 'react'
 import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
-import clsx from "https://esm.sh/clsx";
+import clsx from "clsx";
 
 const SidebarItem = ({ item, activeTab, setActiveTab, isSidebarCollapsed, setClickedTab, clickedTab }) => {
     const IconComponent = item.icon;
