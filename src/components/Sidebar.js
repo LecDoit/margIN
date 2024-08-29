@@ -17,7 +17,7 @@ const SIDEBAR_ITEMS = [
 ,
   ];
 
-const Sidebar = ({onSelect}) => {
+const Sidebar = ({onSelect,onVisible}) => {
     // console.log(newz.module)
 
     const [isCollapsed,setIsCollapsed] = useState(true);
@@ -59,10 +59,21 @@ const Sidebar = ({onSelect}) => {
     }
 
     useEffect(()=>{
+        const myFunc = ()=>{
+            setActiveTab(clickedTab)
+        } 
+        const timer = setTimeout(myFunc,7000)
+        
 
-        console.log(clickedTab)
-      },[clickedTab])
+      },[activeTab])
     
+    const handleClick=(e)=>{
+        onSelect(e.id)
+    }
+    useEffect(()=>{
+        onVisible(showSidebar)
+    },[showSidebar])
+        
 
 
   return (
@@ -72,19 +83,18 @@ const Sidebar = ({onSelect}) => {
     onMouseEnter={()=>setIsHover(true)}
     onMouseLeave={()=>setIsHover(false)}
     >
-           
-        
         {!showSidebar ?  <div></div> 
         :<div>
         <button id={pined}  className='sidebar--collapse--button' 
         onClick={pin}
         >
-            <LuPin/>
+        <LuPin/>
         </button>
          
          </div>}
         {SIDEBAR_ITEMS.map((item) => (
-        <div key={item.id} onClick={()=>{onSelect(item.id)}}>
+        // <div key={item.id} onClick={()=>{onSelect(item.id)}}>
+        <div key={item.id} onClick={()=>{handleClick(item)}}>
         <SidebarItem 
           isSidebarCollapsed={!showSidebar}
           key={item.id}

@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/margIN/static/css/main.ff70990e.css",
+    "main.js": "/margIN/static/js/main.000203b6.js",
+    "index.html": "/margIN/index.html",
+    "main.ff70990e.css.map": "/margIN/static/css/main.ff70990e.css.map",
+    "main.000203b6.js.map": "/margIN/static/js/main.000203b6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ff70990e.css",
+    "static/js/main.000203b6.js"
+  ]
+}

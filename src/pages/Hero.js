@@ -48,6 +48,7 @@ const Hero = () => {
                   initial={{opacity:0,
                   }}
                   whileInView={{opacity:1}}
+                  transition={{duration:1}}
                   viewport={{amount:"all"}}>
 
         MargIn is an is intuitve platform for everyone
@@ -55,13 +56,19 @@ const Hero = () => {
         </motion.div>
         <div className='hero--2--1'>
           <motion.div className='hero--2--holder'
-            initial={{opacity:0, scale:0
-            }}
-            whileInView={{opacity:1,scale:1}}
-            whileHover={{scale:1.1}}
-            viewport={{amount:"all"}}
+           
+            // viewport={{amount:"all"}}
+   
           >
-            <div className='hero--2--top'>2800+</div>
+            <motion.div className='hero--2--top'
+             initial={{opacity:0, scale:0
+             }}
+             whileInView={{opacity:1,scale:1
+             }}
+ 
+             whileHover={{scale:1.1
+               
+             }}>2800+</motion.div>
             <div className='hero--2--bottom'>Stocks</div>
           </motion.div>
           <div className='hero--2--holder'>
@@ -70,7 +77,7 @@ const Hero = () => {
             }}
             whileInView={{opacity:1,scale:1}}
             whileHover={{scale:1.1}}
-            viewport={{amount:"all"}}
+            // viewport={{amount:"all"}}
             >300+</motion.div>
             <div className='hero--2--bottom'>ETFs</div>
           </div>
@@ -81,7 +88,9 @@ const Hero = () => {
                         }}
                         whileInView={{opacity:1,scale:1}}
                         whileHover={{scale:1.1}}
-                        viewport={{amount:"all"}}>10+</motion.div>
+                        // viewport={{amount:"all"}}
+                        >10+
+                        </motion.div>
             <div className='hero--2--bottom'>Cryptocurrencies</div>
           </div>
         </div>

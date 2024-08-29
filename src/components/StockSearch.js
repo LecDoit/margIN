@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-
 import axios from'axios';
+import {GoSearch} from 'react-icons/go'
 import { useStocksContext } from "../hooks/useStocksContext";
 import { useAuthContext } from '../hooks/useAuthContext';
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {getAllSymbols} from '../helpers/webSocketHelpers'
 import LoadingSmall from '../components/LoadingSmall'
+import Lens from './Lens';
 
 const StockSearch = ({symbols}) => {
 
@@ -29,9 +30,6 @@ const StockSearch = ({symbols}) => {
         const endDateYear = new Date(endDate).getFullYear()
         const endDateMonth = new Date(endDate).getMonth()+1
         let endDateDay = new Date(endDate).getDate()
-
-
-    
         setLast2Year(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
 
     },[endDate])
@@ -78,6 +76,7 @@ const StockSearch = ({symbols}) => {
     }
 
     const onSearch = (searchTerm)=>{
+      console.log(searchTerm)
         setToggleButton(false)
         setInputValue(searchTerm.description)
         setChosenSymbol(searchTerm)
@@ -89,24 +88,30 @@ const StockSearch = ({symbols}) => {
   return (
     <div>
       {isLoading ?  <LoadingSmall/> :
-      
-  
     <div>
       {data ?
-        <div>
-          <div>
-              <input type="text" value={inputValue} onChange={onChange}></input>
-              <button onClick={()=>addStocks(chosenSymbol)} disabled={toggleButton}>Add stock</button>
+        <div className='search'>
+          
+          <div className='search--containter'>
+              <input className='search---input'placeholder='Search Assets here...' type="text" value={inputValue} onChange={onChange}></input>
+          
+              <div className='goSearch' >
+                <Lens onClick={()=>addStocks(chosenSymbol)}></Lens>
+                {/* <GoSearch className='goSearch--lens' onClick={()=>addStocks(chosenSymbol)} disabled={toggleButton}></GoSearch> */}
+              </div>
           </div>
-          <div>
+          {/* </> */}
+          <div className='search--result'>
               {data.returnData.filter(item=>{
+                
                   const searchTerm = inputValue.toLowerCase()
                   const fullDesc = item.description.toLowerCase()
                   const fullSymbol = item.symbol.toLowerCase()
-                  return searchTerm &&  fullDesc.includes(searchTerm) && fullDesc !=searchTerm ||searchTerm &&  fullSymbol.includes(searchTerm) && fullSymbol !=searchTerm
-              }).map((item,i)=>
-          <div onClick={()=>onSearch(item)} key={i}>{item.description} </div>
-              
+                  return searchTerm && fullDesc.includes(searchTerm) && fullDesc !=searchTerm ||searchTerm &&  fullSymbol.includes(searchTerm) && fullSymbol !=searchTerm
+              }).map((item,i)=>{
+           
+                return <div className='search--result--item' onClick={()=>onSearch(item)} key={i}>{item.description} </div>
+              }
           )
               }
           </div>

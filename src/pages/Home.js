@@ -1,7 +1,7 @@
 import  React ,{ useRef,useState,useEffect,useCallback,BrowserRouter,Routes,Route} from "react";
 import axios from'axios';
 
-
+import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import WebSocket from '../components/WebSocket'
 import Navbar from '../components/Navbar'
@@ -32,7 +32,8 @@ const Home = () => {
 
   const {signup,error,isLoading} = useSignup()
 
-  const [bottom,setBottom] =useState('dashboard')
+  const [bottom,setBottom] =useState('stocks')
+  const [sideBarVisible,setSideBarVisible] =useState(false)
 
 
 
@@ -94,21 +95,29 @@ const Home = () => {
 
     },[dispatch,user])
 
-    const openSideBar =()=>{
-      setSidebarOn(!sidebarOn)
-
-    }
 
     useEffect(()=>{
 
-      console.log(bottom)
-    },[bottom])
+      // console.log(sideBarVisible)
+    },[sideBarVisible])
 
-const hugeFunc=(arg)=>{
+const conditionalRenderContent=(arg)=>{
   if (arg=='stocks'){
-    return loaded ? <div><StockSearch/><StockGroup/></div> :<div>Stock Search placeholder</div>
+    return loaded ? 
+    <motion.div className="home--stocks"
+
+    >
+      <StockSearch/>
+      
+      <StockGroup/>
+    </motion.div> 
+    :
+    <div><Loading/></div>
   } else if (arg=='dashboard'){
     return <div>here will be dashbard</div>
+  } else {
+
+    return <div>here will be soemthing else</div>
   }
 
 
@@ -117,18 +126,19 @@ const hugeFunc=(arg)=>{
     <div className="home">
  
       <Navbar id={'home--nav'}/>
-      <Sidebar onSelect={setBottom} />
+      <Sidebar onSelect={setBottom} onVisible={setSideBarVisible} />
       {/* <div>{hugeFunc(bottom)}</div> */}
 
         
         {
         isLoading ?<Loading/>
         :
-        <div className="home--content">
-          {hugeFunc(bottom)}
+        <motion.div className="home--content"
+        animate={{marginLeft:!sideBarVisible ? "-120px":"20px"}}>
+          {conditionalRenderContent(bottom)}
           {/* {loaded ? <StockSearch/> :<div>Stock Search placeholder</div>}
-          // {loaded ? <StockGroup/>:<div>Stock Group placeholder</div>} */}
-        </div>
+          /motion./ {loaded ? <StockGroup/>:<div>Stock Group placeholder</div>} */}
+        </motion.div>
     
 
       }
