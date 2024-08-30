@@ -7,6 +7,8 @@ import useWebsocketHook from '../hooks/useWebSocketHook'
 import {getAllSymbols} from '../helpers/webSocketHelpers'
 import LoadingSmall from '../components/LoadingSmall'
 import Lens from './Lens';
+import Add from "./Add";
+import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
 
 const StockSearch = ({symbols}) => {
 
@@ -40,6 +42,7 @@ const StockSearch = ({symbols}) => {
 
 
     const addStocks = async (e)=>{
+      console.log(e)
 
        const body = JSON.stringify({"email":user.email,"stocks":[{"symbol": e.symbol, "buy": 0, "sell": 0,"period":1440,"ticks":50,"start":last2Year}]})
 
@@ -90,18 +93,14 @@ const StockSearch = ({symbols}) => {
       {isLoading ?  <LoadingSmall/> :
     <div>
       {data ?
-        <div className='search'>
-          
+        <div className='search'>          
           <div className='search--containter'>
-              <input className='search---input'placeholder='Search Assets here...' type="text" value={inputValue} onChange={onChange}></input>
-          
+              <input className='search---input'placeholder='Search Assets here...' type="text" value={inputValue} onChange={onChange}>
+              </input>          
               <div className='goSearch' >
-                <Lens onClick={()=>addStocks(chosenSymbol)}></Lens>
-                {/* <GoSearch className='goSearch--lens' onClick={()=>addStocks(chosenSymbol)} disabled={toggleButton}></GoSearch> */}
+                {toggleButton ? <Lens ></Lens> : <div onClick={()=>addStocks(chosenSymbol)}> <Add  disabled={toggleButton}/> </div>}                
               </div>
-          </div>
-          {/* </> */}
-          <div className='search--result'>
+              <div className='search--result'>
               {data.returnData.filter(item=>{
                 
                   const searchTerm = inputValue.toLowerCase()
@@ -110,11 +109,22 @@ const StockSearch = ({symbols}) => {
                   return searchTerm && fullDesc.includes(searchTerm) && fullDesc !=searchTerm ||searchTerm &&  fullSymbol.includes(searchTerm) && fullSymbol !=searchTerm
               }).map((item,i)=>{
            
-                return <div className='search--result--item' onClick={()=>onSearch(item)} key={i}>{item.description} </div>
+                return <motion.div
+                  whileHover={{scale:1.02,backgroundColor:'#F3F3F3',
+                  boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)',
+                color:"#0043F1"}}
+                  transition={{type:"tween",duration:0.1}}
+                  whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}} 
+                
+
+                 className='search--result--item'  onClick={()=>onSearch(item)} key={i}>{item.description} </motion.div>
               }
           )
               }
           </div>
+          </div>
+
+        
         </div>
       :
         <div></div>

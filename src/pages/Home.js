@@ -19,6 +19,7 @@ import Test from './Test'
 import TestforLoggedIn from './TestforLoggedIn';
 
 
+
 const Home = () => {
 
   const {stocks,dispatch} = useStocksContext()
@@ -33,7 +34,7 @@ const Home = () => {
   const {signup,error,isLoading} = useSignup()
 
   const [bottom,setBottom] =useState('stocks')
-  const [sideBarVisible,setSideBarVisible] =useState(false)
+
 
 
 
@@ -96,23 +97,17 @@ const Home = () => {
     },[dispatch,user])
 
 
-    useEffect(()=>{
 
-      // console.log(sideBarVisible)
-    },[sideBarVisible])
 
 const conditionalRenderContent=(arg)=>{
   if (arg=='stocks'){
     return loaded ? 
-    <motion.div className="home--stocks"
-
-    >
-      <StockSearch/>
-      
-      <StockGroup/>
-    </motion.div> 
-    :
-    <div><Loading/></div>
+      <motion.div className="home--stocks">    
+        <StockSearch/>
+        <StockGroup/>
+      </motion.div> 
+      :
+      <div><Loading/></div>
   } else if (arg=='dashboard'){
     return <div>here will be dashbard</div>
   } else {
@@ -126,7 +121,7 @@ const conditionalRenderContent=(arg)=>{
     <div className="home">
  
       <Navbar id={'home--nav'}/>
-      <Sidebar onSelect={setBottom} onVisible={setSideBarVisible} />
+      <Sidebar onSelect={setBottom}  />
       {/* <div>{hugeFunc(bottom)}</div> */}
 
         
@@ -134,7 +129,8 @@ const conditionalRenderContent=(arg)=>{
         isLoading ?<Loading/>
         :
         <motion.div className="home--content"
-        animate={{marginLeft:!sideBarVisible ? "-120px":"20px"}}>
+        // animate={{marginLeft:!sideBarVisible ? "-120px":"20px"}}
+        >
           {conditionalRenderContent(bottom)}
           {/* {loaded ? <StockSearch/> :<div>Stock Search placeholder</div>}
           /motion./ {loaded ? <StockGroup/>:<div>Stock Group placeholder</div>} */}

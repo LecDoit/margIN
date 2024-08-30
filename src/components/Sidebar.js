@@ -17,7 +17,7 @@ const SIDEBAR_ITEMS = [
 ,
   ];
 
-const Sidebar = ({onSelect,onVisible}) => {
+const Sidebar = ({onSelect}) => {
     // console.log(newz.module)
 
     const [isCollapsed,setIsCollapsed] = useState(true);
@@ -71,14 +71,14 @@ const Sidebar = ({onSelect,onVisible}) => {
         onSelect(e.id)
     }
     useEffect(()=>{
-        onVisible(showSidebar)
+        // onVisible(showSidebar)
     },[showSidebar])
         
 
 
   return (
     <motion.div className='sidebar'
-    animate={{width:!showSidebar? 50:"100%"}}
+    animate={{width:!showSidebar? 50:180}}
     layout
     onMouseEnter={()=>setIsHover(true)}
     onMouseLeave={()=>setIsHover(false)}
