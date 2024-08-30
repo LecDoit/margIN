@@ -96,14 +96,16 @@ a:visited{
   height: 30px;
   background-color: transparent;
   border:1px solid transparent;
-  border-bottom: 1px solid var(--DARKBLUE);
+  /* border-bottom: 1px solid var(--DARKBLUE); */
   border-radius: 0;
   cursor: pointer;
+  background-color: var(--WHITE);
+  border-radius: 24px;
 
 }
 .search---input:focus{
   border:none;
-  border-bottom: 2px solid var(--BLUE);
+  border-bottom: 2px solid var(--LIGHTBLUE);
 }
 
 .search--result{
