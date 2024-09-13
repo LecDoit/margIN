@@ -62,16 +62,22 @@ const StockGroup = () => {
         <div className='stockGroup--table--graph'>Last 7 Days</div>
 
       </div>
-      <div className='stockGroup--table--content'>{stocks.length>0 ? <div>
-          {stocks.map((item,a)=>{
-              return <SingleStock key={a} chartRangeArgument={
-                  chartRangeFactory(startDate,endDate,stocks[a].symbol,1000,1440) 
-         
-              }
-              order={a+1}
-              />
-          }) }
-          </div>:<div></div>}
+      <div className='stockGroup--table--content'>
+        {stocks.length>0 ? 
+          <div>
+            {stocks.map((item,a)=>{
+                return <SingleStock key={a} chartRangeArgument={
+                    chartRangeFactory(startDate,endDate,stocks[a].symbol,1000,1440) 
+          
+                    }
+                    order={a+1}
+                    />
+              }) 
+            }
+          </div>
+          :
+          <div></div>
+          }
 
       </div>
     </div>

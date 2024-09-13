@@ -7,6 +7,7 @@ import BasicLineChart from "./BasicLineChart"
 import StockSearch from './StockSearch';
 import LoadingSmall from '../components/LoadingSmall'
 import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
+import SingleStockDetails from './SingleStockDetails';
 
 
 
@@ -21,6 +22,13 @@ const SingleStock = ({chartRangeArgument,order}) => {
 
   const [color7,setColor7] =useState('')
   const [color24,setColor24] =useState('')
+
+  const [showModal,setShowModal] = useState(false)
+
+  const [centerX,setCenterX] = useState(0)
+  const [centerY,setCenterY] = useState(0)
+  
+  
 
   useEffect(()=>{
     if (data){
@@ -57,8 +65,23 @@ const SingleStock = ({chartRangeArgument,order}) => {
     }
   }
 
+  const renderWindow = (e)=>{
+    const rect = e.target.getBoundingClientRect()
+    const centerX = rect.left+rect.width/2
+    const centerY = rect.top+rect.height/2
+    setCenterX(centerX)
+    setCenterY(centerY)
+
+    console.log(centerX,centerY)
+    setShowModal(true)
+
+  }
+
   return (
-    <motion.div
+    <div>
+      <SingleStockDetails showModal={showModal} setShowModal={setShowModal} centerX={centerX} centerY={centerY}/>
+    
+    <motion.div 
     whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',
     boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
     transition={{type:"tween",duration:0.1}}
@@ -66,7 +89,7 @@ const SingleStock = ({chartRangeArgument,order}) => {
     >
       {isLoading ? 
       <LoadingSmall/> :
-      <div className='singleStock'>
+      <div className='singleStock' onClick={renderWindow}>    
         <div className='stockGroup--table--no'>{order}</div>
         <div className='stockGroup--table--name'>{chartRangeArgument.arguments.info.symbol}</div>
         <div className='stockGroup--table--price' >{actualPrice}</div>
@@ -78,6 +101,7 @@ const SingleStock = ({chartRangeArgument,order}) => {
       </div>
           }
     </motion.div>
+    </div>
 
   )
 }

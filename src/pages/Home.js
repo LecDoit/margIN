@@ -107,7 +107,7 @@ const conditionalRenderContent=(arg)=>{
         <StockGroup/>
       </motion.div> 
       :
-      <div><Loading/></div>
+      <Loading/>
   } else if (arg=='dashboard'){
     return <div>here will be dashbard</div>
   } else {
@@ -125,8 +125,7 @@ const conditionalRenderContent=(arg)=>{
       {/* <div>{hugeFunc(bottom)}</div> */}
 
         
-        {
-        isLoading ?<Loading/>
+        {isLoading ? <div className='center--loading'><Loading/></div>
         :
         <motion.div className="home--content"
         // animate={{marginLeft:!sideBarVisible ? "-120px":"20px"}}

@@ -32,7 +32,7 @@ const Login = () => {
     <div>
         <Navbar id={'login--nav'}/>
         {
-        isLoading?<Loading/>
+        isLoading? <div className='center--loading'><Loading/></div>
         :
         <div className='signup'>
 
