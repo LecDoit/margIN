@@ -71,36 +71,36 @@ const SingleStock = ({chartRangeArgument,order}) => {
     const centerY = rect.top+rect.height/2
     setCenterX(centerX)
     setCenterY(centerY)
-
-    console.log(centerX,centerY)
     setShowModal(true)
 
   }
 
   return (
     <div>
-      <SingleStockDetails showModal={showModal} setShowModal={setShowModal} centerX={centerX} centerY={centerY}/>
+      <SingleStockDetails showModal={showModal} setShowModal={setShowModal} centerX={centerX} centerY={centerY}
+      chartData={data} chartRangeArgument={chartRangeArgument}/>
     
-    <motion.div 
-    whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',
-    boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
-    transition={{type:"tween",duration:0.1}}
-    whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}} 
-    >
-      {isLoading ? 
-      <LoadingSmall/> :
-      <div className='singleStock' onClick={renderWindow}>    
-        <div className='stockGroup--table--no'>{order}</div>
-        <div className='stockGroup--table--name'>{chartRangeArgument.arguments.info.symbol}</div>
-        <div className='stockGroup--table--price' >{actualPrice}</div>
-        <div className='stockGroup--table--24'style={{color:color24}}>{(((actualPrice/last24HPrice)-1)*100).toFixed(2)}%</div>
-        <div className='stockGroup--table--7' style={{color:color7}}>{(((actualPrice/last7DPrice)-1)*100).toFixed(2)}%</div>
+      <motion.div 
+      whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',
+      boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
+      transition={{type:"tween",duration:0.1}}
+      whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}} 
+      >
+        {isLoading ? 
+        <LoadingSmall/> :
+        <div className='singleStock-wrapper'>   
+          <div className='singleStock' onClick={renderWindow}>
+            <div className='stockGroup--table--no'>{order}</div> 
+            <div className='stockGroup--table--name'>{chartRangeArgument.arguments.info.symbol}</div>
+            <div className='stockGroup--table--price' >{actualPrice}</div>
+            <div className='stockGroup--table--24'style={{color:color24}}>{(((actualPrice/last24HPrice)-1)*100).toFixed(2)}%</div>
+            <div className='stockGroup--table--7' style={{color:color7}}>{(((actualPrice/last7DPrice)-1)*100).toFixed(2)}%</div>
 
-
-        <BasicLineChart className='stockGroup--table--graph' colorLine={colorLine} chartData={data} chartRangeArgument={chartRangeArgument}/> 
-      </div>
-          }
-    </motion.div>
+          </div> 
+          <BasicLineChart className='stockGroup--table--graph' colorLine={colorLine} chartData={data} chartRangeArgument={chartRangeArgument}/> 
+        </div>
+            }
+      </motion.div>
     </div>
 
   )
