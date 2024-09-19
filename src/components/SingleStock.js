@@ -11,7 +11,9 @@ import SingleStockDetails from './SingleStockDetails';
 
 
 
-const SingleStock = ({chartRangeArgument,order}) => {
+const SingleStock = ({chartRangeArgument,order,stock}) => {
+
+  
 
   const {stocks,dispatch} = useStocksContext() 
   const {data,error,isLoading} = useWebsocketHook(chartRangeArgument)
@@ -27,11 +29,14 @@ const SingleStock = ({chartRangeArgument,order}) => {
 
   const [centerX,setCenterX] = useState(0)
   const [centerY,setCenterY] = useState(0)
+  // const [stockz,setStock] = useState(null)
   
   
-
+// console.log('single stock refreshed')
   useEffect(()=>{
+    // console.log(data)
     if (data){
+      // console.log(chartRangeArgument.arguments.info.symbol, stock)
       const p = data.returnData.rateInfos[data.returnData.rateInfos.length-1].open
       const last24hp = data.returnData.rateInfos[data.returnData.rateInfos.length-2].open
       const last7D = data.returnData.rateInfos[0].open
@@ -78,7 +83,7 @@ const SingleStock = ({chartRangeArgument,order}) => {
   return (
     <div>
       <SingleStockDetails showModal={showModal} setShowModal={setShowModal} centerX={centerX} centerY={centerY}
-      chartData={data} chartRangeArgument={chartRangeArgument}/>
+      chartData={data} chartRangeArgument={chartRangeArgument} stock={stock}/>
     
       <motion.div 
       whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',

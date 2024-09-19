@@ -31,7 +31,7 @@ export const lineChartFactory = (arg,arg2,arg3)=>{
     // const year = new Date(arg.returnData.rateInfos[0].ctm).getFullYear()
     // const month = new Date(arg.returnData.rateInfos[0].ctm).getMonth()
 
-   
+    
     for (let i = 0;i<arg.returnData.rateInfos.length;i++){
         const year = new Date(arg.returnData.rateInfos[i].ctm).getFullYear()
         const month = new Date(arg.returnData.rateInfos[i].ctm).getMonth()

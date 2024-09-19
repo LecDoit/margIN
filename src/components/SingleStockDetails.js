@@ -9,14 +9,14 @@ import { useAuthContext } from '../hooks/useAuthContext';
 
 
 
-const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeArgument}) => {
-
+const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeArgument,chartData, stock}) => {
+ 
     const {data,error,isLoading} = useWebsocketHook(chartRangeArgument)
     const {stocks,dispatch} = useStocksContext()
     const {user} = useAuthContext()
-    // console.log(chartRangeFactory())
 
-
+    
+    // console.log('single stock details refreshed')
 
     ////////////////////
     const [particularStock,setParticularStock] = useState('')
@@ -41,11 +41,9 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     const updateUser = async (e)=>{
         e.preventDefault()
-        
-
-        const filteredStock = stocks.filter((s)=>s._id === particularStock[0]._id)
-        const filteredArray = stocks.filter((s)=>s._id !== particularStock[0]._id)
- 
+        const index = stocks.indexOf(particularStock)
+        console.log(index)
+        const filteredStock = stocks.splice(index,1) 
 
         filteredStock[0].buy=buy
         filteredStock[0].sell=sell
@@ -53,11 +51,13 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         filteredStock[0].ticks=ticks
         filteredStock[0].start=startDate
 
-        filteredArray.push(filteredStock[0])
+        stocks.splice(index, 0, filteredStock[0])
+
+        
         
         axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
 
-        {"email":user.email,"stocks":filteredArray},
+        {"email":user.email,"stocks":stocks},
         {
             headers:{
             'Content-Type':'application/json',
@@ -70,84 +70,80 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
                 const json = response.data.stocks
                 dispatch({type:`DELETE_STOCK`,payload:json})
-                console.log(json)
-             
-
-            })
-
-          
-         
+            })         
     }
+
     useState(()=>{
+            
+        if (stocks){
+            console.log(stock)
+            setBuy(stock.buy)
+            setSell(stock.sell)
+            setSymbols(stock.symbol)
+            setParticularStock(stock)
+            
+            setPeriod(stock.period)
+            setTicks(stock.ticks)
+            setStartDate(stock.start)
+            setEndDate(new Date().getTime())
+            if (buy!==0){
+            } else {
+            setBuyLine({beforeDatasetsDraw(chart){
+                            const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
+                            ctx.save();
+
+                            // success line
+                            ctx.strokeStyle = 'green';
+
+                            ctx.strokeRect(left,y.getPixelForValue(buy),width,0)
+                            ctx.restore()
+
+                            // success backgroud
+                            ctx.fillStyle = 'rgba(0,200,0,0.2'
+                            ctx.fillRect(left,bottom,width,y.getPixelForValue(buy)-bottom)
+                            ctx.restore()
+
+                            // success text
+                            ctx.font = '12px Arial'
+                            ctx.fillStyle = ('green')
+                            ctx.fillText('Buy', width,y.getPixelForValue(buy))
+
+
         
+                            }   
+                        })
+                    }
+            if (sell!==0){
 
-        // setBuy(returnStockProp("buy"))
-        // setSell(returnStockProp("sell"))
-        setSymbols(chartRangeArgument.arguments.info.symbol)
-        setParticularStock(stocks.filter((stock)=> {
-            return stock.symbol === chartRangeArgument.arguments.info.symbol}))
+            } else{
+            setSellLine({beforeDatasetsDraw(chart){
+                            const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
+                            ctx.save();
+
+                            //success line
+                            ctx.strokeStyle = 'red';
+                            ctx.strokeRect(left,y.getPixelForValue(sell),width,0)
+                            ctx.restore()
+
+
+                            // success backgroud
+
+                            ctx.fillStyle = 'rgba(255,0,0,0.2'
+                            ctx.fillRect(left,top,width,y.getPixelForValue(sell)-top)
+                            ctx.restore()
+
+                            // success text
+                            ctx.font = '12px Arial'
+                            ctx.fillStyle = ('red')
+                            ctx.fillText('Sell', width,y.getPixelForValue(sell))
+
         
-        setPeriod(chartRangeArgument.arguments.info.period)
-        setTicks(chartRangeArgument.arguments.info.ticks)
-        setStartDate(chartRangeArgument.arguments.info.start)
-        setEndDate(new Date().getTime())
-        if (buy!==0){
-        } else {
-        setBuyLine({beforeDatasetsDraw(chart){
-                        const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
-                        ctx.save();
+                            }   
+                        })
+            }
+            }
+    },[stocks])
 
-                        // success line
-                        ctx.strokeStyle = 'green';
-
-                        ctx.strokeRect(left,y.getPixelForValue(buy),width,0)
-                        ctx.restore()
-
-                        // success backgroud
-                        ctx.fillStyle = 'rgba(0,200,0,0.2'
-                        ctx.fillRect(left,bottom,width,y.getPixelForValue(buy)-bottom)
-                        ctx.restore()
-
-                        // success text
-                        ctx.font = '12px Arial'
-                        ctx.fillStyle = ('green')
-                        ctx.fillText('Buy', width,y.getPixelForValue(buy))
-
-
-    
-                        }   
-                    })
-                }
-        if (sell!==0){
-
-        } else{
-        setSellLine({beforeDatasetsDraw(chart){
-                        const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
-                        ctx.save();
-
-                        //success line
-                        ctx.strokeStyle = 'red';
-                        ctx.strokeRect(left,y.getPixelForValue(sell),width,0)
-                        ctx.restore()
-
-
-                        // success backgroud
-
-                        ctx.fillStyle = 'rgba(255,0,0,0.2'
-                        ctx.fillRect(left,top,width,y.getPixelForValue(sell)-top)
-                        ctx.restore()
-
-                        // success text
-                        ctx.font = '12px Arial'
-                        ctx.fillStyle = ('red')
-                        ctx.fillText('Sell', width,y.getPixelForValue(sell))
-
-      
-                        }   
-                    })
-        }
-    
-},[stocks])
 
 
     
@@ -173,9 +169,17 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     }
     const funcCheck = ()=>{
-        console.log('works')
-        setShowModal(false)
+        console.log('stock',stock)
+        console.log('stocks',stocks)
+        console.log('particular stock',particularStock)
     }
+
+    useEffect(()=>{
+        // console.log("it is being refreshed")
+        // console.log(stocks)
+        // console.log(particularStock[0])
+        // console.log('---------------')
+    },[stocks])
 
 
   return (
@@ -186,7 +190,6 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             initial="hidden"
             animate='visible'
             exit='hidden'
-
             >  
                 <motion.div className='modal'
                     variants={modal}
@@ -195,10 +198,12 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                     exit='hidden'
                 >
                     <div style={{height:"200px", height:"200px"}}>
-                        <Line  data={lineChartFactory(data,"symbol")}  />
+                        <div>{symbol}</div>
+                        {/* <Line  data={lineChartFactory(data,"symbol")}  /> */}
                         
                     </div>
                     <div onClick={()=>setShowModal(false)}>Hide</div>
+                    <button onClick={funcCheck}> show stock</button>
                     
                     <div>
                         {/* start */}

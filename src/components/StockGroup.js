@@ -47,6 +47,10 @@ const StockGroup = () => {
     
   },[])
 
+  useEffect(()=>{
+    // console.log('stock group refreshed')
+  },[stocks])
+
 
 
 
@@ -70,7 +74,7 @@ const StockGroup = () => {
                     chartRangeFactory(startDate,endDate,stocks[a].symbol,1000,1440) 
           
                     }
-                    order={a+1}
+                    order={a+1} stock={item}
                     />
               }) 
             }
