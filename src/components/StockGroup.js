@@ -8,7 +8,7 @@ import SingleStock from './SingleStock';
 
 import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '../helpers/webSocketHelpers'
 import StockDetails from './Stock';
-import { isCompositeComponent } from 'react-dom/test-utils';
+import { isCompositeComponent, isCompositeComponentWithType } from 'react-dom/test-utils';
 
 
 const StockGroup = () => {
@@ -16,6 +16,7 @@ const StockGroup = () => {
     const {stocks,dispatch} = useStocksContext() 
     const [endDate,setEndDate] = useState(new Date().getTime())
     const [startDate,setStartDate] = useState('')
+    const [stocksRefreshed,setStocksRefreshed] = useState('')
  
 
     useEffect(()=>{
@@ -49,6 +50,7 @@ const StockGroup = () => {
 
   useEffect(()=>{
     // console.log('stock group refreshed')
+    setStocksRefreshed(stocks)
   },[stocks])
 
 
@@ -70,6 +72,7 @@ const StockGroup = () => {
         {stocks.length>0 ? 
           <div>
             {stocks.map((item,a)=>{
+                
                 return <SingleStock key={a} chartRangeArgument={
                     chartRangeFactory(startDate,endDate,stocks[a].symbol,1000,1440) 
           

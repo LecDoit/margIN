@@ -37,46 +37,72 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const [last5Year, setLast5Year] = useState('')
     const [last10Year, setLast10Year] = useState('')
     const [lastMonth, setLastMonth] = useState('')
+
     ////////////////
+
+
+    const [stocksRefreshed,setStocksRefreshed] = useState('')
+
+    useEffect(()=>{
+
+      setStocksRefreshed(stocks)
+
+    },[stocks])
+
 
     const updateUser = async (e)=>{
         e.preventDefault()
+
+        const filteredStock = stocks.filter((s)=>s._id === particularStock._id)
+        // const filteredArray = stocks.filter((s)=>s._id !== particularStock._id)
+
+
+
         const index = stocks.indexOf(particularStock)
-        console.log(index)
-        const filteredStock = stocks.splice(index,1) 
+        // const index2 = stocks.indexOf(filteredStock)
+        const index3 = stocks.findIndex(item=>item===particularStock)
 
-        filteredStock[0].buy=buy
-        filteredStock[0].sell=sell
-        filteredStock[0].period=period
-        filteredStock[0].ticks=ticks
-        filteredStock[0].start=startDate
+        console.log(filteredStock[0])
+        // const splicedStock = stocks.splice(index,1) 
+        console.log(index,index3)
+   
+        
+     
+        // console.log(stocks[0]===filteredStock[0])
 
-        stocks.splice(index, 0, filteredStock[0])
+        // splicedStock[0].buy=buy
+        // splicedStock[0].sell=sell
+        // splicedStock[0].period=period
+        // splicedStock[0].ticks=ticks
+        // splicedStock[0].start=startDate
+
+        // stocks.splice(index, 0, splicedStock[0])
+        // console.log(stocks)
 
         
         
-        axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
+        // axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
 
-        {"email":user.email,"stocks":stocks},
-        {
-            headers:{
-            'Content-Type':'application/json',
-            'Authorization':`Bearer ${user.token}`
-            }
-        }
+        // {"email":user.email,"stocks":stocks},
+        // {
+        //     headers:{
+        //     'Content-Type':'application/json',
+        //     'Authorization':`Bearer ${user.token}`
+        //     }
+        // }
 
-        )
-            .then((response)=>{
+        // )
+        //     .then((response)=>{
 
-                const json = response.data.stocks
-                dispatch({type:`DELETE_STOCK`,payload:json})
-            })         
+        //         const json = response.data.stocks
+        //         dispatch({type:`DELETE_STOCK`,payload:json})
+        //     })         
     }
 
     useState(()=>{
             
-        if (stocks){
-            console.log(stock)
+        // if (stocks){
+            // console.log(stock)
             setBuy(stock.buy)
             setSell(stock.sell)
             setSymbols(stock.symbol)
@@ -141,10 +167,13 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                             }   
                         })
             }
-            }
+            // }
     },[stocks])
 
+    useEffect(()=>{
+        // console.log(particularStock)
 
+    },[particularStock])
 
     
     const backdrop ={
@@ -174,12 +203,12 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         console.log('particular stock',particularStock)
     }
 
-    useEffect(()=>{
-        // console.log("it is being refreshed")
-        // console.log(stocks)
-        // console.log(particularStock[0])
-        // console.log('---------------')
-    },[stocks])
+    // useEffect(()=>{
+    //     // console.log("it is being refreshed")
+    //     // console.log(stocks)
+    //     // console.log(particularStock[0])
+    //     // console.log('---------------')
+    // },[stocks])
 
 
   return (
@@ -199,6 +228,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                 >
                     <div style={{height:"200px", height:"200px"}}>
                         <div>{symbol}</div>
+                        <div>{particularStock._id}</div>
                         {/* <Line  data={lineChartFactory(data,"symbol")}  /> */}
                         
                     </div>

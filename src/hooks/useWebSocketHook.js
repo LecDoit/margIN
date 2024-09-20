@@ -26,7 +26,7 @@ const useWebSocketHook = (xtbMessageArg) => {
 
 
     useEffect(()=>{
-        // console.log(reload)
+        console.log(xtbMessageArg)
     },[xtbMessageArg])
 
 
@@ -68,7 +68,7 @@ const useWebSocketHook = (xtbMessageArg) => {
 
 //  get the XTB credentials from API
     useEffect(() => {
-        setIsLoading(true)
+        // setIsLoading(true)
         // console.log('initial',xtbMessageArg)
 
         if (user){
@@ -80,7 +80,7 @@ const useWebSocketHook = (xtbMessageArg) => {
 
 // since we received the credentials from API we can now log into the XTB WebSocket
     useEffect(()=>{
-        if(userXtb){
+        if(userXtb && !streamSessionId){
             sendJsonMessage(logIn(userXtb, passwordXtb));
         }
     },[userXtb,xtbMessageArg])
@@ -101,9 +101,12 @@ const useWebSocketHook = (xtbMessageArg) => {
             setData(lastJsonMessage)   
             setIsLoading(false)
             // console.log('what is happening here?',lastJsonMessage)
+        } else{
+            console.log(lastJsonMessage,'baddan')
+            setIsLoading(false)
         }
 
-        // console.log(lastJsonMessage)
+        console.log(lastJsonMessage)
         
     },[lastJsonMessage,sendJsonMessage])
 
@@ -129,3 +132,5 @@ const useWebSocketHook = (xtbMessageArg) => {
 }
 
 export default useWebSocketHook
+
+// naprawic zeby zmienialo sie na true w jednym momencie

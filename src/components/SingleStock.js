@@ -16,7 +16,8 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   
 
   const {stocks,dispatch} = useStocksContext() 
-  const {data,error,isLoading} = useWebsocketHook(chartRangeArgument)
+  const [hookArg,setHookArg] = useState('')
+  const {data,error,isLoading} = useWebsocketHook(hookArg)
   const [actualPrice,setActualPrice] = useState(0)
   const [last24HPrice,setLast24HPrice] = useState(0)
   const [last7DPrice,setLast7DPrice] = useState(0)
@@ -29,12 +30,14 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
 
   const [centerX,setCenterX] = useState(0)
   const [centerY,setCenterY] = useState(0)
+
+
   // const [stockz,setStock] = useState(null)
   
   
 // console.log('single stock refreshed')
   useEffect(()=>{
-    // console.log(data)
+    console.log(data)
     if (data){
       // console.log(chartRangeArgument.arguments.info.symbol, stock)
       const p = data.returnData.rateInfos[data.returnData.rateInfos.length-1].open
@@ -79,6 +82,11 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
     setShowModal(true)
 
   }
+
+
+  useEffect(()=>{
+    setHookArg(chartRangeArgument)
+  },[chartRangeArgument])
 
   return (
     <div>

@@ -24,7 +24,13 @@ const StockSearch = ({symbols}) => {
     const [last2Year, setLast2Year] = useState('')
     const [endDate, setEndDate] = useState(new Date().getTime())
     const [body,setBody] = useState('')
+    const [stocksRefreshed,setStocksRefreshed] = useState('')
 
+    useEffect(()=>{
+
+      setStocksRefreshed(stocks)
+
+    },[stocks])
 
 
 
@@ -42,7 +48,7 @@ const StockSearch = ({symbols}) => {
 
 
     const addStocks = async (e)=>{
-      console.log(e)
+      // console.log(e)
 
        const body = JSON.stringify({"email":user.email,"stocks":[{"symbol": e.symbol, "buy": 0, "sell": 0,"period":1440,"ticks":50,"start":last2Year}]})
 
@@ -58,6 +64,7 @@ const StockSearch = ({symbols}) => {
           })
           const json = await response.json()
           if (response.ok){
+            console.log(json)
 
             dispatch({type:"CREATE_STOCK",payload:json.stocks})
 
@@ -79,7 +86,7 @@ const StockSearch = ({symbols}) => {
     }
 
     const onSearch = (searchTerm)=>{
-      console.log(searchTerm)
+      // console.log(searchTerm)
         setToggleButton(false)
         setInputValue(searchTerm.description)
         setChosenSymbol(searchTerm)
