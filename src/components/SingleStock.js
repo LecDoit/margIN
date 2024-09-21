@@ -37,7 +37,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   
 // console.log('single stock refreshed')
   useEffect(()=>{
-    console.log(data)
+    // console.log(data)
     if (data){
       // console.log(chartRangeArgument.arguments.info.symbol, stock)
       const p = data.returnData.rateInfos[data.returnData.rateInfos.length-1].open
@@ -86,7 +86,8 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
 
   useEffect(()=>{
     setHookArg(chartRangeArgument)
-  },[chartRangeArgument])
+  },[chartRangeArgument,stock,stocks])
+
 
   return (
     <div>
@@ -110,7 +111,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
             <div className='stockGroup--table--7' style={{color:color7}}>{(((actualPrice/last7DPrice)-1)*100).toFixed(2)}%</div>
 
           </div> 
-          <BasicLineChart className='stockGroup--table--graph' colorLine={colorLine} chartData={data} chartRangeArgument={chartRangeArgument}/> 
+          <BasicLineChart className='stockGroup--table--graph' colorLine={colorLine} chartData={data} chartRangeArgument={chartRangeArgument} stock={stock}/> 
         </div>
             }
       </motion.div>

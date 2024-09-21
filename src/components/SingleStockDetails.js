@@ -43,66 +43,70 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     const [stocksRefreshed,setStocksRefreshed] = useState('')
 
-    useEffect(()=>{
+    // useEffect(()=>{
+        
+    // //   setStocksRefreshed(stocks)
+    // console.log('powinno to wskoczyc')
 
-      setStocksRefreshed(stocks)
-
-    },[stocks])
+    // },[stocks])
 
 
     const updateUser = async (e)=>{
         e.preventDefault()
-
-        const filteredStock = stocks.filter((s)=>s._id === particularStock._id)
+        // console.log(particularStock)
+        // const filteredStock = stocks.filter((s)=>s.symbol== particularStock.symbol)
         // const filteredArray = stocks.filter((s)=>s._id !== particularStock._id)
 
+        const findStock = stocks.find(item=>item._id===particularStock._id)
 
+        const index = stocks.indexOf(findStock)
+        const splicedStock = stocks.splice(index,1) 
 
-        const index = stocks.indexOf(particularStock)
-        // const index2 = stocks.indexOf(filteredStock)
-        const index3 = stocks.findIndex(item=>item===particularStock)
+        // const index3 = stocks.findIndex(item=>item==index2)
 
-        console.log(filteredStock[0])
-        // const splicedStock = stocks.splice(index,1) 
-        console.log(index,index3)
+        // console.log()
+        
+        
+
+        console.log(splicedStock)
    
         
      
         // console.log(stocks[0]===filteredStock[0])
 
-        // splicedStock[0].buy=buy
-        // splicedStock[0].sell=sell
-        // splicedStock[0].period=period
-        // splicedStock[0].ticks=ticks
-        // splicedStock[0].start=startDate
+        splicedStock[0].buy=buy
+        splicedStock[0].sell=sell
+        splicedStock[0].period=period
+        splicedStock[0].ticks=ticks
+        splicedStock[0].start=startDate
 
-        // stocks.splice(index, 0, splicedStock[0])
+        stocks.splice(index, 0, splicedStock[0])
         // console.log(stocks)
 
         
         
-        // axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
+        axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
 
-        // {"email":user.email,"stocks":stocks},
-        // {
-        //     headers:{
-        //     'Content-Type':'application/json',
-        //     'Authorization':`Bearer ${user.token}`
-        //     }
-        // }
+        {"email":user.email,"stocks":stocks},
+        {
+            headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${user.token}`
+            }
+        }
 
-        // )
-        //     .then((response)=>{
+        )
+            .then((response)=>{
 
-        //         const json = response.data.stocks
-        //         dispatch({type:`DELETE_STOCK`,payload:json})
-        //     })         
+                const json = response.data.stocks
+                dispatch({type:`DELETE_STOCK`,payload:json})
+            })         
     }
 
-    useState(()=>{
-            
-        // if (stocks){
-            // console.log(stock)
+    useEffect(()=>{
+        console.log('why its not refreshing',stocks)
+        if (stocks){
+            console.log(stock)
             setBuy(stock.buy)
             setSell(stock.sell)
             setSymbols(stock.symbol)
@@ -167,7 +171,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                             }   
                         })
             }
-            // }
+            }
     },[stocks])
 
     useEffect(()=>{
@@ -198,9 +202,9 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     }
     const funcCheck = ()=>{
-        console.log('stock',stock)
+        console.log('stock',stock.symbol,stock._id)
         console.log('stocks',stocks)
-        console.log('particular stock',particularStock)
+        console.log('particular stock',particularStock.symbol)
     }
 
     // useEffect(()=>{

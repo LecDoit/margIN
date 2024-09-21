@@ -26,7 +26,7 @@ const useWebSocketHook = (xtbMessageArg) => {
 
 
     useEffect(()=>{
-        console.log(xtbMessageArg)
+        // console.log(xtbMessageArg)
     },[xtbMessageArg])
 
 
@@ -102,11 +102,11 @@ const useWebSocketHook = (xtbMessageArg) => {
             setIsLoading(false)
             // console.log('what is happening here?',lastJsonMessage)
         } else{
-            console.log(lastJsonMessage,'baddan')
+            // console.log(lastJsonMessage,'baddan')
             setIsLoading(false)
         }
 
-        console.log(lastJsonMessage)
+        // console.log(lastJsonMessage)
         
     },[lastJsonMessage,sendJsonMessage])
 

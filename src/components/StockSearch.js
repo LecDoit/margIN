@@ -64,7 +64,7 @@ const StockSearch = ({symbols}) => {
           })
           const json = await response.json()
           if (response.ok){
-            console.log(json)
+            // console.log(json)
 
             dispatch({type:"CREATE_STOCK",payload:json.stocks})
 

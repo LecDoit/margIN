@@ -49,7 +49,7 @@ const StockGroup = () => {
   },[])
 
   useEffect(()=>{
-    // console.log('stock group refreshed')
+    // console.log('stock group refreshed',stocks)
     setStocksRefreshed(stocks)
   },[stocks])
 

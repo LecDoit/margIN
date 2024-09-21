@@ -10,7 +10,8 @@ import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '
 
 
 
-function BasicLineChart({chartData,chartRangeArgument,colorLine}) {
+function BasicLineChart({chartData,chartRangeArgument,colorLine,stock}) {
+    // console.log(chartRangeArgument.arguments.info.symbol)
 
     const {stocks,dispatch} = useStocksContext()
     const {user} = useAuthContext()
@@ -18,21 +19,40 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine}) {
     const [particularStock,setParticularStock] = useState('')
     const [symbol,setSymbols] = useState('')
 
+    const [stocksRefreshed,setStocksRefreshed] = useState('')
+
+    useEffect(()=>{
+
+      setStocksRefreshed(stocks)
+
+    },[stocks])
+
     useState(()=>{
 
-            setSymbols(chartRangeArgument.arguments.info.symbol)
-            setParticularStock(stocks.filter((stock)=> {
-                return stock.symbol === chartRangeArgument.arguments.info.symbol}))                   
+            setSymbols(stock.symbol)
+            // setParticularStock(stocks.filter((stock)=> {
+            //     return stock.symbol === chartRangeArgument.arguments.info.symbol}))   
+            setParticularStock(stock)                
         
-    },[stocks])
+    },[stocks,chartRangeArgument])
     
     const handleClickDeleteStock = async (e) =>{
- 
-        const filteredArray = stocks.filter((s)=>s._id !== particularStock[0]._id)
-
-        const currObj = {email:user.email,stocks:filteredArray}
-
         e.preventDefault();
+
+        const findStock = stocks.find(item=>item._id===particularStock._id)
+
+        const index = stocks.indexOf(findStock)
+        const splicedStock = stocks.splice(index,1) 
+        // console.log(splicedStock,stocks)
+        console.log(findStock,index,stocks)
+
+ 
+        // const filteredArray = stocks.filter((s)=>s.symbol!== particularStock[0].symbol)
+        // console.log(filteredArray,particularStock[0])
+
+        const currObj = {email:user.email,stocks:stocks}
+
+        
         axios.patch('https://xtbbackend.onrender.com/stocks/deleteStock',
         
         currObj,
@@ -44,7 +64,7 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine}) {
           }
         )
             .then((response)=>{
-                // console.log(response.data)
+                console.log(response.data)
                 const json = response.data.stocks
                 dispatch({type:'DELETE_STOCK',payload:json}) 
            
