@@ -104,9 +104,9 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     }
 
     useEffect(()=>{
-        console.log('why its not refreshing',stocks)
+        // console.log('why its not refreshing',stocks)
         if (stocks){
-            console.log(stock)
+            // console.log(stock)
             setBuy(stock.buy)
             setSell(stock.sell)
             setSymbols(stock.symbol)
@@ -207,12 +207,25 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         console.log('particular stock',particularStock.symbol)
     }
 
-    // useEffect(()=>{
-    //     // console.log("it is being refreshed")
-    //     // console.log(stocks)
-    //     // console.log(particularStock[0])
-    //     // console.log('---------------')
-    // },[stocks])
+    useEffect(()=>{
+        const handleEsc=(e)=>{
+            if (e.key==='Escape'){
+                setShowModal(false)
+            }
+        }
+        window.addEventListener('keydown',handleEsc)
+        return()=>{
+            window.removeEventListener('keydown',handleEsc)
+        }
+
+    },[])
+
+    const handleBackdropClick = (e)=>{
+        if (e.target.className === "backdrop"){
+            setShowModal(false)
+            
+        }
+    }
 
 
   return (
@@ -223,6 +236,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             initial="hidden"
             animate='visible'
             exit='hidden'
+            onClick={handleBackdropClick}
             >  
                 <motion.div className='modal'
                     variants={modal}
@@ -230,14 +244,11 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                     animate='visible'
                     exit='hidden'
                 >
-                    <div style={{height:"200px", height:"200px"}}>
-                        <div>{symbol}</div>
-                        <div>{particularStock._id}</div>
-                        {/* <Line  data={lineChartFactory(data,"symbol")}  /> */}
-                        
+                    <div style={{height:"200px", height:"200px"}}>                
+                        <Line  data={lineChartFactory(data,"symbol")}  />                        
                     </div>
                     <div onClick={()=>setShowModal(false)}>Hide</div>
-                    <button onClick={funcCheck}> show stock</button>
+     
                     
                     <div>
                         {/* start */}

@@ -89,9 +89,11 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   },[chartRangeArgument,stock,stocks])
 
 
+
+
   return (
     <div>
-      <SingleStockDetails showModal={showModal} setShowModal={setShowModal} centerX={centerX} centerY={centerY}
+      <SingleStockDetails  showModal={showModal} setShowModal={setShowModal} centerX={centerX} centerY={centerY}
       chartData={data} chartRangeArgument={chartRangeArgument} stock={stock}/>
     
       <motion.div 

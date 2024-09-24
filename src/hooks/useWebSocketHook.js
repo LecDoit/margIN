@@ -25,9 +25,9 @@ const useWebSocketHook = (xtbMessageArg) => {
 
 
 
-    useEffect(()=>{
-        // console.log(xtbMessageArg)
-    },[xtbMessageArg])
+    // useEffect(()=>{
+    //     console.log(connectionStatus)
+    // },[ReadyState])
 
 
 
@@ -52,23 +52,24 @@ const useWebSocketHook = (xtbMessageArg) => {
     const { sendMessage,sendJsonMessage, lastMessage, readyState ,lastJsonMessage} = useWebSocket(socketUrl,{
         // onOpen: ()=> console.log('opened'),
         // onClose: ()=> console.log('closed'),
+        onError: (e)=> setError(e),
         // onMessage:(e)=>console.log(e),
-        shouldReconnect: (closeEvent)=>false,
+        shouldReconnect: (closeEvent)=>true,
 
         
     });
 
-    // const connectionStatus = {
-    //     [ReadyState.CONNECTING]: 'Connecting',
-    //     [ReadyState.OPEN]: 'Open',
-    //     [ReadyState.CLOSING]: 'Closing',
-    //     [ReadyState.CLOSED]: 'Closed',
-    //     [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-    //   }[readyState];
+    const connectionStatus = {
+        [ReadyState.CONNECTING]: 'Connecting',
+        [ReadyState.OPEN]: 'Open',
+        [ReadyState.CLOSING]: 'Closing',
+        [ReadyState.CLOSED]: 'Closed',
+        [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+      }[readyState];
 
 //  get the XTB credentials from API
     useEffect(() => {
-        // setIsLoading(true)
+        setIsLoading(true)
         // console.log('initial',xtbMessageArg)
 
         if (user){

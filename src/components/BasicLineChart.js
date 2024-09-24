@@ -44,7 +44,7 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine,stock}) {
         const index = stocks.indexOf(findStock)
         const splicedStock = stocks.splice(index,1) 
         // console.log(splicedStock,stocks)
-        console.log(findStock,index,stocks)
+        // console.log(findStock,index,stocks)
 
  
         // const filteredArray = stocks.filter((s)=>s.symbol!== particularStock[0].symbol)
@@ -64,7 +64,7 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine,stock}) {
           }
         )
             .then((response)=>{
-                console.log(response.data)
+                // console.log(response.data)
                 const json = response.data.stocks
                 dispatch({type:'DELETE_STOCK',payload:json}) 
            
