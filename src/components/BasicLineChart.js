@@ -103,7 +103,7 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine,stock}) {
 
             
             {chartData ?
-                <Line data={lineChartFactory(chartData,symbol,colorLine)} options={options} />
+                <Line data={lineChartFactory(chartData,symbol,colorLine,0.6)} options={options} />
               :<div></div>}   
              
             <div className='delete--stock' onClick={handleClickDeleteStock}><Delete/></div>

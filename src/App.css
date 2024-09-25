@@ -894,14 +894,79 @@ input:focus{
   z-index: 1;
 }
 .modal{
+  display: flex;
+  flex-direction: column;
   max-width: 75vw;
   margin:0 auto;
-  padding:40px 20px;
+  padding:40px 40px;
   background-color: var(--LIGHTERGRAY);
   border-radius: 10px;
-  text-align: center;
+
   
+  
+  
+}
+.modal--title{
+  display: flex;
+  flex-direction: row;
+  gap:20px;
+  height: 50px;
+  justify-content: space-between;
+  font-size: 23px;
+  font-weight: 500;
+  color: var(--BLACK);  
+  margin-right: 10px;
+  margin-bottom:20px;
+  margin-left:50px;
+  
+}
+.modal--title--left{
+  display: flex;
+  flex-direction: row;    
+  align-items: center;
+  gap:20px;
+  border-bottom: 1px solid var(--LIGHTBLUE);
+}
+.modal--title--right{
+  display: flex;
+  flex-direction: row;    
+  align-items: center;
+
 }
 .modal--form{
   display: flex;
+}
+.tficlose{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal--chart--group{
+  display: flex;
+}
+.modal--chart{
+  display: flex;
+  width:70vw;
+  height:50vh
+}
+.modal--chart--form{
+  display: flex;
+  width:30vw;
+  justify-content: center;
+}
+.modal--chart--form--form{
+  display: flex;
+  flex-direction: column;
+  /* margin-top: auto; */
+  margin-bottom: auto;
+}
+
+
+.modal--chart--buysell{
+  display: flex;
+  height: 10vh;
+  justify-content:start;
+  align-items: center;
+  gap:20px;
 }

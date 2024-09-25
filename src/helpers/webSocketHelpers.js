@@ -15,7 +15,8 @@ export const chartRangeFactory = (start,end,symbol,ticks,period)=>{
     return chartRange
 }
 
-export const lineChartFactory = (arg,arg2,arg3)=>{
+export const lineChartFactory = (arg,arg2,arg3,tension)=>{
+    console.log(arg.returnData.rateInfos)
 
     const labels = []
     const datasets = [{
@@ -24,7 +25,8 @@ export const lineChartFactory = (arg,arg2,arg3)=>{
         backgroundColor:["rgba(0,0,0,0"],
         borderColor:arg3,
         borderWidth:1,
-        tension:0.5
+        tension:tension,
+        pointRadius:0
         
     }]
 

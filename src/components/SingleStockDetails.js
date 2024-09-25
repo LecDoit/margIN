@@ -6,6 +6,10 @@ import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '
 import { useStocksContext } from "../hooks/useStocksContext";
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
+import {TfiClose} from 'react-icons/tfi'
+import { getByDisplayValue } from '@testing-library/react'
+import { elements } from 'chart.js'
+import Loading from '../components/Loading'
 
 
 
@@ -34,25 +38,34 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const [endDate, setEndDate] = useState('')
 
     const [lastYear, setLastYear] = useState('')
-    const [last5Year, setLast5Year] = useState('')
-    const [last10Year, setLast10Year] = useState('')
+    const [last5Years, setLast5Years] = useState('')
+    const [last10Years, setLast10Years] = useState('')
     const [lastMonth, setLastMonth] = useState('')
+    const [last6Months, setLast6Months] = useState('')
 
     ////////////////
 
 
-    const [stocksRefreshed,setStocksRefreshed] = useState('')
+    const [triggerApiCall,setTriggerApiCall] = useState('')
 
-    // useEffect(()=>{
+    const oneYearsInMilliseconds = 1 * 365.25 * 24 * 60 * 60 * 1000;
+    const fiveYearsInMilliseconds = 5 * 365.25 * 24 * 60 * 60 * 1000;
+    const tenYearsInMilliseconds = 10 * 365.25 * 24 * 60 * 60 * 1000;   
+    const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
+
+    useEffect(()=>{
         
-    // //   setStocksRefreshed(stocks)
-    // console.log('powinno to wskoczyc')
+    //   setStocksRefreshed(stocks)
+    console.log(data)
 
-    // },[stocks])
+    },[data])
 
 
     const updateUser = async (e)=>{
-        e.preventDefault()
+        if (e){
+            e.preventDefault()
+        }
+        
         // console.log(particularStock)
         // const filteredStock = stocks.filter((s)=>s.symbol== particularStock.symbol)
         // const filteredArray = stocks.filter((s)=>s._id !== particularStock._id)
@@ -68,7 +81,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         
         
 
-        console.log(splicedStock)
+        // console.log(splicedStock)
    
         
      
@@ -78,10 +91,10 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         splicedStock[0].sell=sell
         splicedStock[0].period=period
         splicedStock[0].ticks=ticks
-        splicedStock[0].start=startDate
-
+        splicedStock[0].start=startDate 
         stocks.splice(index, 0, splicedStock[0])
-        // console.log(stocks)
+        console.log(startDate)
+        console.log(stocks)
 
         
         
@@ -97,7 +110,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
         )
             .then((response)=>{
-
+                console.log(response.data.stocks)
                 const json = response.data.stocks
                 dispatch({type:`DELETE_STOCK`,payload:json})
             })         
@@ -116,6 +129,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             setTicks(stock.ticks)
             setStartDate(stock.start)
             setEndDate(new Date().getTime())
+
             if (buy!==0){
             } else {
             setBuyLine({beforeDatasetsDraw(chart){
@@ -208,6 +222,31 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     }
 
     useEffect(()=>{
+       if (endDate){
+            setLastYear(endDate-oneYearsInMilliseconds)
+            setLast5Years(endDate-fiveYearsInMilliseconds)
+            setLast10Years(endDate-tenYearsInMilliseconds)
+            setLast6Months(endDate-sixMonthsInMilliseconds)
+        }
+        
+        // console.log('end date is in place')
+
+        // const endDateYear = new Date(endDate).getFullYear()
+        // const endDateMonth = new Date(endDate).getMonth()+1
+        // let endDateDay = new Date(endDate).getDate()
+
+   
+
+        // setLastYear(new Date(`${endDateYear-1}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+        // setLast5Year(new Date(`${endDateYear-5}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+        // setLast10Year(new Date(`${endDateYear-10}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+        // setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
+
+
+
+    },[endDate])
+
+    useEffect(()=>{
         const handleEsc=(e)=>{
             if (e.key==='Escape'){
                 setShowModal(false)
@@ -227,6 +266,74 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         }
     }
 
+    const options = {
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{
+            legend:{
+                display:false,
+            }
+        },
+        elements:{
+            line:{
+                // borderWidth:4,
+                // color:`#fff`
+            }
+        },
+        scales:{
+            x:{
+                display:true,
+                grid:{
+                    display:false
+                },
+                ticks:{
+                    // color:"000000"
+                }
+            },
+            y:{
+                display:true,
+                grid:{
+                    display:false
+                },
+                ticks:{
+                    // color:'#fff',
+                    callback: (e)=>{
+                        return `$${e/100}`
+                    }
+                }
+            }
+        },
+       
+
+
+    }
+    
+useEffect(()=>{
+    
+    // console.log(startDate)
+    
+
+
+},[startDate,endDate])
+
+const sendStartDate= async (e)=>{
+    e.preventDefault()
+    setStartDate(e.target.value)
+    // console.log( new Date(e.target.value),"new date here")
+    // console.log((e.target.value),"new date here")
+    setTriggerApiCall(true)
+    
+
+}
+useEffect(()=>{
+
+    if (triggerApiCall){
+        updateUser()
+        setTriggerApiCall(false)
+    }
+},[triggerApiCall])
+
+
 
   return (
     <div >
@@ -244,25 +351,53 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                     animate='visible'
                     exit='hidden'
                 >
-                    <div style={{height:"200px", height:"200px"}}>                
-                        <Line  data={lineChartFactory(data,"symbol")}  />                        
+                    <div className='modal--title'>
+                        <div className='modal--title--left'>
+                            <div>{symbol}</div>
+                            <div>current price and change</div>
+                        </div>
+                        <div className='modal--title--right'>
+                            <div onClick={()=>setShowModal(false)}><TfiClose className={'tficlose'}/>
+                        </div>
+                        </div>
+                        
                     </div>
-                    <div onClick={()=>setShowModal(false)}>Hide</div>
+
+                    <div className='modal--chart--group'>
+                        <div className='modal--chart'>
+                            { isLoading ?<Loading/> :<Line  data={lineChartFactory(data,symbol, "#002c58",0)} options={options}/>}                
+                                                  
+                        </div>
+                        <div className='modal--chart--form'>
+                            <form className='modal--chart--form--form'>
+                                <div className='modal--chart--buysell'>
+                                    <label>Price to Sell</label>
+                                    <input onChange={(e)=>setSell(Number(e.target.value))} value={sell} type="number"></input>
+                                </div>
+                                <div className='modal--chart--buysell'>
+                                    <label>Price to Buy</label>
+                                    <input onChange={(e)=>setBuy(Number(e.target.value))} value={buy} type="number"></input>
+                                </div>
+                                <button onClick={updateUser}>Set prices</button>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    
      
                     
                     <div>
                         {/* start */}
-                        <div className='modal--form'>
-                    
-                            <form>
-                                <div>Set Price</div>
-                                <label>Price to Sell</label>
-                                <input onChange={(e)=>setSell(Number(e.target.value))} value={sell} type="number"></input>
-                                <label>Price to Buy</label>
-
-                                <input onChange={(e)=>setBuy(Number(e.target.value))} value={buy} type="number"></input>
-                                <button onClick={updateUser}>Set prices</button>
-                            </form>
+                        <div className='modal--form'>       
+                            <div>                                
+                                    <button value={last6Months} onClick={(e)=>sendStartDate(e)}>6M</button>
+                                    <button value={lastYear} onClick={(e)=>sendStartDate(e)}>1Y</button>
+                                    <button value={last5Years} onClick={(e)=>sendStartDate(e)}>5Y</button>
+                                    <button value={last10Years} onClick={(e)=>sendStartDate(e)}>10Y</button>
+                                    {/* <button value={lastMonth} onClick={(e)=>sendStartDate(e)}>1M</button> */}
+                            </div>             
+                            
 
                             <form>
                                 <div>Period</div>
@@ -286,17 +421,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                 <button onClick={updateUser}>update ticks</button>
                             </form>
 
-                            <form>
-                                <label>Range</label>
-                                <select value={startDate} onChange={(e)=>setStartDate(e.target.value)}>
-                                    <option value={last10Year}>10Y</option>
-                                    <option value={last5Year}>5Y</option>
-                                    <option value={lastYear}>1Y</option>
-                                    <option value={lastMonth}>1M</option>
-
-                                </select>
-                                <button onClick={updateUser}>update ticks</button>
-                            </form>
+                            
 
 
 
