@@ -15,18 +15,20 @@ export const chartRangeFactory = (start,end,symbol,ticks,period)=>{
     return chartRange
 }
 
-export const lineChartFactory = (arg,arg2,arg3,tension)=>{
-    console.log(arg.returnData.rateInfos)
+export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO)=>{
+    // console.log(arg.returnData.rateInfos)
 
     const labels = []
     const datasets = [{
         label:arg2,
         data:[],
-        backgroundColor:["rgba(0,0,0,0"],
+        fill:true,
+        backgroundColor:[`rgba(0, 44, 88,${bgO})`],
         borderColor:arg3,
-        borderWidth:1,
+        borderWidth:thicknes,
         tension:tension,
-        pointRadius:0
+        pointRadius:0,
+        
         
     }]
 

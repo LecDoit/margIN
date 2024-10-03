@@ -14,13 +14,13 @@ import Loading from '../components/Loading'
 
 
 const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeArgument,chartData, stock}) => {
- 
+
     const {data,error,isLoading} = useWebsocketHook(chartRangeArgument)
     const {stocks,dispatch} = useStocksContext()
     const {user} = useAuthContext()
 
     
-    // console.log('single stock details refreshed')
+   
 
     ////////////////////
     const [particularStock,setParticularStock] = useState('')
@@ -35,7 +35,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const [showDetails,setShowDetails] = useState(false)
 
     const [startDate, setStartDate] = useState('')
-    const [endDate, setEndDate] = useState('')
+    const [endDate, setEndDate] = useState(new Date().getTime())
 
     const [lastYear, setLastYear] = useState('')
     const [last5Years, setLast5Years] = useState('')
@@ -48,17 +48,14 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     const [triggerApiCall,setTriggerApiCall] = useState('')
 
+    const [referenceLineValue,setReferenceLineValue] = useState(15000)
+
     const oneYearsInMilliseconds = 1 * 365.25 * 24 * 60 * 60 * 1000;
     const fiveYearsInMilliseconds = 5 * 365.25 * 24 * 60 * 60 * 1000;
     const tenYearsInMilliseconds = 10 * 365.25 * 24 * 60 * 60 * 1000;   
     const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
 
-    useEffect(()=>{
-        
-    //   setStocksRefreshed(stocks)
-    console.log(data)
 
-    },[data])
 
 
     const updateUser = async (e)=>{
@@ -93,8 +90,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         splicedStock[0].ticks=ticks
         splicedStock[0].start=startDate 
         stocks.splice(index, 0, splicedStock[0])
-        console.log(startDate)
-        console.log(stocks)
+        // console.log(startDate)
+        // console.log(stocks)
 
         
         
@@ -110,47 +107,52 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
         )
             .then((response)=>{
-                console.log(response.data.stocks)
+                // console.log(response.data.stocks)
                 const json = response.data.stocks
                 dispatch({type:`DELETE_STOCK`,payload:json})
             })         
     }
 
     useEffect(()=>{
-        // console.log('why its not refreshing',stocks)
+        console.log('why its not refreshing',stock.buy,buyLine)
         if (stocks){
-            // console.log(stock)
-            setBuy(stock.buy)
-            setSell(stock.sell)
-            setSymbols(stock.symbol)
-            setParticularStock(stock)
             
-            setPeriod(stock.period)
-            setTicks(stock.ticks)
-            setStartDate(stock.start)
-            setEndDate(new Date().getTime())
+            
 
             if (buy!==0){
             } else {
+            console.log('this works')
             setBuyLine({beforeDatasetsDraw(chart){
                             const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
                             ctx.save();
 
                             // success line
                             ctx.strokeStyle = 'green';
+                            ctx.beginPath()
 
-                            ctx.strokeRect(left,y.getPixelForValue(buy),width,0)
-                            ctx.restore()
+                            // -------------
+                            ctx.lineWidth = 6
+                            ctx.moveTo(left,15000)
+                            ctx.lineTo(right,15000)
+                            ctx.stroke()
+
+
+                            // -------------
+
+
+
+                            // ctx.strokeRect(left,y.getPixelForValue(buy),width,0)
+                            // ctx.restore()
 
                             // success backgroud
-                            ctx.fillStyle = 'rgba(0,200,0,0.2'
-                            ctx.fillRect(left,bottom,width,y.getPixelForValue(buy)-bottom)
+                            // ctx.fillStyle = 'rgba(0,200,0,0.2'
+                            // ctx.fillRect(left,bottom,width,y.getPixelForValue(buy)-bottom)
                             ctx.restore()
 
                             // success text
-                            ctx.font = '12px Arial'
-                            ctx.fillStyle = ('green')
-                            ctx.fillText('Buy', width,y.getPixelForValue(buy))
+                            // ctx.font = '12px Arial'
+                            // ctx.fillStyle = ('green')
+                            // ctx.fillText('Buy', width,y.getPixelForValue(buy))
 
 
         
@@ -186,12 +188,13 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                         })
             }
             }
-    },[stocks])
+    },[stocks,buy])
 
     useEffect(()=>{
-        // console.log(particularStock)
+        console.log('it has been updated')
 
-    },[particularStock])
+    },[buyLine])
+
 
     
     const backdrop ={
@@ -221,32 +224,19 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         console.log('particular stock',particularStock.symbol)
     }
 
-    useEffect(()=>{
-       if (endDate){
-            setLastYear(endDate-oneYearsInMilliseconds)
-            setLast5Years(endDate-fiveYearsInMilliseconds)
-            setLast10Years(endDate-tenYearsInMilliseconds)
-            setLast6Months(endDate-sixMonthsInMilliseconds)
-        }
-        
-        // console.log('end date is in place')
 
-        // const endDateYear = new Date(endDate).getFullYear()
-        // const endDateMonth = new Date(endDate).getMonth()+1
-        // let endDateDay = new Date(endDate).getDate()
-
-   
-
-        // setLastYear(new Date(`${endDateYear-1}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-        // setLast5Year(new Date(`${endDateYear-5}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-        // setLast10Year(new Date(`${endDateYear-10}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-        // setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
-
-
-
-    },[endDate])
 
     useEffect(()=>{
+            setBuy(stock.buy)
+            setSell(stock.sell)
+            setSymbols(stock.symbol)
+            setParticularStock(stock)
+            
+            setPeriod(stock.period)
+            setTicks(stock.ticks)
+            // console.log(stock,'look here')
+            setStartDate(stock.start)
+            // setEndDate()
         const handleEsc=(e)=>{
             if (e.key==='Escape'){
                 setShowModal(false)
@@ -258,6 +248,31 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         }
 
     },[])
+
+    useEffect(()=>{
+        if (endDate){
+             setLastYear(endDate-oneYearsInMilliseconds)
+             setLast5Years(endDate-fiveYearsInMilliseconds)
+             setLast10Years(endDate-tenYearsInMilliseconds)
+             setLast6Months(endDate-sixMonthsInMilliseconds)
+         }
+         
+         // console.log('end date is in place')
+ 
+         // const endDateYear = new Date(endDate).getFullYear()
+         // const endDateMonth = new Date(endDate).getMonth()+1
+         // let endDateDay = new Date(endDate).getDate()
+ 
+    
+ 
+         // setLastYear(new Date(`${endDateYear-1}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+         // setLast5Year(new Date(`${endDateYear-5}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+         // setLast10Year(new Date(`${endDateYear-10}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
+         // setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
+ 
+ 
+ 
+     },[endDate])
 
     const handleBackdropClick = (e)=>{
         if (e.target.className === "backdrop"){
@@ -272,7 +287,24 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         plugins:{
             legend:{
                 display:false,
-            }
+            },
+            tooltip:{
+                enabled:true,
+                callbacks:{
+                    label: (e)=>{
+                        return `Price: ${e.raw/100}`
+                    }
+                },
+                backgroundColor:'rgba(0, 67, 241)',
+                titleFont:{
+                    // size:12
+                },
+                displayColors:false,
+                
+                
+            },
+
+
         },
         elements:{
             line:{
@@ -298,23 +330,46 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                 ticks:{
                     // color:'#fff',
                     callback: (e)=>{
-                        return `$${e/100}`
+                        return `${e/100}`
                     }
                 }
             }
         },
+        interaction:{
+            mode:'index',
+            axis:'xy',
+            intersect:false,
+        },
+        plugins: [
+            {
+              id: 'referenceLine',
+              afterDraw: (chart) => {
+                const ctx = chart.ctx;
+                const yScale = chart.scales.y;
+                const xScale = chart.scales.x;
+      
+                // Get the Y position for the reference line (horizontal line on price level)
+                const yValue = yScale.getPixelForValue(referenceLineValue);
+                
+      
+                // Draw the reference line
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(xScale.left, yValue); // From left side of the chart
+                ctx.lineTo(xScale.right, yValue); // To right side of the chart
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = 'red'; // Color of the reference line
+                ctx.stroke();
+                ctx.restore();
+              },
+            },
+          ],
        
 
 
     }
     
-useEffect(()=>{
     
-    // console.log(startDate)
-    
-
-
-},[startDate,endDate])
 
 const sendStartDate= async (e)=>{
     e.preventDefault()
@@ -326,7 +381,6 @@ const sendStartDate= async (e)=>{
 
 }
 useEffect(()=>{
-
     if (triggerApiCall){
         updateUser()
         setTriggerApiCall(false)
@@ -365,7 +419,7 @@ useEffect(()=>{
 
                     <div className='modal--chart--group'>
                         <div className='modal--chart'>
-                            { isLoading ?<Loading/> :<Line  data={lineChartFactory(data,symbol, "#002c58",0)} options={options}/>}                
+                            { isLoading ?<Loading/> :<Line plugins={  [buyLine]}  data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03)} options={options}/>}                
                                                   
                         </div>
                         <div className='modal--chart--form'>
@@ -378,11 +432,18 @@ useEffect(()=>{
                                     <label>Price to Buy</label>
                                     <input onChange={(e)=>setBuy(Number(e.target.value))} value={buy} type="number"></input>
                                 </div>
+                
                                 <button onClick={updateUser}>Set prices</button>
                             </form>
                         </div>
                     </div>
-
+<div>
+<div className='modal--chart--buysell'>
+                                    <label>Price to ref line</label>
+                                    <input onChange={(e)=>setReferenceLineValue(Number(e.target.value))} value={referenceLineValue} type="number"></input>
+                                </div>
+                                <button onClick={updateUser}>Set prices</button>
+</div>
 
                     
      

@@ -9,6 +9,7 @@ import LoadingSmall from '../components/LoadingSmall'
 import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
 import SingleStockDetails from './SingleStockDetails';
 
+import {chartRangeFactory} from '../helpers/webSocketHelpers'
 
 
 const SingleStock = ({chartRangeArgument,order,stock}) => {
@@ -31,13 +32,15 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   const [centerX,setCenterX] = useState(0)
   const [centerY,setCenterY] = useState(0)
 
+  const [endDate,setEndDate] = useState(new Date().getTime())
+
 
   // const [stockz,setStock] = useState(null)
   
   
 // console.log('single stock refreshed')
   useEffect(()=>{
-    // console.log(data)
+    // console.log(data,chartRangeArgument.arguments.info)
     if (data){
       // console.log(chartRangeArgument.arguments.info.symbol, stock)
       const p = data.returnData.rateInfos[data.returnData.rateInfos.length-1].open
@@ -94,7 +97,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   return (
     <div>
       <SingleStockDetails  showModal={showModal} setShowModal={setShowModal} centerX={centerX} centerY={centerY}
-      chartData={data} chartRangeArgument={chartRangeArgument} stock={stock}/>
+      chartData={data} chartRangeArgument={chartRangeFactory(stock.start,endDate,stock.symbol,stock.ticks,stock.period)} stock={stock}/>
     
       <motion.div 
       whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',

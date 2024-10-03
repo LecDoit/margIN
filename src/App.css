@@ -1,6 +1,6 @@
 :root{
-  --DARKBLUE:#002c58;
-  --BLUE:#0043F1;
+  --DARKBLUE:rgb(0, 44, 88);
+  --BLUE:rgb(0, 67, 241);
   --LIGHTBLUE: rgb(129, 161, 248);
   --BLACK: #000014;
   --WHITE: rgb(253, 253, 253);
