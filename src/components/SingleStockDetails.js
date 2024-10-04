@@ -292,7 +292,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                 enabled:true,
                 callbacks:{
                     label: (e)=>{
-                        return `Price: ${e.raw/100}`
+                        return `Price: ${e.raw}`
                     }
                 },
                 backgroundColor:'rgba(0, 67, 241)',
@@ -330,40 +330,13 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                 ticks:{
                     // color:'#fff',
                     callback: (e)=>{
-                        return `${e/100}`
+                        return `${e}`
                     }
                 }
             }
-        },
-        interaction:{
-            mode:'index',
-            axis:'xy',
-            intersect:false,
-        },
-        plugins: [
-            {
-              id: 'referenceLine',
-              afterDraw: (chart) => {
-                const ctx = chart.ctx;
-                const yScale = chart.scales.y;
-                const xScale = chart.scales.x;
-      
-                // Get the Y position for the reference line (horizontal line on price level)
-                const yValue = yScale.getPixelForValue(referenceLineValue);
-                
-      
-                // Draw the reference line
-                ctx.save();
-                ctx.beginPath();
-                ctx.moveTo(xScale.left, yValue); // From left side of the chart
-                ctx.lineTo(xScale.right, yValue); // To right side of the chart
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = 'red'; // Color of the reference line
-                ctx.stroke();
-                ctx.restore();
-              },
-            },
-          ],
+        }
+
+       
        
 
 
@@ -419,7 +392,7 @@ useEffect(()=>{
 
                     <div className='modal--chart--group'>
                         <div className='modal--chart'>
-                            { isLoading ?<Loading/> :<Line plugins={  [buyLine]}  data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03)} options={options}/>}                
+                            { isLoading ?<Loading/> :<Line   data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03,buy,sell)} options={options}/>}                
                                                   
                         </div>
                         <div className='modal--chart--form'>
@@ -437,13 +410,7 @@ useEffect(()=>{
                             </form>
                         </div>
                     </div>
-<div>
-<div className='modal--chart--buysell'>
-                                    <label>Price to ref line</label>
-                                    <input onChange={(e)=>setReferenceLineValue(Number(e.target.value))} value={referenceLineValue} type="number"></input>
-                                </div>
-                                <button onClick={updateUser}>Set prices</button>
-</div>
+
 
                     
      
