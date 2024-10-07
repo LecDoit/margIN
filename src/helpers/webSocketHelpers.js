@@ -1,3 +1,5 @@
+import {format} from 'date-fns'
+
 export const chartRangeFactory = (start,end,symbol,ticks,period)=>{
     const chartRange = {
         "command": "getChartRangeRequest",
@@ -14,6 +16,8 @@ export const chartRangeFactory = (start,end,symbol,ticks,period)=>{
 
     return chartRange
 }
+
+
 
 export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
     // console.log(arg.returnData.rateInfos)
@@ -32,9 +36,9 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
     {
         label:"buy",
         data:[],
-        fill:false,
-        backgroundColor:[`rgba(244, 244, 80)`],
-        borderColor:'green',
+        fill:true,
+        backgroundColor:[`rgba(0, 175, 50,0.01)`],
+        borderColor:`rgba(0, 175, 50)`,
         borderWidth:thicknes,
         tension:tension,
         pointRadius:0,        
@@ -42,9 +46,9 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
     {
         label:"sell",
         data:[],
-        fill:false,
-        backgroundColor:[`rgba(90, 90, 90)`],
-        borderColor:'red',
+        fill:`end`,
+        backgroundColor:[`rgba(214, 0, 90,0.01)`],
+        borderColor:`rgba(214, 0, 90)`,
         borderWidth:thicknes,
         tension:tension,
         pointRadius:0,        
@@ -56,14 +60,21 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
 
     
     for (let i = 0;i<arg.returnData.rateInfos.length;i++){
+        const aDate = (new Date(arg.returnData.rateInfos[i].ctm))
+        const formatadate = format(aDate,'MM/dd/yyyy HH:mm')
         const year = new Date(arg.returnData.rateInfos[i].ctm).getFullYear()
         const month = new Date(arg.returnData.rateInfos[i].ctm).getMonth()
         const open = (arg.returnData.rateInfos[i].open)/100
         const combine = `${year}`+`,`+`${month}`
-        labels.push(combine)
+        labels.push(formatadate)
         datasets[0].data.push(open)
-        datasets[1].data.push(buy)
-        datasets[2].data.push(sell)
+        if (buy>0){
+            datasets[1].data.push(buy)
+        }
+        if (sell>0){
+            datasets[2].data.push(sell)
+        }
+        
         
                 
     

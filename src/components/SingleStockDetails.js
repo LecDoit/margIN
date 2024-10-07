@@ -8,7 +8,7 @@ import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
 import {TfiClose} from 'react-icons/tfi'
 import { getByDisplayValue } from '@testing-library/react'
-import { elements } from 'chart.js'
+import { elements, Interaction } from 'chart.js'
 import Loading from '../components/Loading'
 
 
@@ -24,8 +24,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     ////////////////////
     const [particularStock,setParticularStock] = useState('')
-    const [buy,setBuy] = useState(0)
-    const [sell,setSell] = useState(0)
+    const [buy,setBuy] = useState('')
+    const [sell,setSell] = useState('')
     const [period,setPeriod] = useState(0)
     const [ticks,setTicks] = useState(0)
 
@@ -40,8 +40,20 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const [lastYear, setLastYear] = useState('')
     const [last5Years, setLast5Years] = useState('')
     const [last10Years, setLast10Years] = useState('')
-    const [lastMonth, setLastMonth] = useState('')
     const [last6Months, setLast6Months] = useState('')
+    const [lastMonth, setLastMonth] = useState('')
+    const [lastWeek, setLastWeek] = useState('')
+
+    ///////////////
+    const ticksAndPeriods = {
+        '1W':{ticks:2016,period:5},
+        '1M':{ticks:1460,period:30},
+        '6M':{ticks:1095,period:240},
+        '1Y':{ticks:2016,period:240},
+        '5Y':{ticks:1825,period:1440},
+        '10Y':{ticks:520,period:10080},
+        
+    }
 
     ////////////////
 
@@ -49,11 +61,13 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const [triggerApiCall,setTriggerApiCall] = useState('')
 
     const [referenceLineValue,setReferenceLineValue] = useState(15000)
-
+    
     const oneYearsInMilliseconds = 1 * 365.25 * 24 * 60 * 60 * 1000;
     const fiveYearsInMilliseconds = 5 * 365.25 * 24 * 60 * 60 * 1000;
     const tenYearsInMilliseconds = 10 * 365.25 * 24 * 60 * 60 * 1000;   
     const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
+    const oneMonthInMilliseconds = (365.25 / 12) * 24 * 60 * 60 * 1000;
+    const oneWeekInMilliseconds = (365.25 / 52.17857) * 24 * 60 * 60 * 1000;
 
 
 
@@ -113,90 +127,6 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             })         
     }
 
-    useEffect(()=>{
-        console.log('why its not refreshing',stock.buy,buyLine)
-        if (stocks){
-            
-            
-
-            if (buy!==0){
-            } else {
-            console.log('this works')
-            setBuyLine({beforeDatasetsDraw(chart){
-                            const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
-                            ctx.save();
-
-                            // success line
-                            ctx.strokeStyle = 'green';
-                            ctx.beginPath()
-
-                            // -------------
-                            ctx.lineWidth = 6
-                            ctx.moveTo(left,15000)
-                            ctx.lineTo(right,15000)
-                            ctx.stroke()
-
-
-                            // -------------
-
-
-
-                            // ctx.strokeRect(left,y.getPixelForValue(buy),width,0)
-                            // ctx.restore()
-
-                            // success backgroud
-                            // ctx.fillStyle = 'rgba(0,200,0,0.2'
-                            // ctx.fillRect(left,bottom,width,y.getPixelForValue(buy)-bottom)
-                            ctx.restore()
-
-                            // success text
-                            // ctx.font = '12px Arial'
-                            // ctx.fillStyle = ('green')
-                            // ctx.fillText('Buy', width,y.getPixelForValue(buy))
-
-
-        
-                            }   
-                        })
-                    }
-            if (sell!==0){
-
-            } else{
-            setSellLine({beforeDatasetsDraw(chart){
-                            const {ctx,scales:{x,y},chartArea:{top,right,bottom,left,width,height}} = chart
-                            ctx.save();
-
-                            //success line
-                            ctx.strokeStyle = 'red';
-                            ctx.strokeRect(left,y.getPixelForValue(sell),width,0)
-                            ctx.restore()
-
-
-                            // success backgroud
-
-                            ctx.fillStyle = 'rgba(255,0,0,0.2'
-                            ctx.fillRect(left,top,width,y.getPixelForValue(sell)-top)
-                            ctx.restore()
-
-                            // success text
-                            ctx.font = '12px Arial'
-                            ctx.fillStyle = ('red')
-                            ctx.fillText('Sell', width,y.getPixelForValue(sell))
-
-        
-                            }   
-                        })
-            }
-            }
-    },[stocks,buy])
-
-    useEffect(()=>{
-        console.log('it has been updated')
-
-    },[buyLine])
-
-
-    
     const backdrop ={
         visible:{opacity:1},
         hidden:{opacity:0}
@@ -224,19 +154,15 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         console.log('particular stock',particularStock.symbol)
     }
 
-
-
     useEffect(()=>{
             setBuy(stock.buy)
             setSell(stock.sell)
             setSymbols(stock.symbol)
-            setParticularStock(stock)
-            
+            setParticularStock(stock)            
             setPeriod(stock.period)
             setTicks(stock.ticks)
-            // console.log(stock,'look here')
             setStartDate(stock.start)
-            // setEndDate()
+            
         const handleEsc=(e)=>{
             if (e.key==='Escape'){
                 setShowModal(false)
@@ -255,23 +181,11 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
              setLast5Years(endDate-fiveYearsInMilliseconds)
              setLast10Years(endDate-tenYearsInMilliseconds)
              setLast6Months(endDate-sixMonthsInMilliseconds)
+             setLastMonth(endDate-oneMonthInMilliseconds)
+             setLastWeek(endDate-oneWeekInMilliseconds)
+
+
          }
-         
-         // console.log('end date is in place')
- 
-         // const endDateYear = new Date(endDate).getFullYear()
-         // const endDateMonth = new Date(endDate).getMonth()+1
-         // let endDateDay = new Date(endDate).getDate()
- 
-    
- 
-         // setLastYear(new Date(`${endDateYear-1}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-         // setLast5Year(new Date(`${endDateYear-5}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-         // setLast10Year(new Date(`${endDateYear-10}`+  `,${endDateMonth}` + `,${endDateDay}`).getTime())
-         // setLastMonth(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
- 
- 
- 
      },[endDate])
 
     const handleBackdropClick = (e)=>{
@@ -283,6 +197,11 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     const options = {
         responsive:true,
+        interaction:{
+            mode:'nearest',
+            axis:'xy',
+            intersect:false
+        },
         maintainAspectRatio:false,
         plugins:{
             legend:{
@@ -290,6 +209,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             },
             tooltip:{
                 enabled:true,
+                mode:'nearest',
+               
                 callbacks:{
                     label: (e)=>{
                         return `Price: ${e.raw}`
@@ -297,19 +218,15 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                 },
                 backgroundColor:'rgba(0, 67, 241)',
                 titleFont:{
-                    // size:12
                 },
-                displayColors:false,
-                
+                displayColors:false,         
                 
             },
-
 
         },
         elements:{
             line:{
-                // borderWidth:4,
-                // color:`#fff`
+
             }
         },
         scales:{
@@ -319,7 +236,9 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                     display:false
                 },
                 ticks:{
-                    // color:"000000"
+                    // maxTicksLimit:10
+                    autoSkip:true,
+                    stepSize:200
                 }
             },
             y:{
@@ -335,30 +254,30 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                 }
             }
         }
-
-       
-       
-
-
+        
     }
     
     
 
-const sendStartDate= async (e)=>{
-    e.preventDefault()
-    setStartDate(e.target.value)
-    // console.log( new Date(e.target.value),"new date here")
-    // console.log((e.target.value),"new date here")
-    setTriggerApiCall(true)
-    
+    const sendStartDate= async (e)=>{
+        e.preventDefault()
+        setStartDate(e.target.value)
+        const buttonText = e.target.textContent
+        const buttonTicks = ticksAndPeriods[buttonText].ticks
+        const buttonPeriod = ticksAndPeriods[buttonText].period
+        setTicks(buttonTicks)
+        setPeriod(buttonPeriod)
+        setTriggerApiCall(true)
+        
 
-}
-useEffect(()=>{
-    if (triggerApiCall){
-        updateUser()
-        setTriggerApiCall(false)
     }
-},[triggerApiCall])
+    useEffect(()=>{
+        if (triggerApiCall){
+            updateUser()
+            setTriggerApiCall(false)
+        }
+    },[triggerApiCall])
+
 
 
 
@@ -399,60 +318,30 @@ useEffect(()=>{
                             <form className='modal--chart--form--form'>
                                 <div className='modal--chart--buysell'>
                                     <label>Price to Sell</label>
-                                    <input onChange={(e)=>setSell(Number(e.target.value))} value={sell} type="number"></input>
+                                    <input onChange={(e)=>setSell(Number(e.target.value))} value={sell===0?'':sell} type="number"></input>
                                 </div>
                                 <div className='modal--chart--buysell'>
                                     <label>Price to Buy</label>
-                                    <input onChange={(e)=>setBuy(Number(e.target.value))} value={buy} type="number"></input>
+                                    <input onChange={(e)=>setBuy(Number(e.target.value))} value={buy===0 ? '': buy} type="number" ></input>
                                 </div>
                 
                                 <button onClick={updateUser}>Set prices</button>
                             </form>
                         </div>
-                    </div>
-
-
-                    
+                    </div>                   
      
                     
                     <div>
                         {/* start */}
                         <div className='modal--form'>       
                             <div>                                
+                                    <button value={lastWeek} onClick={(e)=>sendStartDate(e)}>1W</button>
+                                    <button value={lastMonth} onClick={(e)=>sendStartDate(e)}>1M</button>
                                     <button value={last6Months} onClick={(e)=>sendStartDate(e)}>6M</button>
                                     <button value={lastYear} onClick={(e)=>sendStartDate(e)}>1Y</button>
                                     <button value={last5Years} onClick={(e)=>sendStartDate(e)}>5Y</button>
                                     <button value={last10Years} onClick={(e)=>sendStartDate(e)}>10Y</button>
-                                    {/* <button value={lastMonth} onClick={(e)=>sendStartDate(e)}>1M</button> */}
-                            </div>             
-                            
-
-                            <form>
-                                <div>Period</div>
-                                <select value={period} onChange={e=>setPeriod(e.target.value)}>
-                                    <option value="1">1 Minute</option>
-                                    <option value="5">5 Minutes</option>
-                                    <option value="15">15 Minutes</option>
-                                    <option value="30">30 Minutes</option>
-                                    <option value="60">60 minutes (1hour)</option>
-                                    <option value="240">240 minutes (4 hours)</option>
-                                    <option value="1440">1440 minutes (1 day)</option>
-                                    <option value="10080">10080 minutes (1 week)</option>
-                                    <option value="43200" >43200 minutes (30 days)</option>
-                                </select>
-                                <button onClick={updateUser}>update period</button>
-                            </form>
-
-                            <form>
-                                <label>Ticks</label>
-                                <input type="number" value={ticks} onChange={(e)=>{setTicks(Number(e.target.value))}}></input>
-                                <button onClick={updateUser}>update ticks</button>
-                            </form>
-
-                            
-
-
-
+                            </div> 
                         </div>
 
 

@@ -74,7 +74,7 @@ const StockGroup = () => {
             {stocks.map((item,a)=>{
                 
                 return <SingleStock key={a} chartRangeArgument={
-                    chartRangeFactory(startDate,endDate,stocks[a].symbol,1000,1440) 
+                    chartRangeFactory(startDate,endDate,stocks[a].symbol,10,1440) 
           
                     }
                     order={a+1} stock={item}

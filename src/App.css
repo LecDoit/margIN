@@ -10,6 +10,9 @@
   --nav-load-time:1000ms;
   --nav-load-time-delay: calc(var(----hero-header-load-time)+var(--hero-desc-load-time));
 
+  --GREEN: rgb(0, 178, 50);
+  --RED:rgb(214, 0, 0);
+
 
 
   /* --nav-buttons-load-time:3200ms; */

@@ -21,7 +21,7 @@ const StockSearch = ({symbols}) => {
     const [toggleButton,setToggleButton] = useState(true)
     const [suggestions,setSuggestions] = useState([]);
     const {stocks,dispatch} = useStocksContext()
-    const [last2Year, setLast2Year] = useState('')
+    const [last6Months, set6Months] = useState('')
     const [endDate, setEndDate] = useState(new Date().getTime())
     const [body,setBody] = useState('')
     const [stocksRefreshed,setStocksRefreshed] = useState('')
@@ -35,10 +35,11 @@ const StockSearch = ({symbols}) => {
 
 
     useEffect(()=>{
-        const endDateYear = new Date(endDate).getFullYear()
-        const endDateMonth = new Date(endDate).getMonth()+1
-        let endDateDay = new Date(endDate).getDate()
-        setLast2Year(new Date(`${endDateYear}`+  `,${endDateMonth-1}` + `,${endDateDay}`).getTime())
+
+
+        const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
+
+        set6Months(endDate-sixMonthsInMilliseconds)
 
     },[endDate])
 
@@ -50,7 +51,7 @@ const StockSearch = ({symbols}) => {
     const addStocks = async (e)=>{
       // console.log(e)
 
-       const body = JSON.stringify({"email":user.email,"stocks":[{"symbol": e.symbol, "buy": 0, "sell": 0,"period":1440,"ticks":50,"start":last2Year}]})
+       const body = JSON.stringify({"email":user.email,"stocks":[{"symbol": e.symbol, "buy": 0, "sell": 0,"period":240,"ticks":1095,"start":last6Months}]})
 
   
           // const response = await fetch('http://localhost:10000/stocks/addStock',{
