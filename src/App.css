@@ -936,9 +936,7 @@ input:focus{
   align-items: center;
 
 }
-.modal--form{
-  display: flex;
-}
+
 .tficlose{
   display: flex;
   align-items: center;
@@ -957,6 +955,7 @@ input:focus{
   display: flex;
   width:30vw;
   justify-content: center;
+
 }
 .modal--chart--form--form{
   display: flex;
@@ -973,3 +972,32 @@ input:focus{
   align-items: center;
   gap:20px;
 }
+
+.modal--form{
+  display: flex;
+  height: 7vh;
+  margin-left: 41vw;
+  gap:10px;
+
+
+  
+}
+
+.modal--form--period--button{
+  display:flex;
+  width: 25px;
+  height: 25px;
+  justify-content: center;
+  align-items: center;
+  color:var(--DARKBLUE);
+  font-weight: 500;
+  cursor: pointer;
+}
+  
+  
+  
+
+  
+
+ 
+  

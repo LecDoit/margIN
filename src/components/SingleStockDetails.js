@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react'
 import {motion,AnimatePresence} from 'framer-motion'
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {Line} from 'react-chartjs-2'
-import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '../helpers/webSocketHelpers'
+import {ticksAndPeriods,lineChartFactory,findKeyByTicks} from '../helpers/webSocketHelpers'
 import { useStocksContext } from "../hooks/useStocksContext";
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -18,6 +18,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const {data,error,isLoading} = useWebsocketHook(chartRangeArgument)
     const {stocks,dispatch} = useStocksContext()
     const {user} = useAuthContext()
+
 
     
    
@@ -43,25 +44,12 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const [last6Months, setLast6Months] = useState('')
     const [lastMonth, setLastMonth] = useState('')
     const [lastWeek, setLastWeek] = useState('')
+    const [periodButton,setPeriodButton] = useState('')
 
-    ///////////////
-    const ticksAndPeriods = {
-        '1W':{ticks:2016,period:5},
-        '1M':{ticks:1460,period:30},
-        '6M':{ticks:1095,period:240},
-        '1Y':{ticks:2016,period:240},
-        '5Y':{ticks:1825,period:1440},
-        '10Y':{ticks:520,period:10080},
-        
-    }
-
-    ////////////////
-
+    const [value,setValue]  = useState('')
 
     const [triggerApiCall,setTriggerApiCall] = useState('')
 
-    const [referenceLineValue,setReferenceLineValue] = useState(15000)
-    
     const oneYearsInMilliseconds = 1 * 365.25 * 24 * 60 * 60 * 1000;
     const fiveYearsInMilliseconds = 5 * 365.25 * 24 * 60 * 60 * 1000;
     const tenYearsInMilliseconds = 10 * 365.25 * 24 * 60 * 60 * 1000;   
@@ -162,6 +150,9 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             setPeriod(stock.period)
             setTicks(stock.ticks)
             setStartDate(stock.start)
+            setPeriodButton(findKeyByTicks(ticksAndPeriods,stock.ticks))
+            setValue(ticksAndPeriods)
+
             
         const handleEsc=(e)=>{
             if (e.key==='Escape'){
@@ -183,7 +174,6 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
              setLast6Months(endDate-sixMonthsInMilliseconds)
              setLastMonth(endDate-oneMonthInMilliseconds)
              setLastWeek(endDate-oneWeekInMilliseconds)
-
 
          }
      },[endDate])
@@ -236,9 +226,9 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                     display:false
                 },
                 ticks:{
-                    // maxTicksLimit:10
-                    autoSkip:true,
-                    stepSize:200
+                    maxTicksLimit:7,
+                    align:"start"
+                    
                 }
             },
             y:{
@@ -268,6 +258,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         setTicks(buttonTicks)
         setPeriod(buttonPeriod)
         setTriggerApiCall(true)
+        setPeriodButton(buttonText)
+        
         
 
     }
@@ -277,7 +269,9 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             setTriggerApiCall(false)
         }
     },[triggerApiCall])
-
+    const newSend =(e)=>{
+        console.log(e.target.value)
+    }
 
 
 
@@ -307,6 +301,19 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                         </div>
                         </div>
                         
+                    </div>    
+                    {/* <div>
+                        {Object.entries(ticksAndPeriods).map(([key,{state}])=>
+                        <button value={state} onClick={(e)=>newSend(e)}>{key}</button>
+                        )}
+                    </div>                          */}
+                    <div className='modal--form'>                                                  
+                        <motion.div className='modal--form--period--button' value={lastWeek} onClick={(e)=>newSend(e)}>1W</motion.div>
+                        <motion.div className='modal--form--period--button' value={lastMonth} onClick={(e)=>sendStartDate(e)}>1M</motion.div>
+                        <motion.div className='modal--form--period--button' value={last6Months} onClick={(e)=>sendStartDate(e)}>6M</motion.div>
+                        <motion.div className='modal--form--period--button' value={lastYear} onClick={(e)=>sendStartDate(e)}>1Y</motion.div>
+                        <motion.div className='modal--form--period--button' value={last5Years} onClick={(e)=>sendStartDate(e)}>5Y</motion.div>
+                        <motion.div className='modal--form--period--button' value={last10Years} onClick={(e)=>sendStartDate(e)}>10Y</motion.div>
                     </div>
 
                     <div className='modal--chart--group'>
@@ -331,23 +338,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                     </div>                   
      
                     
-                    <div>
-                        {/* start */}
-                        <div className='modal--form'>       
-                            <div>                                
-                                    <button value={lastWeek} onClick={(e)=>sendStartDate(e)}>1W</button>
-                                    <button value={lastMonth} onClick={(e)=>sendStartDate(e)}>1M</button>
-                                    <button value={last6Months} onClick={(e)=>sendStartDate(e)}>6M</button>
-                                    <button value={lastYear} onClick={(e)=>sendStartDate(e)}>1Y</button>
-                                    <button value={last5Years} onClick={(e)=>sendStartDate(e)}>5Y</button>
-                                    <button value={last10Years} onClick={(e)=>sendStartDate(e)}>10Y</button>
-                            </div> 
-                        </div>
-
-
-
-                        {/* end */}
-                    </div>
+                    
                 </motion.div>              
             </motion.div>
 

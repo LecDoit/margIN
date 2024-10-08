@@ -60,13 +60,16 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
 
     
     for (let i = 0;i<arg.returnData.rateInfos.length;i++){
-        const aDate = (new Date(arg.returnData.rateInfos[i].ctm))
-        const formatadate = format(aDate,'MM/dd/yyyy HH:mm')
-        const year = new Date(arg.returnData.rateInfos[i].ctm).getFullYear()
-        const month = new Date(arg.returnData.rateInfos[i].ctm).getMonth()
+        const date = (new Date(arg.returnData.rateInfos[i].ctm))
+        const day = date.getDate().toString().padStart(2, '0');  // Gets the day and pads it to 2 digits
+        const month = date.toLocaleString('en-US', { month: 'short' });  // Gets the abbreviated month name
+        const year = date.getFullYear();  // Gets the full year
+
+        const formattedDate = `${day} ${month} ${year}`;
+
         const open = (arg.returnData.rateInfos[i].open)/100
-        const combine = `${year}`+`,`+`${month}`
-        labels.push(formatadate)
+
+        labels.push(formattedDate)
         datasets[0].data.push(open)
         if (buy>0){
             datasets[1].data.push(buy)
@@ -112,3 +115,25 @@ export const getEurUsd = {
             "symbol": "EURPLN"
         }
     }
+
+
+export const findKeyByTicks = (obj, targetTicks) => {
+        for (const key in obj) {
+            if (obj[key].ticks === targetTicks) {
+                return key; // Return the key if the ticks value matches
+            }
+        }
+        return null; // Return null if no match is found
+    };
+
+
+
+
+export  const ticksAndPeriods = {
+    '1W':{ticks:2017,period:5,state:'lastWeek'},
+    '1M':{ticks:1460,period:30,state:'lastMonth'},
+    '6M':{ticks:1095,period:240,state:'last6Months'},
+    '1Y':{ticks:2016,period:240,state:'lastYear'},
+    '5Y':{ticks:1825,period:1440,state:'last5Years'},
+    '10Y':{ticks:520,period:10080,state:'last10Years'},        
+}
