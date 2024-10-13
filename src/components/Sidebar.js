@@ -78,34 +78,34 @@ const Sidebar = ({onSelect}) => {
 
   return (
     <motion.div className='sidebar'
-    animate={{width:!showSidebar? 50:180}}
-    layout
-    onMouseEnter={()=>setIsHover(true)}
-    onMouseLeave={()=>setIsHover(false)}
+        animate={{width:!showSidebar? 50:180}}
+        layout
+        onMouseEnter={()=>setIsHover(true)}
+        onMouseLeave={()=>setIsHover(false)}
     >
         {!showSidebar ?  <div></div> 
-        :<div>
-        <button id={pined}  className='sidebar--collapse--button' 
-        onClick={pin}
-        >
-        <LuPin/>
-        </button>
+            :<div>
+                <button id={pined}  className='sidebar--collapse--button' 
+                onClick={pin}>
+                    <LuPin/>
+                </button>
          
-         </div>}
+            </div>}
+
         {SIDEBAR_ITEMS.map((item) => (
         // <div key={item.id} onClick={()=>{onSelect(item.id)}}>
-        <div key={item.id} onClick={()=>{handleClick(item)}}>
-        <SidebarItem 
-          isSidebarCollapsed={!showSidebar}
-          key={item.id}
-          item={item}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          setClickedTab={setClickedTab}
-          clickedTab={clickedTab}
-        />
-        </div>
-      ))}
+            <div key={item.id} onClick={()=>{handleClick(item)}}>
+                <SidebarItem 
+                isSidebarCollapsed={!showSidebar}
+                key={item.id}
+                item={item}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                setClickedTab={setClickedTab}
+                clickedTab={clickedTab}
+                />
+            </div>
+        ))}
 
 
     </motion.div>

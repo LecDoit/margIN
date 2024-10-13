@@ -10,10 +10,12 @@ import {TfiClose} from 'react-icons/tfi'
 import { getByDisplayValue } from '@testing-library/react'
 import { elements, Interaction } from 'chart.js'
 import Loading from '../components/Loading'
+import RangeBarItem from './RangeBarItem'
 
 
 
 const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeArgument,chartData, stock}) => {
+    // console.log(chartRangeArgument)
 
     const {data,error,isLoading} = useWebsocketHook(chartRangeArgument)
     const {stocks,dispatch} = useStocksContext()
@@ -56,6 +58,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
     const oneMonthInMilliseconds = (365.25 / 12) * 24 * 60 * 60 * 1000;
     const oneWeekInMilliseconds = (365.25 / 52.17857) * 24 * 60 * 60 * 1000;
+
+    const [activeRange,] = useState('')
 
 
 
@@ -109,7 +113,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
         )
             .then((response)=>{
-                // console.log(response.data.stocks)
+                // console.log(response)
                 const json = response.data.stocks
                 dispatch({type:`DELETE_STOCK`,payload:json})
             })         
@@ -150,8 +154,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             setPeriod(stock.period)
             setTicks(stock.ticks)
             setStartDate(stock.start)
-            setPeriodButton(findKeyByTicks(ticksAndPeriods,stock.ticks))
-            setValue(ticksAndPeriods)
+            // setPeriodButton(findKeyByTicks(ticksAndPeriods,stock.ticks))
+            // setValue(ticksAndPeriods)
 
             
         const handleEsc=(e)=>{
@@ -174,6 +178,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
              setLast6Months(endDate-sixMonthsInMilliseconds)
              setLastMonth(endDate-oneMonthInMilliseconds)
              setLastWeek(endDate-oneWeekInMilliseconds)
+            //  console.log(periodButton)
 
          }
      },[endDate])
@@ -251,28 +256,32 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     const sendStartDate= async (e)=>{
         e.preventDefault()
+        console.log(e.target.value)
         setStartDate(e.target.value)
         const buttonText = e.target.textContent
-        const buttonTicks = ticksAndPeriods[buttonText].ticks
-        const buttonPeriod = ticksAndPeriods[buttonText].period
-        setTicks(buttonTicks)
-        setPeriod(buttonPeriod)
+        // const buttonTicks = ticksAndPeriods[buttonText].ticks
+        // const buttonPeriod = ticksAndPeriods[buttonText].period
+        // setTicks(buttonTicks)
+        // setPeriod(buttonPeriod)
         setTriggerApiCall(true)
-        setPeriodButton(buttonText)
-        
-        
-
+        // setPeriodButton(buttonText)
     }
     useEffect(()=>{
         if (triggerApiCall){
             updateUser()
             setTriggerApiCall(false)
+            // console.log(periodButton)
         }
     },[triggerApiCall])
-    const newSend =(e)=>{
+    const handleClick =(e)=>{
         console.log(e.target.value)
     }
-
+    useEffect(()=>{
+        if (data){
+            // console.log(data.returnData)
+        }
+        
+    },[data])
 
 
   return (
@@ -302,19 +311,61 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                         </div>
                         
                     </div>    
-                    {/* <div>
-                        {Object.entries(ticksAndPeriods).map(([key,{state}])=>
-                        <button value={state} onClick={(e)=>newSend(e)}>{key}</button>
+                    <div>
+                        {ticksAndPeriods.map((item)=>
+                        <div  className='modal--form'>
+                            <RangeBarItem className='modal--form--period--button' 
+                                key={item.name}
+                                item={item}     
+                                activeRange={activeRange}
+                                setActiveRange={setActiveRange}
+                                setClickedRange ={setClickedRange}
+                                onClick={(e)=>handleClick(e)}>{item.name}
+
+
+                            </RangeBarItem>
+                        </div>
+                        
                         )}
-                    </div>                          */}
-                    <div className='modal--form'>                                                  
-                        <motion.div className='modal--form--period--button' value={lastWeek} onClick={(e)=>newSend(e)}>1W</motion.div>
-                        <motion.div className='modal--form--period--button' value={lastMonth} onClick={(e)=>sendStartDate(e)}>1M</motion.div>
-                        <motion.div className='modal--form--period--button' value={last6Months} onClick={(e)=>sendStartDate(e)}>6M</motion.div>
-                        <motion.div className='modal--form--period--button' value={lastYear} onClick={(e)=>sendStartDate(e)}>1Y</motion.div>
-                        <motion.div className='modal--form--period--button' value={last5Years} onClick={(e)=>sendStartDate(e)}>5Y</motion.div>
-                        <motion.div className='modal--form--period--button' value={last10Years} onClick={(e)=>sendStartDate(e)}>10Y</motion.div>
-                    </div>
+                    </div>                         
+                    {/* <div className='modal--form'>                                                  
+                        <motion.div 
+                            whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
+                            transition={{duration:0}}
+                            whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}}
+                            // style={{backgroundColor :value===periodButton ? "rgb(253, 253, 253)":"rgb(253, 253, 253,0)",
+                            //     color:value===periodButton ? 'rgb(0, 67, 241);':'rgb(0, 44, 88)',
+                            //     textDecoration: value===periodButton ?'underline 1px':'none'
+                            // }}
+                            className='modal--form--period--button' value={lastWeek} onClick={(e)=>sendStartDate(e)}
+                            data-period={lastWeek}>1W
+                        </motion.div>
+                        <motion.div 
+                        whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
+                        transition={{duration:0}}
+                        whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}} className='modal--form--period--button' value={lastMonth} onClick={(e)=>sendStartDate(e)}>1M</motion.div>
+                        <motion.div 
+                        whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
+                        transition={{duration:0}}
+                        whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}} className='modal--form--period--button' value={last6Months} onClick={(e)=>sendStartDate(e)}
+                        // style={{backgroundColor :value===periodButton ? "rgb(253, 253, 253)":"rgb(253, 253, 253)",
+                        //     color:value===periodButton ? 'red':'rgb(0, 67, 241)',
+                        //     textDecoration:'underline 1px'
+                        // }}
+                        >6M</motion.div>
+                        <motion.div 
+                        whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
+                        transition={{duration:0}}
+                        whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}} className='modal--form--period--button' value={lastYear} onClick={(e)=>sendStartDate(e)}>1Y</motion.div>
+                        <motion.div 
+                        whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
+                        transition={{duration:0}}
+                        whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}} className='modal--form--period--button' value={last5Years} onClick={(e)=>sendStartDate(e)}>5Y</motion.div>
+                        <motion.div 
+                        whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
+                        transition={{duration:0}}
+                        whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}} className='modal--form--period--button' value={last10Years} onClick={(e)=>sendStartDate(e)}>10Y</motion.div> */}
+                    {/* </div> */}
 
                     <div className='modal--chart--group'>
                         <div className='modal--chart'>

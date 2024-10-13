@@ -28,7 +28,7 @@ const StockGroup = () => {
    
 
       if (endDateDay===0){
-          console.log('niedizela',endDate)
+          // console.log('niedziela',new Date(endDate))
           const newEndDate = (endDate-twoDaysInMilliseconds)
           const sevenDaysBack = newEndDate-sevenDaysInMilliseconds
           setEndDate(newEndDate)

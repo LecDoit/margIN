@@ -992,6 +992,7 @@ input:focus{
   color:var(--DARKBLUE);
   font-weight: 500;
   cursor: pointer;
+  border-radius: 6px;
 }
   
   
