@@ -281,33 +281,33 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                         </div>
                         
                     </div>   
-                    <div>
-                    <div className='modal--form'>
-                        {ticksAndPeriods.map((item,i)=>
-                        <div key={item.ticks}   className='modal--form--period--button'  >
+                    
+                        <div className='modal--form'>
+                            {ticksAndPeriods.map((item,i)=>
+                            <div key={item.ticks}   className='modal--form--period--button'  >
+                    
+                                <motion.div   className='modal--form--period--button'    
+
+                                    
+                                    whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
+                                    transition={{duration:0}}
+                                    onClick={()=>sendStartDate(item)}
+
+                                    style={{
+                                    backgroundColor:item.name===activeRange ? "rgb(253, 253, 253)":"rgb(253, 253, 253,0)",
+                                    color:item.name===activeRange  ? 'rgb(0, 67, 241)':'rgb(0, 44, 88)',
+                                    textDecoration: item.name===activeRange  ?'underline 1px':'none'
+                                    }}
+                                    whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}}
+
+                                    >{item.name}
                 
-                            <motion.div   className='modal--form--period--button'    
-
-                                   
-                                whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
-                                transition={{duration:0}}
-                                onClick={()=>sendStartDate(item)}
-
-                                style={{
-                                backgroundColor:item.name===activeRange ? "rgb(253, 253, 253)":"rgb(253, 253, 253,0)",
-                                color:item.name===activeRange  ? 'rgb(0, 67, 241)':'rgb(0, 44, 88)',
-                                textDecoration: item.name===activeRange  ?'underline 1px':'none'
-                                }}
-                                whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}}
-
-                                >{item.name}
-               
-                             </motion.div>
-                        </div>
-                        
-                        )}
-                    </div> 
-                    </div>                         
+                                </motion.div>
+                            </div>
+                            
+                            )}
+                        </div> 
+                                          
                   
 
                     <div className='modal--chart--group'>
