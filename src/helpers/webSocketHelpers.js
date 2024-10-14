@@ -125,23 +125,28 @@ export const findKeyByTicks = (obj, targetTicks) => {
         }
         return null; // Return null if no match is found
     };
+
+export const findItemByProperty = (array,property,value)=>{
+    return array.find(((item)=>item[property]===value))
+
+}
     
-    const endDate = new Date().getTime()
+const endDate = new Date().getTime()
 
 
-    const oneYearsInMilliseconds = 1 * 365.25 * 24 * 60 * 60 * 1000;
-    const fiveYearsInMilliseconds = 5 * 365.25 * 24 * 60 * 60 * 1000;
-    const tenYearsInMilliseconds = 10 * 365.25 * 24 * 60 * 60 * 1000;   
-    const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
-    const oneMonthInMilliseconds = (365.25 / 12) * 24 * 60 * 60 * 1000;
-    const oneWeekInMilliseconds = (365.25 / 52.17857) * 24 * 60 * 60 * 1000;
+const oneYearsInMilliseconds = 1 * 365.25 * 24 * 60 * 60 * 1000;
+const fiveYearsInMilliseconds = 5 * 365.25 * 24 * 60 * 60 * 1000;
+const tenYearsInMilliseconds = 10 * 365.25 * 24 * 60 * 60 * 1000;   
+const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
+const oneMonthInMilliseconds = (365.25 / 12) * 24 * 60 * 60 * 1000;
+const oneWeekInMilliseconds = (365.25 / 52.17857) * 24 * 60 * 60 * 1000;
 
-    // setLastYear(endDate-oneYearsInMilliseconds)
-    // setLast5Years(endDate-fiveYearsInMilliseconds)
-    // setLast10Years(endDate-tenYearsInMilliseconds)
-    // setLast6Months(endDate-sixMonthsInMilliseconds)
-    // setLastMonth(endDate-oneMonthInMilliseconds)
-    // setLastWeek(endDate-oneWeekInMilliseconds)
+// setLastYear(endDate-oneYearsInMilliseconds)
+// setLast5Years(endDate-fiveYearsInMilliseconds)
+// setLast10Years(endDate-tenYearsInMilliseconds)
+// setLast6Months(endDate-sixMonthsInMilliseconds)
+// setLastMonth(endDate-oneMonthInMilliseconds)
+// setLastWeek(endDate-oneWeekInMilliseconds)
 
 
 

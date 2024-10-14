@@ -994,6 +994,11 @@ input:focus{
   cursor: pointer;
   border-radius: 6px;
 }
+
+.range-item__active{
+  background-color: var(--WHITE);
+  
+}
   
   
   
