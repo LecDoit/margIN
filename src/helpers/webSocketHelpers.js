@@ -17,6 +17,12 @@ export const chartRangeFactory = (start,end,symbol,ticks,period)=>{
     return chartRange
 }
 
+export const credentials = {
+    user:16313473,
+    password:"Xtbxtbxtb123"
+
+}
+
 
 
 export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
@@ -141,20 +147,12 @@ const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
 const oneMonthInMilliseconds = (365.25 / 12) * 24 * 60 * 60 * 1000;
 const oneWeekInMilliseconds = (365.25 / 52.17857) * 24 * 60 * 60 * 1000;
 
-// setLastYear(endDate-oneYearsInMilliseconds)
-// setLast5Years(endDate-fiveYearsInMilliseconds)
-// setLast10Years(endDate-tenYearsInMilliseconds)
-// setLast6Months(endDate-sixMonthsInMilliseconds)
-// setLastMonth(endDate-oneMonthInMilliseconds)
-// setLastWeek(endDate-oneWeekInMilliseconds)
-
-
 
 export const ticksAndPeriods = [
-    {name:'1W',ticks:2017,period:5,state:endDate-oneWeekInMilliseconds},
-    {name:'1M',ticks:1460,period:30,state:endDate-oneMonthInMilliseconds},
+    {name:'IW',ticks:2017,period:5,state:endDate-oneWeekInMilliseconds},
+    {name:'IM',ticks:1460,period:30,state:endDate-oneMonthInMilliseconds},
     {name:'6M',ticks:1095,period:240,state:endDate-sixMonthsInMilliseconds},
-    {name:'1Y',ticks:2016,period:240,state:endDate-oneYearsInMilliseconds},
+    {name:'IY',ticks:2016,period:240,state:endDate-oneYearsInMilliseconds},
     {name:'5Y',ticks:1825,period:1440,state:endDate-fiveYearsInMilliseconds},
-    {name:'10Y',ticks:520,period:10080,state:endDate-tenYearsInMilliseconds},        
+    {name:'IOY',ticks:520,period:10080,state:endDate-tenYearsInMilliseconds},        
 ]

@@ -17,6 +17,8 @@ import StockGroup from "../components/StockGroup";
 
 import Test from './Test'
 import TestforLoggedIn from './TestforLoggedIn';
+import {logIn,credentials} from '../helpers/webSocketHelpers'
+import useWebsocketHook from '../hooks/useWebSocketHook'
 
 
 
@@ -24,7 +26,11 @@ const Home = () => {
 
   const {stocks,dispatch} = useStocksContext()
   const {user} = useAuthContext()
+
+
   const [loaded,setLoaded] = useState(false)
+  const [connected,setConnected] = useState(false)
+
 
   const [userXtb,setUserXtb] = useState('')
   const [passwordXtb,setPasswordXtb] = useState('')
@@ -34,10 +40,7 @@ const Home = () => {
   const {signup,error,isLoading} = useSignup()
 
   const [bottom,setBottom] =useState('stocks')
-
-
-
-
+  // const {data,setHookIsLoading} = useWebsocketHook(logIn(credentials.user,credentials.password))
   
 
 
@@ -62,6 +65,7 @@ const Home = () => {
             // console.log(json.stocks)
             dispatch({type:"SET_STOCKS",payload:json.stocks})
             setLoaded(true)
+            
           }
   
           if (!response.ok){
@@ -70,17 +74,30 @@ const Home = () => {
         }
 
         const fetchCredentials = async()=>{
+          if (sessionStorage.getItem('xtbCredentials')){
+              const xtbCredentials = (JSON.parse(sessionStorage.getItem('xtbCredentials')))
+              setUserXtb(xtbCredentials.user)
+              setPasswordXtb(xtbCredentials.password)
+              // setXtbMessage(xtbMessageArg)
+  
+          } else{       
+          
           // const response = await fetch('http://localhost:10000/stocks/getCredentials',{
           const response = await fetch('https://xtbbackend.onrender.com/stocks/getCredentials',{
-            method:'GET',
-            headers:{
+              method:'GET',
+              headers:{
               'Content-Type':'application/json',
               'Authorization':`Bearer ${user.token}`
-            }
+              }
           })
           const json = await response.json()
           setUserXtb(json.user)
           setPasswordXtb(json.password)
+          // setXtbMessage(xtbMessageArg)
+          sessionStorage.setItem('xtbCredentials',JSON.stringify(json))
+          }
+      
+          
 
 
 
@@ -99,12 +116,15 @@ const Home = () => {
 
 
 
+
+
+
 const conditionalRenderContent=(arg)=>{
   if (arg=='stocks'){
     return loaded ? 
       <motion.div className="home--stocks">    
-        <StockSearch/>
-        <StockGroup/>
+         <StockSearch/>
+          <StockGroup/>
       </motion.div> 
       :
       <Loading/>
@@ -122,14 +142,17 @@ const conditionalRenderContent=(arg)=>{
  
       <Navbar id={'home--nav'}/>
       <Sidebar onSelect={setBottom}  />
+      
       {/* <div>{hugeFunc(bottom)}</div> */}
 
         
         {isLoading ? <div className='center--loading'><Loading/></div>
         :
         <motion.div className="home--content"
+        
         // animate={{marginLeft:!sideBarVisible ? "-120px":"20px"}}
         >
+
           {conditionalRenderContent(bottom)}
           {/* {loaded ? <StockSearch/> :<div>Stock Search placeholder</div>}
           /motion./ {loaded ? <StockGroup/>:<div>Stock Group placeholder</div>} */}

@@ -53,7 +53,7 @@ const StockGroup = () => {
     setStocksRefreshed(stocks)
   },[stocks])
 
-
+  console.log('czy to strzela? stockgroup?')
 
 
 

@@ -14,7 +14,7 @@ const StockSearch = ({symbols}) => {
 
 
     const {user} = useAuthContext()
-    const {data,error,isLoading} = useWebsocketHook(getAllSymbols)
+    const {data,error,isLoading,isLoggedIn,functionCall} = useWebsocketHook()
 
     const [inputValue,setInputValue] = useState('');
     const [chosenSymbol,setChosenSymbol] = useState('')
@@ -25,6 +25,8 @@ const StockSearch = ({symbols}) => {
     const [endDate, setEndDate] = useState(new Date().getTime())
     const [body,setBody] = useState('')
     const [stocksRefreshed,setStocksRefreshed] = useState('')
+
+    
 
     useEffect(()=>{
 
@@ -44,7 +46,12 @@ const StockSearch = ({symbols}) => {
     },[endDate])
 
     
-    
+ 
+    useEffect(()=>{
+      if (isLoggedIn){
+        functionCall(getAllSymbols)   
+      }
+    },[isLoggedIn,functionCall])
 
 
 
@@ -98,6 +105,7 @@ const StockSearch = ({symbols}) => {
  
   return (
     <div>
+      
       {isLoading ?  <LoadingSmall/> :
     <div>
       {data ?
@@ -109,6 +117,7 @@ const StockSearch = ({symbols}) => {
                 {toggleButton ? <Lens ></Lens> : <div onClick={()=>addStocks(chosenSymbol)}> <Add  disabled={toggleButton}/> </div>}                
               </div>
               <div className='search--result'>
+
               {data.returnData.filter(item=>{
                 
                   const searchTerm = inputValue.toLowerCase()
@@ -129,6 +138,7 @@ const StockSearch = ({symbols}) => {
               }
           )
               }
+              
           </div>
           </div>
 

@@ -18,7 +18,9 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
 
   const {stocks,dispatch} = useStocksContext() 
   const [hookArg,setHookArg] = useState('')
-  const {data,error,isLoading} = useWebsocketHook(hookArg)
+  // const {data,error,isLoading} = useWebsocketHook(hookArg)
+  const {data,error,isLoading,isLoggedIn,functionCall} = useWebsocketHook()
+
   const [actualPrice,setActualPrice] = useState(0)
   const [last24HPrice,setLast24HPrice] = useState(0)
   const [last7DPrice,setLast7DPrice] = useState(0)
@@ -87,9 +89,19 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   }
 
 
+
+  // useEffect(()=>{
+  //   setHookArg(chartRangeArgument)
+  // },[chartRangeArgument,stock,stocks])
+  console.log('czy to strzela?')
   useEffect(()=>{
-    setHookArg(chartRangeArgument)
-  },[chartRangeArgument,stock,stocks])
+  
+    if (isLoggedIn){
+
+
+      functionCall(chartRangeArgument)   
+    }
+  },[isLoggedIn,functionCall])
 
 
 

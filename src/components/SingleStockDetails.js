@@ -36,24 +36,10 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
 
     const [startDate, setStartDate] = useState('')
-    const [endDate, setEndDate] = useState(new Date().getTime())
-
-
 
     const [triggerApiCall,setTriggerApiCall] = useState('')
 
-    const oneYearsInMilliseconds = 1 * 365.25 * 24 * 60 * 60 * 1000;
-    const fiveYearsInMilliseconds = 5 * 365.25 * 24 * 60 * 60 * 1000;
-    const tenYearsInMilliseconds = 10 * 365.25 * 24 * 60 * 60 * 1000;   
-    const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
-    const oneMonthInMilliseconds = (365.25 / 12) * 24 * 60 * 60 * 1000;
-    const oneWeekInMilliseconds = (365.25 / 52.17857) * 24 * 60 * 60 * 1000;
-
     const [activeRange,setActiveRange] = useState('')
-    const [clickedRange,setClickedRange] = useState('')
-
-
-
 
     const updateUser = async (e)=>{
         if (e){
@@ -145,9 +131,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             setPeriod(stock.period)
             setTicks(stock.ticks)
             setStartDate(stock.start)
-            setClickedRange(findItemByProperty(ticksAndPeriods,"ticks",stock.ticks).name)
             setActiveRange(findItemByProperty(ticksAndPeriods,"ticks",stock.ticks).name)
-            // setValue(ticksAndPeriods)
 
             
         const handleEsc=(e)=>{

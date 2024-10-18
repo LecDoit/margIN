@@ -1,11 +1,13 @@
-import {useEffect,useState} from 'react';
+import {useCallback, useEffect,useState} from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { useStocksContext } from "./useStocksContext";
 import { useAuthContext } from "./useAuthContext";
-import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '../helpers/webSocketHelpers'
+import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd,credentials} from '../helpers/webSocketHelpers'
+
 
 
 const useWebSocketHook = (xtbMessageArg) => {
+// console.log('how many times running?')
 
     const {user} = useAuthContext()
     const {stocks,dispatch} = useStocksContext() 
@@ -14,51 +16,32 @@ const useWebSocketHook = (xtbMessageArg) => {
     const [xtbMessage,setXtbMessage] = useState('')
 
     const [data,setData]= useState(null);
-    const [isPendingCredentials,setIsPendingCredentials]= useState(null);
+    const [isLoggedIn,setIsLoggedIn]= useState(false);
     const [error,setError]= useState(null);
 
-
-    const [userXtb,setUserXtb] = useState('')
-    const [passwordXtb,setPasswordXtb] = useState('')
     const [streamSessionId, setStreamSessionId] = useState(null)
-    const [isLoading,setIsLoading] = useState(null)
+    const [hookIsLoading,setHookIsLoading] = useState(false)
 
-
-
-    // useEffect(()=>{
-    //     console.log(connectionStatus)
-    // },[ReadyState])
-
-
-
-    const fetchCredentials = async()=>{
-        // const response = await fetch('http://localhost:10000/stocks/getCredentials',{
-        const response = await fetch('https://xtbbackend.onrender.com/stocks/getCredentials',{
-            method:'GET',
-            headers:{
-            'Content-Type':'application/json',
-            'Authorization':`Bearer ${user.token}`
-            }
-        })
-        const json = await response.json()
-        setUserXtb(json.user)
-        setPasswordXtb(json.password)
-        setXtbMessage(xtbMessageArg)
-                                              
-                                              
-                                              
-                                                      }
 
     const { sendMessage,sendJsonMessage, lastMessage, readyState ,lastJsonMessage} = useWebSocket(socketUrl,{
-        // onOpen: ()=> console.log('opened'),
-        // onClose: ()=> console.log('closed'),
+        onOpen: ()=> {
+            console.log('opened')           
+            sendJsonMessage(logIn(credentials.user,credentials.password))
+        },
+        onClose: ()=> console.log('closed',lastJsonMessage),
         onError: (e)=> setError(e),
-        // onMessage:(e)=>console.log(e),
-        shouldReconnect: (closeEvent)=>true,
+        onMessage:()=>{
+  
+          
+
+        }
+            ,
+        shouldReconnect: ()=>true,
 
         
     });
 
+    // sendJsonMessage(logIn(credentials.user,credentials.password))
     const connectionStatus = {
         [ReadyState.CONNECTING]: 'Connecting',
         [ReadyState.OPEN]: 'Open',
@@ -67,69 +50,35 @@ const useWebSocketHook = (xtbMessageArg) => {
         [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
       }[readyState];
 
-//  get the XTB credentials from API
-    useEffect(() => {
-        setIsLoading(true)
-        // console.log('initial',xtbMessageArg)
+      const functionCall = useCallback((arg) =>{
 
-        if (user){
-            // console.log('user is true',xtbMessageArg)
-            fetchCredentials()
-            // console.log('fetching crede and setting up the argument to send')
-        }
-    }, [xtbMessageArg]);
+            sendJsonMessage(arg)
 
-// since we received the credentials from API we can now log into the XTB WebSocket
-    useEffect(()=>{
-        if(userXtb && !streamSessionId){
-            sendJsonMessage(logIn(userXtb, passwordXtb));
-        }
-    },[userXtb,xtbMessageArg])
+      },[streamSessionId,sendJsonMessage])
 
-  
-// component for gathering the neccessary messages
-    useEffect(()=>{
-        // console.log('this is running every single time lastjson message has beeen sent or received',lastJsonMessage)
-
-        // for streamSession ID message
-        if(lastJsonMessage?.status===true && lastJsonMessage !== undefined && lastJsonMessage?.streamSessionId){
-            // console.log('this is checking if status is true and got streamsessionid')
-            setStreamSessionId(lastJsonMessage.streamSessionId)
-        } 
-
-        // for any other requested Data
-        if  (lastJsonMessage?.returnData  ){
-            setData(lastJsonMessage)   
-            setIsLoading(false)
-            // console.log('what is happening here?',lastJsonMessage)
-        } else{
-            // console.log(lastJsonMessage,'baddan')
-            setIsLoading(false)
-        }
-
-        // console.log(lastJsonMessage)
+      useEffect(()=>{
         
-    },[lastJsonMessage,sendJsonMessage])
-
-
-
-
-// execute this code right after we log in into the XTB WebSocket
-    useEffect(()=>{
-        if (streamSessionId){
-            // console.log('wysylam',xtbMessage,lastJsonMessage)
-
-            sendJsonMessage(xtbMessage)
+        if (lastJsonMessage){
+            console.log('is true',lastJsonMessage)
+            if (lastJsonMessage.status && lastJsonMessage.streamSessionId){
+                const receivedSessionKey = lastJsonMessage.setStreamSessionId
+                localStorage.setItem('sessionKey',receivedSessionKey)
+                setStreamSessionId(receivedSessionKey)
+                // hookIsLoading(true)
+                setIsLoggedIn(true)
+            }
+        if (lastJsonMessage.returnData){
+            setData(lastJsonMessage)
+            setHookIsLoading(false)
+            }
         }
-     
 
-    },[setStreamSessionId,streamSessionId,xtbMessage])
-
+      },[lastJsonMessage,sendJsonMessage])
 
 
 
 
-  return {data,error,isLoading}
+  return {data,error,setHookIsLoading,functionCall,isLoggedIn}
 }
 
 export default useWebSocketHook

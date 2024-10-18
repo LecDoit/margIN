@@ -975,7 +975,7 @@ input:focus{
 
 .modal--form{
   display: flex;
-  height: 7vh;
+  height: 5vh;
   margin-left: 41vw;
   gap:10px;
 
