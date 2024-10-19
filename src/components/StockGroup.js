@@ -1,44 +1,35 @@
-import React,{useEffect,useState,useCallback} from 'react';
-// import useWebSocket, { ReadyState } from 'react-use-websocket';
+import React,{useEffect,useState} from 'react';
 import { useStocksContext } from "../hooks/useStocksContext";
-import useWebsocketHook from '../hooks/useWebSocketHook'
-import LineChart from "./LineChart"
-import StockSearch from './StockSearch';
 import SingleStock from './SingleStock';
+import {chartRangeFactory} from '../helpers/webSocketHelpers'
+import { sevenDaysInMilliseconds,twoDaysInMilliseconds,oneDaysInMilliseconds,endDate } from '../helpers/webSocketHelpers';
 
-import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '../helpers/webSocketHelpers'
-import StockDetails from './Stock';
-import { isCompositeComponent, isCompositeComponentWithType } from 'react-dom/test-utils';
+
 
 
 const StockGroup = () => {
 
     const {stocks,dispatch} = useStocksContext() 
-    const [endDate,setEndDate] = useState(new Date().getTime())
+    const [endDateState,setEndDateState] = useState(endDate)
     const [startDate,setStartDate] = useState('')
-    const [stocksRefreshed,setStocksRefreshed] = useState('')
+
  
 
     useEffect(()=>{
 
-      let endDateDay = new Date(endDate).getDay()
-      const sevenDaysInMilliseconds = 7*24*60*60*1000
-      const twoDaysInMilliseconds = 2*24*60*60*1000
-      const oneDaysInMilliseconds = 1*24*60*60*1000
-   
+      let endDateDay = new Date(endDate).getDay()   
 
       if (endDateDay===0){
-          // console.log('niedziela',new Date(endDate))
           const newEndDate = (endDate-twoDaysInMilliseconds)
           const sevenDaysBack = newEndDate-sevenDaysInMilliseconds
-          setEndDate(newEndDate)
+          setEndDateState(newEndDate)
           setStartDate(Number(sevenDaysBack))
 
 
       } else if (endDateDay===6){
         const newEndDate = (endDate-oneDaysInMilliseconds)
         const sevenDaysBack = newEndDate-sevenDaysInMilliseconds
-        setEndDate(newEndDate)
+        setEndDateState(newEndDate)
         setStartDate(Number(sevenDaysBack))
 
       } else{
@@ -47,13 +38,6 @@ const StockGroup = () => {
       }
     
   },[])
-
-  useEffect(()=>{
-    // console.log('stock group refreshed',stocks)
-    setStocksRefreshed(stocks)
-  },[stocks])
-
-  console.log('czy to strzela? stockgroup?')
 
 
 
@@ -74,7 +58,7 @@ const StockGroup = () => {
             {stocks.map((item,a)=>{
                 
                 return <SingleStock key={a} chartRangeArgument={
-                    chartRangeFactory(startDate,endDate,stocks[a].symbol,10,1440) 
+                    chartRangeFactory(startDate,endDateState,stocks[a].symbol,10,1440) 
           
                     }
                     order={a+1} stock={item}
@@ -94,5 +78,3 @@ const StockGroup = () => {
 
 export default StockGroup
 
-
-// const body = JSON.stringify({"email":user.email,"stocks":[{"symbol": e.symbol, "buy": 0, "sell": 0,"period":1440,"ticks":50,"start":last2Year}]})

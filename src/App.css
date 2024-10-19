@@ -91,7 +91,8 @@ a:visited{
   display: flex;
   flex-direction: row;
   /* width: 50%; */
-  margin:0 auto
+  margin:0 auto;
+  gap:10px
 }
 
 .search---input{
@@ -859,15 +860,22 @@ input:focus{
 .basicLineChart{
   display: flex;
   flex-direction: row;
-  width:320px;
+  width:340px;
   height:100px;
-  margin-left:80px;
+  margin-left:90px;
 }
+.basic--line--chart{
+  width: 170px;
+  height: 90px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 
 .delete--stock{
   /* border:1px solid var(--DARKBLUE); */
   width:98px;
-  margin-left: 20px;
+  margin-left: 30px;
   height: 98px;
   display: grid;
   justify-content: center;

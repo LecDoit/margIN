@@ -1,17 +1,16 @@
-import React,{useEffect,useState,useCallback} from 'react';
-import {Bar,Line} from 'react-chartjs-2'
+import React,{useEffect,useState} from 'react';
+import {Line} from 'react-chartjs-2'
 import { useStocksContext } from "../hooks/useStocksContext";
 import Delete from './Delete'
-
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
-import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd} from '../helpers/webSocketHelpers'
+import {lineChartFactory} from '../helpers/webSocketHelpers'
 
 
 
 
 function BasicLineChart({chartData,chartRangeArgument,colorLine,stock}) {
-    // console.log(chartRangeArgument.arguments.info.symbol)
+
 
     const {stocks,dispatch} = useStocksContext()
     const {user} = useAuthContext()
@@ -19,20 +18,10 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine,stock}) {
     const [particularStock,setParticularStock] = useState('')
     const [symbol,setSymbols] = useState('')
 
-    const [stocksRefreshed,setStocksRefreshed] = useState('')
-
-    useEffect(()=>{
-
-      setStocksRefreshed(stocks)
-
-    },[stocks])
 
     useState(()=>{
-
-            setSymbols(stock.symbol)
-            // setParticularStock(stocks.filter((stock)=> {
-            //     return stock.symbol === chartRangeArgument.arguments.info.symbol}))   
-            setParticularStock(stock)                
+        setSymbols(stock.symbol)
+        setParticularStock(stock)                
         
     },[stocks,chartRangeArgument])
     
@@ -43,12 +32,6 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine,stock}) {
 
         const index = stocks.indexOf(findStock)
         const splicedStock = stocks.splice(index,1) 
-        // console.log(splicedStock,stocks)
-        // console.log(findStock,index,stocks)
-
- 
-        // const filteredArray = stocks.filter((s)=>s.symbol!== particularStock[0].symbol)
-        // console.log(filteredArray,particularStock[0])
 
         const currObj = {email:user.email,stocks:stocks}
 
@@ -103,7 +86,7 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine,stock}) {
 
             
             {chartData ?
-                <Line data={lineChartFactory(chartData,symbol,colorLine,0.6,1,0)} options={options} />
+                <div className='basic--line--chart'><Line data={lineChartFactory(chartData,symbol,colorLine,0.6,1,0)} options={options} /></div>
               :<div></div>}   
              
             <div className='delete--stock' onClick={handleClickDeleteStock}><Delete/></div>

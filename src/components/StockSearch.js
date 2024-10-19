@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import axios from'axios';
-import {GoSearch} from 'react-icons/go'
 import { useStocksContext } from "../hooks/useStocksContext";
 import { useAuthContext } from '../hooks/useAuthContext';
 import useWebsocketHook from '../hooks/useWebSocketHook'
@@ -8,50 +6,31 @@ import {getAllSymbols} from '../helpers/webSocketHelpers'
 import LoadingSmall from '../components/LoadingSmall'
 import Lens from './Lens';
 import Add from "./Add";
-import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
+import {motion} from 'framer-motion'
+import {endDate, sixMonthsInMilliseconds } from '../helpers/webSocketHelpers';
 
 const StockSearch = ({symbols}) => {
 
 
     const {user} = useAuthContext()
-    const {data,error,isLoading,isLoggedIn,functionCall} = useWebsocketHook()
+    const {data,error,hookIsLoaded,isLoggedIn,functionCall} = useWebsocketHook()
 
     const [inputValue,setInputValue] = useState('');
     const [chosenSymbol,setChosenSymbol] = useState('')
     const [toggleButton,setToggleButton] = useState(true)
-    const [suggestions,setSuggestions] = useState([]);
     const {stocks,dispatch} = useStocksContext()
-    const [last6Months, set6Months] = useState('')
-    const [endDate, setEndDate] = useState(new Date().getTime())
-    const [body,setBody] = useState('')
-    const [stocksRefreshed,setStocksRefreshed] = useState('')
+    const [last6Months, set6Months] = useState(endDate-sixMonthsInMilliseconds)
+ 
+
 
     
-
-    useEffect(()=>{
-
-      setStocksRefreshed(stocks)
-
-    },[stocks])
-
-
-
-    useEffect(()=>{
-
-
-        const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
-
-        set6Months(endDate-sixMonthsInMilliseconds)
-
-    },[endDate])
-
     
  
     useEffect(()=>{
       if (isLoggedIn){
         functionCall(getAllSymbols)   
       }
-    },[isLoggedIn,functionCall])
+    },[isLoggedIn,functionCall,hookIsLoaded])
 
 
 
@@ -106,7 +85,7 @@ const StockSearch = ({symbols}) => {
   return (
     <div>
       
-      {isLoading ?  <LoadingSmall/> :
+      {!hookIsLoaded ?  <LoadingSmall/> :
     <div>
       {data ?
         <div className='search'>          

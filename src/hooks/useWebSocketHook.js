@@ -13,27 +13,23 @@ const useWebSocketHook = (xtbMessageArg) => {
     const {stocks,dispatch} = useStocksContext() 
     const [socketUrl, setSocketUrl] = useState('wss://ws.xtb.com/demo');
 
-    const [xtbMessage,setXtbMessage] = useState('')
-
     const [data,setData]= useState(null);
     const [isLoggedIn,setIsLoggedIn]= useState(false);
     const [error,setError]= useState(null);
 
     const [streamSessionId, setStreamSessionId] = useState(null)
-    const [hookIsLoading,setHookIsLoading] = useState(false)
+    const [hookIsLoaded,setHookIsLoaded] = useState(false)
 
 
     const { sendMessage,sendJsonMessage, lastMessage, readyState ,lastJsonMessage} = useWebSocket(socketUrl,{
         onOpen: ()=> {
-            console.log('opened')           
+            // console.log('opened')           
             sendJsonMessage(logIn(credentials.user,credentials.password))
+            setHookIsLoaded(false)
         },
-        onClose: ()=> console.log('closed',lastJsonMessage),
+        // onClose: ()=> console.log('closed',lastJsonMessage),
         onError: (e)=> setError(e),
         onMessage:()=>{
-  
-          
-
         }
             ,
         shouldReconnect: ()=>true,
@@ -54,22 +50,23 @@ const useWebSocketHook = (xtbMessageArg) => {
 
             sendJsonMessage(arg)
 
-      },[streamSessionId,sendJsonMessage])
+      },[streamSessionId,sendJsonMessage,hookIsLoaded])
 
       useEffect(()=>{
         
         if (lastJsonMessage){
-            console.log('is true',lastJsonMessage)
+            // console.log('is true',lastJsonMessage)
             if (lastJsonMessage.status && lastJsonMessage.streamSessionId){
                 const receivedSessionKey = lastJsonMessage.setStreamSessionId
                 localStorage.setItem('sessionKey',receivedSessionKey)
                 setStreamSessionId(receivedSessionKey)
                 // hookIsLoading(true)
                 setIsLoggedIn(true)
+                
             }
         if (lastJsonMessage.returnData){
             setData(lastJsonMessage)
-            setHookIsLoading(false)
+            setHookIsLoaded(true)
             }
         }
 
@@ -78,7 +75,7 @@ const useWebSocketHook = (xtbMessageArg) => {
 
 
 
-  return {data,error,setHookIsLoading,functionCall,isLoggedIn}
+  return {data,error,hookIsLoaded,functionCall,isLoggedIn}
 }
 
 export default useWebSocketHook

@@ -137,15 +137,21 @@ export const findItemByProperty = (array,property,value)=>{
 
 }
     
-const endDate = new Date().getTime()
+export const endDate = new Date().getTime()
 
 
-const oneYearsInMilliseconds = 1 * 365.25 * 24 * 60 * 60 * 1000;
-const fiveYearsInMilliseconds = 5 * 365.25 * 24 * 60 * 60 * 1000;
-const tenYearsInMilliseconds = 10 * 365.25 * 24 * 60 * 60 * 1000;   
-const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
-const oneMonthInMilliseconds = (365.25 / 12) * 24 * 60 * 60 * 1000;
-const oneWeekInMilliseconds = (365.25 / 52.17857) * 24 * 60 * 60 * 1000;
+export const oneYearsInMilliseconds = 1 * 365.25 * 24 * 60 * 60 * 1000;
+export const fiveYearsInMilliseconds = 5 * 365.25 * 24 * 60 * 60 * 1000;
+export const tenYearsInMilliseconds = 10 * 365.25 * 24 * 60 * 60 * 1000;   
+export const sixMonthsInMilliseconds = (365.25 / 2) * 24 * 60 * 60 * 1000;
+export const oneMonthInMilliseconds = (365.25 / 12) * 24 * 60 * 60 * 1000;
+export const oneWeekInMilliseconds = (365.25 / 52.17857) * 24 * 60 * 60 * 1000;
+
+export const sevenDaysInMilliseconds = 7*24*60*60*1000
+export const twoDaysInMilliseconds = 2*24*60*60*1000
+export const oneDaysInMilliseconds = 1*24*60*60*1000
+
+
 
 
 export const ticksAndPeriods = [

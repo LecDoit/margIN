@@ -1,31 +1,24 @@
 import React, { useEffect,useState } from 'react'
-import {motion,AnimatePresence} from 'framer-motion'
+import {motion} from 'framer-motion'
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {Line} from 'react-chartjs-2'
-import {ticksAndPeriods,lineChartFactory,findKeyByTicks,findItemByProperty} from '../helpers/webSocketHelpers'
-import { useStocksContext } from "../hooks/useStocksContext";
+import {ticksAndPeriods,lineChartFactory,findItemByProperty} from '../helpers/webSocketHelpers'
+import {useStocksContext } from "../hooks/useStocksContext";
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
 import {TfiClose} from 'react-icons/tfi'
-import { getByDisplayValue } from '@testing-library/react'
-import { elements, Interaction } from 'chart.js'
 import Loading from '../components/Loading'
 
 
 
 
 const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeArgument,chartData, stock}) => {
-    // console.log(chartRangeArgument)
 
-    const {data,error,isLoading} = useWebsocketHook(chartRangeArgument)
+    // const {data,error,isLoading} = useWebsocketHook(chartRangeArgument)
+    const {data,error,hookIsLoaded,isLoggedIn,functionCall} = useWebsocketHook()
     const {stocks,dispatch} = useStocksContext()
     const {user} = useAuthContext()
 
-
-    
-   
-
-    ////////////////////
     const [particularStock,setParticularStock] = useState('')
     const [buy,setBuy] = useState('')
     const [sell,setSell] = useState('')
@@ -45,27 +38,11 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         if (e){
             e.preventDefault()
         }
-        
-        // console.log(particularStock)
-        // const filteredStock = stocks.filter((s)=>s.symbol== particularStock.symbol)
-        // const filteredArray = stocks.filter((s)=>s._id !== particularStock._id)
-
         const findStock = stocks.find(item=>item._id===particularStock._id)
 
         const index = stocks.indexOf(findStock)
         const splicedStock = stocks.splice(index,1) 
 
-        // const index3 = stocks.findIndex(item=>item==index2)
-
-        // console.log()
-        
-        
-
-        // console.log(splicedStock)
-   
-        
-     
-        // console.log(stocks[0]===filteredStock[0])
 
         splicedStock[0].buy=buy
         splicedStock[0].sell=sell
@@ -73,10 +50,6 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         splicedStock[0].ticks=ticks
         splicedStock[0].start=startDate 
         stocks.splice(index, 0, splicedStock[0])
-        // console.log(startDate)
-        // console.log(stocks)
-
-        
         
         axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
 
@@ -90,7 +63,6 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
         )
             .then((response)=>{
-                // console.log(response)
                 const json = response.data.stocks
                 dispatch({type:`DELETE_STOCK`,payload:json})
             })         
@@ -117,11 +89,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         }
 
     }
-    const funcCheck = ()=>{
-        console.log('stock',stock.symbol,stock._id)
-        console.log('stocks',stocks)
-        console.log('particular stock',particularStock.symbol)
-    }
+
+
 
     useEffect(()=>{
             setBuy(stock.buy)
@@ -145,6 +114,12 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         }
 
     },[])
+
+    useEffect(()=>{  
+        if (isLoggedIn){
+          functionCall(chartRangeArgument)             
+        }
+      },[isLoggedIn,functionCall,stocks])
 
 
     const handleBackdropClick = (e)=>{
@@ -237,7 +212,6 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
 
 
-
   return (
     <div >
         {showModal && (
@@ -296,7 +270,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
                     <div className='modal--chart--group'>
                         <div className='modal--chart'>
-                            { isLoading ?<Loading/> :<Line   data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03,buy,sell)} options={options}/>}                
+                            { !hookIsLoaded ?<Loading/> :<Line   data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03,buy,sell)} options={options}/>}                
                                                   
                         </div>
                         <div className='modal--chart--form'>

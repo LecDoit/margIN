@@ -1,25 +1,17 @@
-import React,{useEffect,useState,useCallback} from 'react';
-// import useWebSocket, { ReadyState } from 'react-use-websocket';
+import React,{useEffect,useState} from 'react';
 import { useStocksContext } from "../hooks/useStocksContext";
 import useWebsocketHook from '../hooks/useWebSocketHook'
-import LineChart from "./LineChart"
 import BasicLineChart from "./BasicLineChart"
-import StockSearch from './StockSearch';
 import LoadingSmall from '../components/LoadingSmall'
-import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
+import {motion} from 'framer-motion'
 import SingleStockDetails from './SingleStockDetails';
-
 import {chartRangeFactory} from '../helpers/webSocketHelpers'
-
+import { endDate } from '../helpers/webSocketHelpers';
 
 const SingleStock = ({chartRangeArgument,order,stock}) => {
 
   
-
-  const {stocks,dispatch} = useStocksContext() 
-  const [hookArg,setHookArg] = useState('')
-  // const {data,error,isLoading} = useWebsocketHook(hookArg)
-  const {data,error,isLoading,isLoggedIn,functionCall} = useWebsocketHook()
+  const {data,error,hookIsLoaded,isLoggedIn,functionCall} = useWebsocketHook()
 
   const [actualPrice,setActualPrice] = useState(0)
   const [last24HPrice,setLast24HPrice] = useState(0)
@@ -34,17 +26,13 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   const [centerX,setCenterX] = useState(0)
   const [centerY,setCenterY] = useState(0)
 
-  const [endDate,setEndDate] = useState(new Date().getTime())
+  // const [endDate,setEndDate] = useState(new Date().getTime())
 
 
-  // const [stockz,setStock] = useState(null)
-  
-  
-// console.log('single stock refreshed')
   useEffect(()=>{
     // console.log(data,chartRangeArgument.arguments.info)
     if (data){
-      // console.log(chartRangeArgument.arguments.info.symbol, stock)
+      console.log((stock.start),'comming from mongo') 
       const p = data.returnData.rateInfos[data.returnData.rateInfos.length-1].open
       const last24hp = data.returnData.rateInfos[data.returnData.rateInfos.length-2].open
       const last7D = data.returnData.rateInfos[0].open
@@ -70,13 +58,6 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
     }
   },[data])
 
-  const color = ()=>{
-    if (last7DPrice>0){
-      return true
-    } else{
-      return false
-    }
-  }
 
   const renderWindow = (e)=>{
     const rect = e.target.getBoundingClientRect()
@@ -89,16 +70,8 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   }
 
 
-
-  // useEffect(()=>{
-  //   setHookArg(chartRangeArgument)
-  // },[chartRangeArgument,stock,stocks])
-  console.log('czy to strzela?')
-  useEffect(()=>{
-  
+  useEffect(()=>{  
     if (isLoggedIn){
-
-
       functionCall(chartRangeArgument)   
     }
   },[isLoggedIn,functionCall])
@@ -117,7 +90,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
       transition={{type:"tween",duration:0.1}}
       whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}} 
       >
-        {isLoading ? 
+        {!hookIsLoaded ? 
         <LoadingSmall/> :
         <div className='singleStock-wrapper'>   
           <div className='singleStock' onClick={renderWindow}>
