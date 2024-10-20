@@ -5,8 +5,8 @@ import BasicLineChart from "./BasicLineChart"
 import LoadingSmall from '../components/LoadingSmall'
 import {motion} from 'framer-motion'
 import SingleStockDetails from './SingleStockDetails';
-import {chartRangeFactory} from '../helpers/webSocketHelpers'
-import { endDate } from '../helpers/webSocketHelpers';
+import {chartRangeFactory,endDate,getSymbolFactory} from '../helpers/webSocketHelpers'
+
 
 const SingleStock = ({chartRangeArgument,order,stock}) => {
 
@@ -26,13 +26,11 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   const [centerX,setCenterX] = useState(0)
   const [centerY,setCenterY] = useState(0)
 
-  // const [endDate,setEndDate] = useState(new Date().getTime())
 
 
   useEffect(()=>{
     // console.log(data,chartRangeArgument.arguments.info)
     if (data){
-      console.log((stock.start),'comming from mongo') 
       const p = data.returnData.rateInfos[data.returnData.rateInfos.length-1].open
       const last24hp = data.returnData.rateInfos[data.returnData.rateInfos.length-2].open
       const last7D = data.returnData.rateInfos[0].open
@@ -73,6 +71,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   useEffect(()=>{  
     if (isLoggedIn){
       functionCall(chartRangeArgument)   
+
     }
   },[isLoggedIn,functionCall])
 
@@ -81,8 +80,8 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
 
   return (
     <div>
-      <SingleStockDetails  showModal={showModal} setShowModal={setShowModal} centerX={centerX} centerY={centerY}
-      chartData={data} chartRangeArgument={chartRangeFactory(stock.start,endDate,stock.symbol,stock.ticks,stock.period)} stock={stock}/>
+      { showModal ? <SingleStockDetails  showModal={showModal} setShowModal={setShowModal} centerX={centerX} centerY={centerY}
+      chartData={data} chartRangeArgument={chartRangeFactory(stock.start,endDate,stock.symbol,stock.ticks,stock.period)} stock={stock}/>:<div></div>}
     
       <motion.div 
       whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',

@@ -2,12 +2,13 @@ import React, { useEffect,useState } from 'react'
 import {motion} from 'framer-motion'
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {Line} from 'react-chartjs-2'
-import {ticksAndPeriods,lineChartFactory,findItemByProperty} from '../helpers/webSocketHelpers'
+import {ticksAndPeriods,lineChartFactory,findItemByProperty, getSymbolFactory} from '../helpers/webSocketHelpers'
 import {useStocksContext } from "../hooks/useStocksContext";
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
 import {TfiClose} from 'react-icons/tfi'
 import Loading from '../components/Loading'
+import SingleStockDetailsPrice from './SingleStockDetailsPrice'
 
 
 
@@ -90,7 +91,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     }
 
-
+    
 
     useEffect(()=>{
             setBuy(stock.buy)
@@ -117,7 +118,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     useEffect(()=>{  
         if (isLoggedIn){
-          functionCall(chartRangeArgument)             
+          functionCall(chartRangeArgument)       
         }
       },[isLoggedIn,functionCall,stocks])
 
@@ -212,34 +213,29 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
 
 
+
   return (
-    <div >
-        {showModal && (
+        <div>        
             <motion.div className='backdrop'
             variants={backdrop}
             initial="hidden"
             animate='visible'
             exit='hidden'
-            onClick={handleBackdropClick}
-            >  
+            onClick={handleBackdropClick}>  
                 <motion.div className='modal'
                     variants={modal}
                     initial="hidden"
                     animate='visible'
-                    exit='hidden'
-                >
+                    exit='hidden'>
                     <div className='modal--title'>
                         <div className='modal--title--left'>
-                            <div>{symbol}</div>
-                            <div>current price and change</div>
+                            <SingleStockDetailsPrice stock={stock}/>
                         </div>
                         <div className='modal--title--right'>
                             <div onClick={()=>setShowModal(false)}><TfiClose className={'tficlose'}/>
                         </div>
                         </div>
-                        
-                    </div>   
-                    
+                    </div>
                         <div className='modal--form'>
                             {ticksAndPeriods.map((item,i)=>
                             <div key={item.ticks}   className='modal--form--period--button'  >
@@ -265,13 +261,10 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                             
                             )}
                         </div> 
-                                          
-                  
-
                     <div className='modal--chart--group'>
                         <div className='modal--chart'>
                             { !hookIsLoaded ?<Loading/> :<Line   data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03,buy,sell)} options={options}/>}                
-                                                  
+                                                    
                         </div>
                         <div className='modal--chart--form'>
                             <form className='modal--chart--form--form'>
@@ -284,19 +277,24 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                     <input onChange={(e)=>setBuy(Number(e.target.value))} value={buy===0 ? '': buy} type="number" ></input>
                                 </div>
                 
-                                <button onClick={updateUser}>Set prices</button>
+                                <motion.div className='updateUser--button' 
+                                    onClick={updateUser}
+                                    whileHover={{backgroundColor:'#002c58',color:'#F3F3F3'}}
+                                    whileTap={{backgroundColor:'#EAEAEA',color:'#002c58',scale:0.9}}
+                                    
+                                    
+                                    >Set prices
+                                </motion.div>
                             </form>
                         </div>
-                    </div>                   
-     
-                    
-                    
+                    </div>  
                 </motion.div>              
             </motion.div>
 
-        )}
-    </div>
+        
+        </div>
   )
 }
 
 export default SingleStockDetails
+

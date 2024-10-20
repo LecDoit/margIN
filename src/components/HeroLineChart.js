@@ -22,27 +22,67 @@ function HeroLineChart() {
 
   setTimeout(()=>{setRefreshData(Math.random())},4000)
 
-   const options = {
-    responsive: true,
-    plugins: {
-      annotation:{
-        annotations:{ 
-          line1:{
-            type:'line',
-            yMin: 600,
-            yMax: 600,
-            borderColor:'rgb(255,99,132)',
-            borderWidth:2
-          }
-        }
-      },
-      legend: false,
-      title: {
-        display: true,
-
-      },
+  const options = {
+    responsive:true,
+    interaction:{
+        mode:'nearest',
+        axis:'xy',
+        intersect:false
     },
-  };
+    maintainAspectRatio:false,
+    plugins:{
+        legend:{
+            display:false,
+        },
+        tooltip:{
+            enabled:true,
+            mode:'nearest',
+           
+            callbacks:{
+                label: (e)=>{
+                    return `Price: ${e.raw}`
+                }
+            },
+            backgroundColor:'rgba(0, 67, 241)',
+            titleFont:{
+            },
+            displayColors:false,         
+            
+        },
+
+    },
+    elements:{
+        line:{
+
+        }
+    },
+    scales:{
+        x:{
+            display:true,
+            grid:{
+                display:false
+            },
+            ticks:{
+                maxTicksLimit:7,
+                align:"start"
+                
+            }
+        },
+        y:{
+            display:true,
+            grid:{
+                display:false
+            },
+            ticks:{
+                // color:'#fff',
+                callback: (e)=>{
+                    return `${e}`
+                }
+            }
+        }
+    }
+    
+}
   
   const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
@@ -51,30 +91,40 @@ function HeroLineChart() {
     datasets: [
 
       {
+
         data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        fill:true,
+        borderColor: '#002c58',
+        backgroundColor:'rgba(0, 44, 88, 0.03)',
+        pointRadius:0,
+        tension:0,
+        borderWidth:1.4,
       },
       {
         data: labels.map(() => faker.number.int({ min: 200, max: 200 })),
         borderColor: 'rgb(255,99,132)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        pointRadius:0,
+        tension:0,
+        borderWidth:1.4,
       },
       {
         data: labels.map(() => faker.number.int({ min: 700, max: 700 })),
         borderColor: 'rgb(0,128,0)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        pointRadius:0,
+        tension:0,
+        borderWidth:1.4,
       },
     ],
   };
-
 
 
     return(
         
           <div className='hero--1--2'>
 
-            <Line data={data} options={options} />
+            <Line options={options}  data={data} />
           </div>
         
     )

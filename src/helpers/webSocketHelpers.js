@@ -1,4 +1,5 @@
 import {format} from 'date-fns'
+import { get } from 'react-hook-form'
 
 export const chartRangeFactory = (start,end,symbol,ticks,period)=>{
     const chartRange = {
@@ -23,6 +24,17 @@ export const credentials = {
 
 }
 
+
+export const getSymbolFactory = (symbol)=>{
+    const getSymbol ={
+        "command": "getSymbol",
+        "arguments": {
+            "symbol": `${symbol}`
+        }
+    }
+    return getSymbol
+    
+}
 
 
 export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
