@@ -37,7 +37,7 @@ const StockSearch = ({symbols}) => {
     const addStocks = async (e)=>{
       // console.log(e)
 
-       const body = JSON.stringify({"email":user.email,"stocks":[{"symbol": e.symbol, "buy": 0, "sell": 0,"period":240,"ticks":1095,"start":last6Months}]})
+       const body = JSON.stringify({"email":user.email,"stocks":[{"symbol": e.symbol,"description":e.description,"categoryName":e.categoryName, "buy": 0, "sell": 0,"period":240,"ticks":1095,"start":last6Months}]})
 
   
           // const response = await fetch('http://localhost:10000/stocks/addStock',{
@@ -81,6 +81,9 @@ const StockSearch = ({symbols}) => {
     }
 
 
+    
+
+
  
   return (
     <div>
@@ -108,7 +111,7 @@ const StockSearch = ({symbols}) => {
                 return <motion.div
                   whileHover={{scale:1.02,backgroundColor:'#F3F3F3',
                   boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)',
-                color:"#0043F1"}}
+                  color:"#0043F1"}}
                   transition={{type:"tween",duration:0.1}}
                   whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}} 
                 

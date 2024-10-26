@@ -25,9 +25,12 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const [sell,setSell] = useState('')
     const [period,setPeriod] = useState(0)
     const [ticks,setTicks] = useState(0)
-
     const [symbol,setSymbols] = useState('')
-
+    const [tradeDate,setTradeDate] =useState('')
+    const [price,setPrice] =useState('')
+    const [quantity,setQuantity] =useState('')
+    const [type,setType] = useState('')
+ 
 
     const [startDate, setStartDate] = useState('')
 
@@ -35,22 +38,32 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     const [activeRange,setActiveRange] = useState('')
 
+    const [trades,setTrades] = useState('')
+
     const updateUser = async (e)=>{
         if (e){
             e.preventDefault()
         }
+        const transaction = [tradeDate,price,quantity,type]
+
+
+// WORKING
         const findStock = stocks.find(item=>item._id===particularStock._id)
 
         const index = stocks.indexOf(findStock)
         const splicedStock = stocks.splice(index,1) 
 
-
+        splicedStock[0].trades.push(transaction)
         splicedStock[0].buy=buy
         splicedStock[0].sell=sell
         splicedStock[0].period=period
         splicedStock[0].ticks=ticks
         splicedStock[0].start=startDate 
         stocks.splice(index, 0, splicedStock[0])
+
+        // create factory fo objests to store
+  
+        
         
         axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
 
@@ -68,6 +81,9 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                 dispatch({type:`DELETE_STOCK`,payload:json})
             })         
     }
+    console.log(stock.trades)
+
+
 
     const backdrop ={
         visible:{opacity:1},
@@ -102,6 +118,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             setTicks(stock.ticks)
             setStartDate(stock.start)
             setActiveRange(findItemByProperty(ticksAndPeriods,"ticks",stock.ticks).name)
+            setTrades(stock.trades)
 
             
         const handleEsc=(e)=>{
@@ -212,7 +229,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
 
 
-
+   
 
   return (
         <div>        
@@ -267,7 +284,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                                     
                         </div>
                         <div className='modal--chart--form'>
-                            <form className='modal--chart--form--form'>
+                            <form className='modal--chart--form--range'>
                                 <div className='modal--chart--buysell'>
                                     <label>Price to Sell</label>
                                     <input onChange={(e)=>setSell(Number(e.target.value))} value={sell===0?'':sell} type="number"></input>
@@ -281,9 +298,49 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                     onClick={updateUser}
                                     whileHover={{backgroundColor:'#002c58',color:'#F3F3F3'}}
                                     whileTap={{backgroundColor:'#EAEAEA',color:'#002c58',scale:0.9}}
-                                    
-                                    
                                     >Set prices
+                                </motion.div>
+                            </form>
+
+
+
+                        {/* NEW FORM */}
+                            <form className='modal--chart--form--order'>
+                                <div className='modal--chart--buysell'>
+                                    <label>Quantity of {particularStock.categoryName}</label>
+                                    <input onChange={(e)=>setQuantity(Number(e.target.value))} value={quantity===0?'':quantity} type="number"></input>
+                                </div>
+                                <div className='modal--chart--buysell'>
+                                    <label>Price</label>
+                                    <input onChange={(e)=>setPrice(Number(e.target.value))} value={price===0?'':price} type="number"></input>
+                                </div>
+     
+                                <div className='modal--chart--buysell'>
+                                    <label>Trade Date</label>
+                                    <input onChange={(e)=>setTradeDate(Date(e.target.value))} value={tradeDate===0 ? '': tradeDate} type="Date" ></input>
+                                </div>
+                                <div className='buysellbuttons'>
+                                    <motion.div className='buyButton' 
+                                        onClick={(e)=>setType('buy')}
+                                        whileHover={{backgroundColor:'#00b232',color:'#F3F3F3'}}
+                                        whileTap={{backgroundColor:'#EAEAEA',color:'#002c58',scale:0.9}}
+                                        animate={{backgroundColor:type==='buy'?"#00b232":'#EAEAEA'}}
+                                        >Buy
+                                    </motion.div>
+                                    <motion.div className='sellButton' 
+                                        onClick={(e)=>setType('sell')}
+                                        whileHover={{backgroundColor:'#d60000',color:'#F3F3F3'}}
+                                        whileTap={{backgroundColor:'#EAEAEA',color:'#002c58',scale:0.9}}
+                                        animate={{backgroundColor:type==='sell'?"#d6000" :'#EAEAEA'}}
+                                        >Sell
+                                    </motion.div>
+
+                                </div>
+                                <motion.div className='updateUser--button' 
+                                    onClick={updateUser}
+                                    whileHover={{backgroundColor:'#002c58',color:'#F3F3F3'}}
+                                    whileTap={{backgroundColor:'#EAEAEA',color:'#002c58',scale:0.9}}
+                                    >Set Trade
                                 </motion.div>
                             </form>
                         </div>

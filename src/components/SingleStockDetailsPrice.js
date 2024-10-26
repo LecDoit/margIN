@@ -29,7 +29,7 @@ const SingleStockDetailsPrice = (stock) => {
 
       useEffect(()=>{
         if (data){
-            console.log(data.returnData)
+            // console.log(data.returnData)
             setSymbol(data.returnData.description)
             setBid(data.returnData.bid)
             setAsk(data.returnData.ask)
