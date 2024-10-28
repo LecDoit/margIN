@@ -828,7 +828,17 @@ input:focus{
   font-weight: 600;
   border-bottom: 1px solid var(--LIGHTBLUE);
   
-  
+}
+.tradesGroup--table--header{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  border-bottom: 1px solid var(--LIGHTBLUE);
+  height: 50px;
+  line-height: 50px;
+  font-weight: 600;
+  gap:35px;
+
 
 }
 .stockGroup--table--content{
@@ -854,6 +864,12 @@ input:focus{
 .singleStock-wrapper{
   display: flex;
   border-bottom: 2px solid var(--LIGHTGRAY);
+
+}
+.singleTrade--wrapper{
+  display: flex;
+  border-bottom: 2px solid var(--LIGHTGRAY);
+  gap:25px;
 
 }
 .stockGroup--table--no{
@@ -910,6 +926,9 @@ input:focus{
 }
 
 .backdrop{
+  display: grid;
+  grid-template-columns:10vw 50vw 30vw 10vw;
+  grid-template-rows:10vh 10vh 50vh 20vh 10vh;
   position:fixed;
   top:0;
   left:0;
@@ -919,30 +938,37 @@ input:focus{
   z-index: 1;
 }
 .modal{
-  display: flex;
-  flex-direction: column;
-  max-width: 75vw;
-  margin:0 auto;
-  padding:40px 40px;
+  grid-column-start:2 ;
+  grid-column-end: 4;
+  grid-row-start: 2;
+  grid-row-end: 5;
   background-color: var(--LIGHTERGRAY);
   border-radius: 10px;
-
-  
-  
+ 
   
 }
 .modal--title{
+
+  background-color: aqua;
+  grid-column-start:1 ;
+  grid-column-end: 1;
+  grid-row-start:4;
+  grid-row-end: 4;
+  
+
   display: flex;
   flex-direction: row;
   gap:20px;
-  height: 50px;
+  /* height: 50px; */
   justify-content: space-between;
   font-size: 23px;
   font-weight: 500;
   color: var(--BLACK);  
-  margin-right: 10px;
+
+  /* margin-right: 10px;
   margin-bottom:20px;
-  margin-left:50px;
+  margin-left:50px; */
+
   
 }
 .modal--title--left{
@@ -974,16 +1000,29 @@ input:focus{
 }
 
 .modal--chart--group{
+  grid-column-start:3 ;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+
   display: flex;
+  flex-direction: column;
+  background-color: #00b232;
+  
 }
 .modal--chart{
   display: flex;
-  width:70vw;
-  height:50vh
+  width:40vw;
+  height:20vh
 }
 .modal--chart--form{
+  grid-column-start:2 ;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 4;
+
   display: flex;
-  width:30vw;
+  /* width:30vw; */
   justify-content: center;
   flex-direction: column;
 
@@ -1024,6 +1063,12 @@ input:focus{
   font-weight: 500;
   cursor: pointer;
   border-radius: 6px;
+}
+.modal--trades{
+  grid-column-start:1 ;
+  grid-column-end: 1;
+  grid-row-start: 3;
+  grid-row-end: 3;
 }
 
 .range-item__active{

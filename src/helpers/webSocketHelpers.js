@@ -24,6 +24,17 @@ export const credentials = {
 
 }
 
+export const tradeFactory = (td,price,quantity,type)=>{
+    const trade ={
+        tradeDate:td,
+        price:price,
+        quantity:quantity,
+        type:type
+
+    }
+    return trade
+}
+
 
 export const getSymbolFactory = (symbol)=>{
     const getSymbol ={
@@ -174,3 +185,8 @@ export const ticksAndPeriods = [
     {name:'5Y',ticks:1825,period:1440,state:endDate-fiveYearsInMilliseconds},
     {name:'IOY',ticks:520,period:10080,state:endDate-tenYearsInMilliseconds},        
 ]
+
+export function convertMsToDate(ms) {
+    const date = new Date(ms);
+    return date.toISOString().slice(0, 16).replace("T", " ");
+}

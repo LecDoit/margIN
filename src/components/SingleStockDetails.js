@@ -2,13 +2,14 @@ import React, { useEffect,useState } from 'react'
 import {motion} from 'framer-motion'
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {Line} from 'react-chartjs-2'
-import {ticksAndPeriods,lineChartFactory,findItemByProperty, getSymbolFactory} from '../helpers/webSocketHelpers'
+import {ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,convertMsToDate} from '../helpers/webSocketHelpers'
 import {useStocksContext } from "../hooks/useStocksContext";
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
 import {TfiClose} from 'react-icons/tfi'
 import Loading from '../components/Loading'
 import SingleStockDetailsPrice from './SingleStockDetailsPrice'
+import LoadingSmall from '../components/LoadingSmall'
 
 
 
@@ -44,12 +45,10 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         if (e){
             e.preventDefault()
         }
-        const transaction = [tradeDate,price,quantity,type]
+        const td = new Date(tradeDate).getTime()
+        const transaction = tradeFactory(td,price,quantity,type)
 
-
-// WORKING
         const findStock = stocks.find(item=>item._id===particularStock._id)
-
         const index = stocks.indexOf(findStock)
         const splicedStock = stocks.splice(index,1) 
 
@@ -60,10 +59,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         splicedStock[0].ticks=ticks
         splicedStock[0].start=startDate 
         stocks.splice(index, 0, splicedStock[0])
-
-        // create factory fo objests to store
-  
-        
+      
         
         axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
 
@@ -81,9 +77,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                 dispatch({type:`DELETE_STOCK`,payload:json})
             })         
     }
-    console.log(stock.trades)
 
-
+   
 
     const backdrop ={
         visible:{opacity:1},
@@ -94,13 +89,11 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         hidden:{     
             width:0,   
             height:0,   
-            y:centerY,
             opacity:0,
         },
         visible:{       
             width:"100%",  
-            height:"80vh",       
-            y:"2vh",
+            height:"100%",       
             opacity:1,
             transition:{delay:0.1,duration:0.1}
         }
@@ -227,10 +220,6 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         }
     },[triggerApiCall])
 
-
-
-   
-
   return (
         <div>        
             <motion.div className='backdrop'
@@ -253,37 +242,32 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                         </div>
                         </div>
                     </div>
-                        <div className='modal--form'>
-                            {ticksAndPeriods.map((item,i)=>
-                            <div key={item.ticks}   className='modal--form--period--button'  >
-                    
-                                <motion.div   className='modal--form--period--button'    
 
-                                    
-                                    whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
-                                    transition={{duration:0}}
-                                    onClick={()=>sendStartDate(item)}
-
-                                    style={{
-                                    backgroundColor:item.name===activeRange ? "rgb(253, 253, 253)":"rgb(253, 253, 253,0)",
-                                    color:item.name===activeRange  ? 'rgb(0, 67, 241)':'rgb(0, 44, 88)',
-                                    textDecoration: item.name===activeRange  ?'underline 1px':'none'
-                                    }}
-                                    whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}}
-
-                                    >{item.name}
-                
-                                </motion.div>
-                            </div>
-                            
-                            )}
-                        </div> 
-                    <div className='modal--chart--group'>
+                    {/* <div className='modal--chart--group'>
+                    <div className='modal--form'>
+                        {ticksAndPeriods.map((item,i)=>
+                        <div key={item.ticks}   className='modal--form--period--button'>                
+                            <motion.div   className='modal--form--period--button'                                
+                                whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
+                                transition={{duration:0}}
+                                onClick={()=>sendStartDate(item)}
+                                style={{
+                                backgroundColor:item.name===activeRange ? "rgb(253, 253, 253)":"rgb(253, 253, 253,0)",
+                                color:item.name===activeRange  ? 'rgb(0, 67, 241)':'rgb(0, 44, 88)',
+                                textDecoration: item.name===activeRange  ?'underline 1px':'none'
+                                }}
+                                whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}}
+                                >{item.name}            
+                            </motion.div>
+                        </div>                        
+                        )}
+                    </div> 
                         <div className='modal--chart'>
-                            { !hookIsLoaded ?<Loading/> :<Line   data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03,buy,sell)} options={options}/>}                
-                                                    
+                            { !hookIsLoaded ?<Loading/> :<Line   data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03,buy,sell)} options={options}/>}                                                    
                         </div>
-                        <div className='modal--chart--form'>
+
+                    </div>  */}
+                    {/* <div className='modal--chart--form'>
                             <form className='modal--chart--form--range'>
                                 <div className='modal--chart--buysell'>
                                     <label>Price to Sell</label>
@@ -301,10 +285,6 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                     >Set prices
                                 </motion.div>
                             </form>
-
-
-
-                        {/* NEW FORM */}
                             <form className='modal--chart--form--order'>
                                 <div className='modal--chart--buysell'>
                                     <label>Quantity of {particularStock.categoryName}</label>
@@ -317,7 +297,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
      
                                 <div className='modal--chart--buysell'>
                                     <label>Trade Date</label>
-                                    <input onChange={(e)=>setTradeDate(Date(e.target.value))} value={tradeDate===0 ? '': tradeDate} type="Date" ></input>
+                                    <input onChange={(e)=>setTradeDate(Date(e.target.value))} value={tradeDate===0 ? '': tradeDate} type="datetime-local" ></input>
                                 </div>
                                 <div className='buysellbuttons'>
                                     <motion.div className='buyButton' 
@@ -343,8 +323,34 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                     >Set Trade
                                 </motion.div>
                             </form>
-                        </div>
-                    </div>  
+                    </div> */}
+                    
+                    {/* <div className='modal--trades'>
+                        {trades ? 
+                        <div>                   
+                            <div className='tradesGroup'> 
+                                <div className='tradesGroup--table--header'>
+                                    <div>#</div>
+                                    <div>Trade Date</div>
+                                    <div>Price</div>
+                                    <div>Quantity</div>
+                                    <div>Type</div>
+                                </div>
+                                {trades.map((trade,i)=>{
+                                return ( 
+                                <div className='singleTrade--wrapper' key={i}>
+                                    <div>{i+1}</div>
+                                    <div>{convertMsToDate(trade.tradeDate)}</div>
+                                    <div>{trade.price}</div>
+                                    <div>{trade.quantity}</div>
+                                    <div>{trade.type}</div>
+                                    <TfiClose className={'tficlose'}/>
+                                </div>
+                                )})}
+                            </div>
+      
+                        </div>:<LoadingSmall/> }
+                    </div>  */}
                 </motion.div>              
             </motion.div>
 
