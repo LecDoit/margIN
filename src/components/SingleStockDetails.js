@@ -243,7 +243,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                         </div>
                     </div>
 
-                    {/* <div className='modal--chart--group'>
+                    <div className='modal--chart--group'>
                     <div className='modal--form'>
                         {ticksAndPeriods.map((item,i)=>
                         <div key={item.ticks}   className='modal--form--period--button'>                
@@ -266,8 +266,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                             { !hookIsLoaded ?<Loading/> :<Line   data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03,buy,sell)} options={options}/>}                                                    
                         </div>
 
-                    </div>  */}
-                    {/* <div className='modal--chart--form'>
+                    </div> 
+                    <div className='modal--chart--form'>
                             <form className='modal--chart--form--range'>
                                 <div className='modal--chart--buysell'>
                                     <label>Price to Sell</label>
@@ -323,9 +323,9 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                     >Set Trade
                                 </motion.div>
                             </form>
-                    </div> */}
+                    </div>
                     
-                    {/* <div className='modal--trades'>
+                    <div className='modal--trades'>
                         {trades ? 
                         <div>                   
                             <div className='tradesGroup'> 
@@ -350,7 +350,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                             </div>
       
                         </div>:<LoadingSmall/> }
-                    </div>  */}
+                    </div> 
                 </motion.div>              
             </motion.div>
 
