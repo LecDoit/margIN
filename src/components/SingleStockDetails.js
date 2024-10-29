@@ -244,40 +244,39 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                     </div>
 
                     <div className='modal--chart--group'>
-                    <div className='modal--form'>
-                        {ticksAndPeriods.map((item,i)=>
-                        <div key={item.ticks}   className='modal--form--period--button'>                
-                            <motion.div   className='modal--form--period--button'                                
-                                whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
-                                transition={{duration:0}}
-                                onClick={()=>sendStartDate(item)}
-                                style={{
-                                backgroundColor:item.name===activeRange ? "rgb(253, 253, 253)":"rgb(253, 253, 253,0)",
-                                color:item.name===activeRange  ? 'rgb(0, 67, 241)':'rgb(0, 44, 88)',
-                                textDecoration: item.name===activeRange  ?'underline 1px':'none'
-                                }}
-                                whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}}
-                                >{item.name}            
-                            </motion.div>
-                        </div>                        
-                        )}
-                    </div> 
+                        <div className='modal--form'>
+                            {ticksAndPeriods.map((item,i)=>
+                            <div key={item.ticks}   className='modal--form--period--button'>                
+                                <motion.div   className='modal--form--period--button'                                
+                                    whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
+                                    transition={{duration:0}}
+                                    onClick={()=>sendStartDate(item)}
+                                    style={{
+                                    backgroundColor:item.name===activeRange ? "rgb(253, 253, 253)":"rgb(253, 253, 253,0)",
+                                    color:item.name===activeRange  ? 'rgb(0, 67, 241)':'rgb(0, 44, 88)',
+                                    textDecoration: item.name===activeRange  ?'underline 1px':'none'
+                                    }}
+                                    whileTap={{scale:0.9,backgroundColor:"#F3F3F3"}}
+                                    >{item.name}            
+                                </motion.div>
+                            </div>                        
+                            )}
+                        </div> 
                         <div className='modal--chart'>
                             { !hookIsLoaded ?<Loading/> :<Line   data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03,buy,sell)} options={options}/>}                                                    
                         </div>
-
                     </div> 
                     <div className='modal--chart--form'>
                             <form className='modal--chart--form--range'>
+                                <div className='modal--chart--title'>Set Margin</div>
                                 <div className='modal--chart--buysell'>
-                                    <label>Price to Sell</label>
-                                    <input onChange={(e)=>setSell(Number(e.target.value))} value={sell===0?'':sell} type="number"></input>
+                                    <label  className='modal--chart--label'>Price to Sell</label>
+                                    <input  className='modal--chart--input' onChange={(e)=>setSell(Number(e.target.value))} value={sell===0?'':sell} type="number"></input>
                                 </div>
                                 <div className='modal--chart--buysell'>
-                                    <label>Price to Buy</label>
-                                    <input onChange={(e)=>setBuy(Number(e.target.value))} value={buy===0 ? '': buy} type="number" ></input>
-                                </div>
-                
+                                    <label  className='modal--chart--label'>Price to Buy</label>
+                                    <input className='modal--chart--input' onChange={(e)=>setBuy(Number(e.target.value))} value={buy===0 ? '': buy} type="number" ></input>
+                                </div>                
                                 <motion.div className='updateUser--button' 
                                     onClick={updateUser}
                                     whileHover={{backgroundColor:'#002c58',color:'#F3F3F3'}}
@@ -285,19 +284,22 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                     >Set prices
                                 </motion.div>
                             </form>
+
+
                             <form className='modal--chart--form--order'>
+                                <div className='modal--chart--title'>Place Trade</div>
                                 <div className='modal--chart--buysell'>
-                                    <label>Quantity of {particularStock.categoryName}</label>
-                                    <input onChange={(e)=>setQuantity(Number(e.target.value))} value={quantity===0?'':quantity} type="number"></input>
+                                    <label className='modal--chart--label'>Quantity of {particularStock.categoryName}</label>
+                                    <input className='modal--chart--input' onChange={(e)=>setQuantity(Number(e.target.value))} value={quantity===0?'':quantity} type="number"></input>
                                 </div>
                                 <div className='modal--chart--buysell'>
-                                    <label>Price</label>
-                                    <input onChange={(e)=>setPrice(Number(e.target.value))} value={price===0?'':price} type="number"></input>
+                                    <label className='modal--chart--label'>Price</label>
+                                    <input className='modal--chart--input' onChange={(e)=>setPrice(Number(e.target.value))} value={price===0?'':price} type="number"></input>
                                 </div>
      
                                 <div className='modal--chart--buysell'>
-                                    <label>Trade Date</label>
-                                    <input onChange={(e)=>setTradeDate(Date(e.target.value))} value={tradeDate===0 ? '': tradeDate} type="datetime-local" ></input>
+                                    <label className='modal--chart--label'>Trade Date</label>
+                                    <input className='modal--chart--input' onChange={(e)=>setTradeDate(Date(e.target.value))} value={tradeDate===0 ? '': tradeDate} type="datetime-local" ></input>
                                 </div>
                                 <div className='buysellbuttons'>
                                     <motion.div className='buyButton' 

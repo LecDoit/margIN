@@ -61,7 +61,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
     const rect = e.target.getBoundingClientRect()
     const centerX = rect.left+rect.width/2
     const centerY = rect.top+rect.height/2
-    console.log(centerY)
+    
     setCenterX(centerX)
     setCenterY(centerY)
     setShowModal(true)
