@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react'
 import {motion} from 'framer-motion'
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {Line} from 'react-chartjs-2'
-import {ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,convertMsToDate} from '../helpers/webSocketHelpers'
+import {ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,convertMsToDate,formatDateTime} from '../helpers/webSocketHelpers'
 import {useStocksContext } from "../hooks/useStocksContext";
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -10,6 +10,7 @@ import {TfiClose} from 'react-icons/tfi'
 import Loading from '../components/Loading'
 import SingleStockDetailsPrice from './SingleStockDetailsPrice'
 import LoadingSmall from '../components/LoadingSmall'
+import { valid } from 'semver'
 
 
 
@@ -30,22 +31,50 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const [tradeDate,setTradeDate] =useState('')
     const [price,setPrice] =useState('')
     const [quantity,setQuantity] =useState('')
-    const [type,setType] = useState('')
- 
+    const [type,setType] = useState('') 
 
     const [startDate, setStartDate] = useState('')
-
     const [triggerApiCall,setTriggerApiCall] = useState('')
-
     const [activeRange,setActiveRange] = useState('')
-
     const [trades,setTrades] = useState('')
 
-    const updateUser = async (e)=>{
-        if (e){
-            e.preventDefault()
+    const [errors, setErrors] = useState({});
+
+    const validate = () => {
+        const newErrors = {};
+
+        // Quantity validation (must be a positive integer)
+        if (!quantity) {
+            newErrors.quantity = 'Quantity is required';
+        } 
+        // Price validation (must be a positive number)
+        if (!price) {
+            newErrors.price = 'Price is required';
+        } 
+
+        // Trade date validation (must be a valid date)
+        if (!tradeDate) {
+            newErrors.tradeDate = 'Trade date is required';
         }
-        const td = new Date(tradeDate).getTime()
+
+        // Type of trade validation (must be selected)
+        if (!type) {
+            newErrors.typeOfTrade = 'Type of trade is required';
+        }
+
+        setErrors(newErrors);
+        
+
+        return Object.keys(newErrors).length === 0;
+    };
+    
+
+
+    const updateTrade = async (e)=>{
+
+        if (validate()){
+        const td = new Date(tradeDate)
+
         const transaction = tradeFactory(td,price,quantity,type)
 
         const findStock = stocks.find(item=>item._id===particularStock._id)
@@ -75,7 +104,51 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             .then((response)=>{
                 const json = response.data.stocks
                 dispatch({type:`DELETE_STOCK`,payload:json})
-            })         
+            })  
+            setQuantity('')
+            setPrice('')
+            setTradeDate('')
+            setType('')  
+            setTrades(splicedStock[0].trades)
+        }     
+    }
+    const updateMargin = async (e)=>{
+        if (e){
+            e.preventDefault()
+        }        
+              
+
+        const findStock = stocks.find(item=>item._id===particularStock._id)
+        const index = stocks.indexOf(findStock)
+        const splicedStock = stocks.splice(index,1) 
+
+        splicedStock[0].buy=buy
+        splicedStock[0].sell=sell
+        splicedStock[0].period=period
+        splicedStock[0].ticks=ticks
+        splicedStock[0].start=startDate 
+        stocks.splice(index, 0, splicedStock[0])
+      
+        
+        axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
+
+        {"email":user.email,"stocks":stocks},
+        {
+            headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${user.token}`
+            }
+        }
+
+        )
+            .then((response)=>{
+                const json = response.data.stocks
+                dispatch({type:`DELETE_STOCK`,payload:json})
+
+            })  
+
+            
+               
     }
 
    
@@ -112,6 +185,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             setStartDate(stock.start)
             setActiveRange(findItemByProperty(ticksAndPeriods,"ticks",stock.ticks).name)
             setTrades(stock.trades)
+
 
             
         const handleEsc=(e)=>{
@@ -214,11 +288,15 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     useEffect(()=>{
         if (triggerApiCall){
-            updateUser()
+            // updateUser()
             setTriggerApiCall(false)
 
         }
     },[triggerApiCall])
+
+    useEffect(()=>{
+        console.log(trades)
+    },[trades])
 
   return (
         <div>        
@@ -278,7 +356,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                     <input className='modal--chart--input' onChange={(e)=>setBuy(Number(e.target.value))} value={buy===0 ? '': buy} type="number" ></input>
                                 </div>                
                                 <motion.div className='updateUser--button' 
-                                    onClick={updateUser}
+                                    onClick={updateMargin}
                                     whileHover={{backgroundColor:'#002c58',color:'#F3F3F3'}}
                                     whileTap={{backgroundColor:'#EAEAEA',color:'#002c58',scale:0.9}}
                                     >Set prices
@@ -291,17 +369,26 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                 <div className='modal--chart--buysell'>
                                     <label className='modal--chart--label'>Quantity of {particularStock.categoryName}</label>
                                     <input className='modal--chart--input' onChange={(e)=>setQuantity(Number(e.target.value))} value={quantity===0?'':quantity} type="number"></input>
+                                    
                                 </div>
+                                {errors.quantity && <span className="error--form">{errors.quantity}</span>}
                                 <div className='modal--chart--buysell'>
                                     <label className='modal--chart--label'>Price</label>
                                     <input className='modal--chart--input' onChange={(e)=>setPrice(Number(e.target.value))} value={price===0?'':price} type="number"></input>
                                 </div>
-     
+                                {errors.price && <span className="error--form">{errors.price}</span>}
                                 <div className='modal--chart--buysell'>
                                     <label className='modal--chart--label'>Trade Date</label>
-                                    <input className='modal--chart--input' onChange={(e)=>setTradeDate(Date(e.target.value))} value={tradeDate===0 ? '': tradeDate} type="datetime-local" ></input>
+
+                                    {/* // HERE */}
+                                    <input className='modal--chart--input' onChange={(e)=>setTradeDate((e.target.value))} value={tradeDate}  type="datetime-local" ></input>
+
+
+
                                 </div>
-                                <div className='buysellbuttons'>
+                                {errors.tradeDate && <span className="error--form">{errors.tradeDate}</span>}
+                                <div className='error--containter'>
+                                    <div className='buysellbuttons'>
                                     <motion.div className='buyButton' 
                                         onClick={(e)=>setType('buy')}
                                         whileHover={{backgroundColor:'#00b232',color:'#F3F3F3'}}
@@ -316,10 +403,11 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                         animate={{backgroundColor:type==='sell'?"#d6000" :'#EAEAEA'}}
                                         >Sell
                                     </motion.div>
-
+                                    </div>
+                                    {errors.typeOfTrade && <span className="error--form">{errors.typeOfTrade}</span>}
                                 </div>
                                 <motion.div className='updateUser--button' 
-                                    onClick={updateUser}
+                                    onClick={updateTrade}
                                     whileHover={{backgroundColor:'#002c58',color:'#F3F3F3'}}
                                     whileTap={{backgroundColor:'#EAEAEA',color:'#002c58',scale:0.9}}
                                     >Set Trade
@@ -328,30 +416,37 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                     </div>
                     
                     <div className='modal--trades'>
-                        {trades ? 
-                        <div>                   
-                            <div className='tradesGroup'> 
+                        {trades ?                                           
+                        <div className='tradesGroup'> 
+                            <div className='tradesGroup--table--header--organizer'>
                                 <div className='tradesGroup--table--header'>
-                                    <div>#</div>
-                                    <div>Trade Date</div>
-                                    <div>Price</div>
-                                    <div>Quantity</div>
-                                    <div>Type</div>
+                                    <div className='tradesGroup--table--content'>#</div>
+                                    <div className='tradesGroup--table--content'>Trade Date</div>
+                                    <div className='tradesGroup--table--content'>Price</div>
+                                    <div className='tradesGroup--table--content'>Quantity</div>
+                                    <div className='tradesGroup--table--content'>Type</div>    
+                                    <div className='tradesGroup--table--content'>Remove</div>    
                                 </div>
+                                <div></div>                                
+                            </div>
+                            <div className='trades--wrapper'>
                                 {trades.map((trade,i)=>{
                                 return ( 
-                                <div className='singleTrade--wrapper' key={i}>
-                                    <div>{i+1}</div>
-                                    <div>{convertMsToDate(trade.tradeDate)}</div>
-                                    <div>{trade.price}</div>
-                                    <div>{trade.quantity}</div>
-                                    <div>{trade.type}</div>
-                                    <TfiClose className={'tficlose'}/>
+                                <div className='tradesGroup--table--content--organizer'  key={i}>
+                                    <div className='singleTrade--wrapper'>
+                                        <div className='tradesGroup--table--content'>{i+1}</div>
+                                        <div className='tradesGroup--table--content'>{formatDateTime(trade.tradeDate)}</div>
+                                        <div className='tradesGroup--table--content'>{trade.price}</div>
+                                        <div className='tradesGroup--table--content'>{trade.quantity}</div>
+                                        <div className='tradesGroup--table--content'>{trade.type}</div>
+                                        <div className='tradesGroup--table--content modal--title--right'><TfiClose className={'tficlose'}/></div>  
+                                    </div>
+                                    <div></div>                                  
                                 </div>
                                 )})}
                             </div>
-      
-                        </div>:<LoadingSmall/> }
+                        </div>:
+                        <LoadingSmall/> }
                     </div> 
                 </motion.div>              
             </motion.div>

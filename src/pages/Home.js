@@ -9,6 +9,7 @@ import StockSearch from "../components/StockSearch";
 import StockGroup from "../components/StockGroup";
 
 
+
 const Home = () => {
 
   const {stocks,dispatch} = useStocksContext()
