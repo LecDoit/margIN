@@ -68,7 +68,40 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         return Object.keys(newErrors).length === 0;
     };
     
+    const updateRange = async (e)=>{
 
+
+        const findStock = stocks.find(item=>item._id===particularStock._id)
+        const index = stocks.indexOf(findStock)
+        const splicedStock = stocks.splice(index,1) 
+
+
+        splicedStock[0].buy=buy
+        splicedStock[0].sell=sell
+        splicedStock[0].period=period
+        splicedStock[0].ticks=ticks
+        splicedStock[0].start=startDate 
+        stocks.splice(index, 0, splicedStock[0])
+      
+        
+        axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
+
+        {"email":user.email,"stocks":stocks},
+        {
+            headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${user.token}`
+            }
+        }
+
+        )
+            .then((response)=>{
+                const json = response.data.stocks
+                dispatch({type:`DELETE_STOCK`,payload:json})
+            })  
+
+          
+    }
 
     const updateTrade = async (e)=>{
 
@@ -288,7 +321,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     useEffect(()=>{
         if (triggerApiCall){
-            // updateUser()
+            updateRange()
             setTriggerApiCall(false)
 
         }
