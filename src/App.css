@@ -4,7 +4,7 @@
   --LIGHTBLUE: rgb(129, 161, 248);
   --BLACK: #000014;
   --WHITE: rgb(253, 253, 253);
-  --WHITER: rgba(253, 253, 253, 0.6);
+  --WHITER: #fdfdfd99;
   --LIGHTGRAY: #EAEAEA;
   --LIGHTERGRAY: #F3F3F3;
   --COAL:rgb(120, 120, 120);
@@ -969,7 +969,6 @@ input:focus{
   grid-row-end: 2;
   background-color: var(--LIGHTERGRAY);
   border-radius: 10px;
-
   grid-template-columns:55vw 25vw;
   grid-template-rows:6vh 54vh 20vh ;
 
@@ -982,6 +981,8 @@ input:focus{
   grid-column-end: 3;
   grid-row-start:1;
   grid-row-end: 1;
+  padding-left: 40px;
+
   
 
   display: flex;
@@ -1158,7 +1159,7 @@ input:focus{
 
 }
 .tradesGroup--table--content{
-  width:140px;
+  width:138px;
   display: flex;
   justify-content: center;
   align-items: center;

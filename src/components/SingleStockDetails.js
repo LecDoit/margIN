@@ -308,6 +308,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         }
         
     }
+
+
     
     
     const sendStartDate=  (e)=>{
@@ -327,6 +329,37 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         }
     },[triggerApiCall])
 
+
+    const removeTrade = async (e)=>{
+        const findStock = stocks.find(item=>item._id===particularStock._id)
+        const index = stocks.indexOf(findStock)
+        const splicedStock = stocks.splice(index,1) 
+
+        const splicedStockTrades = splicedStock[0].trades
+        const findTrade = splicedStockTrades.find(trade=>trade._id==e)
+        const indexOfTrade = splicedStockTrades.indexOf(findTrade)
+        const splicedTrade = splicedStockTrades.splice(indexOfTrade,1)
+
+        stocks.splice(index, 0, splicedStock[0])
+        setTrades(splicedStock[0].trades)
+
+        
+        axios.patch('https://xtbbackend.onrender.com/stocks/updateUserSellNBuy',
+        {"email":user.email,"stocks":stocks},
+        {
+            headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${user.token}`}
+        })
+        .then((response)=>{
+            const json = response.data.stocks
+            dispatch({type:`DELETE_STOCK`,payload:json})
+
+        })  
+
+            
+               
+    }
     useEffect(()=>{
         console.log(trades)
     },[trades])
@@ -466,14 +499,25 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                 {trades.map((trade,i)=>{
                                 return ( 
                                 <div className='tradesGroup--table--content--organizer'  key={i}>
-                                    <div className='singleTrade--wrapper'>
-                                        <div className='tradesGroup--table--content'>{i+1}</div>
-                                        <div className='tradesGroup--table--content'>{formatDateTime(trade.tradeDate)}</div>
-                                        <div className='tradesGroup--table--content'>{trade.price}</div>
-                                        <div className='tradesGroup--table--content'>{trade.quantity}</div>
-                                        <div className='tradesGroup--table--content'>{trade.type}</div>
-                                        <div className='tradesGroup--table--content modal--title--right'><TfiClose className={'tficlose'}/></div>  
-                                    </div>
+                                    <motion.div className='singleTrade--wrapper'
+                                          whileHover={{scale:1.01,backgroundColor:'rgba(253, 253, 253,0.1)',
+                                            boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
+                                            transition={{type:"tween",duration:0.1}}
+                                           >
+                                        <motion.div
+                                                whileHover={{color:'#0043f1'}}
+                                                transition={{type:"easeOut",duration:0.1}}
+                                         className='tradesGroup--table--content'>{i+1}</motion.div>
+                                        <motion.div whileHover={{color:'#0043f1'}}
+                                                transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content'>{formatDateTime(trade.tradeDate)}</motion.div>
+                                        <motion.div whileHover={{color:'#0043f1'}}
+                                                transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content'>{trade.price}</motion.div>
+                                        <motion.div whileHover={{color:'#0043f1'}}
+                                                transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content'>{trade.quantity}</motion.div>
+                                        <motion.div whileHover={{color:'#0043f1'}}
+                                                transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content'>{trade.type}</motion.div>
+                                        <div  onClick={(e)=>removeTrade(trade._id)} className='tradesGroup--table--content modal--title--right'><TfiClose className={'tficlose'}/></div>  
+                                    </motion.div>
                                     <div></div>                                  
                                 </div>
                                 )})}
