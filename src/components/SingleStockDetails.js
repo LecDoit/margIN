@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react'
 import {motion} from 'framer-motion'
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {Line} from 'react-chartjs-2'
-import {ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,convertMsToDate,formatDateTime} from '../helpers/webSocketHelpers'
+import {ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,convertMsToDate,formatDateTime,endDate} from '../helpers/webSocketHelpers'
 import {useStocksContext } from "../hooks/useStocksContext";
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -11,6 +11,7 @@ import Loading from '../components/Loading'
 import SingleStockDetailsPrice from './SingleStockDetailsPrice'
 import LoadingSmall from '../components/LoadingSmall'
 import { valid } from 'semver'
+import { setDate } from 'date-fns'
 
 
 
@@ -28,7 +29,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const [period,setPeriod] = useState(0)
     const [ticks,setTicks] = useState(0)
     const [symbol,setSymbols] = useState('')
-    const [tradeDate,setTradeDate] =useState('')
+    const [tradeDate,setTradeDate] =useState(formatDateTime(endDate))
     const [price,setPrice] =useState('')
     const [quantity,setQuantity] =useState('')
     const [type,setType] = useState('') 
@@ -106,9 +107,9 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const updateTrade = async (e)=>{
 
         if (validate()){
-        const td = new Date(tradeDate)
+        // const td = new Date(tradeDate)
 
-        const transaction = tradeFactory(td,price,quantity,type)
+        const transaction = tradeFactory(tradeDate,price,quantity,type)
 
         const findStock = stocks.find(item=>item._id===particularStock._id)
         const index = stocks.indexOf(findStock)
@@ -248,6 +249,13 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     }
 
     const options = {
+        onClick: (event, elements) => {
+              const elementIndex = elements[0].index;
+              setTradeDate(formatDateTime(data.returnData.rateInfos[elementIndex].ctm));
+              setPrice(data.returnData.rateInfos[elementIndex].open/100);
+            
+          },
+         
         responsive:true,
         interaction:{
             mode:'nearest',
@@ -309,12 +317,12 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         
     }
 
-
     
     
     const sendStartDate=  (e)=>{
         setStartDate(e.state)
         setTicks(e.ticks)
+        console.log(e.ticks)
         setPeriod(e.period)
         setTriggerApiCall(true)
         setActiveRange(e.name)
@@ -360,9 +368,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             
                
     }
-    useEffect(()=>{
-        console.log(trades)
-    },[trades])
+
 
   return (
         <div>        
@@ -407,7 +413,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                             )}
                         </div> 
                         <div className='modal--chart'>
-                            { !hookIsLoaded ?<Loading/> :<Line   data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03,buy,sell)} options={options}/>}                                                    
+                            { !hookIsLoaded ?<Loading/> :<Line data={lineChartFactory(data,symbol, "#002c58",0,1.4,0.03,buy,sell,trades)} options={options}/>}                                                    
                         </div>
                     </div> 
                     <div className='modal--chart--form'>
@@ -447,7 +453,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                     <label className='modal--chart--label'>Trade Date</label>
 
                                     {/* // HERE */}
-                                    <input className='modal--chart--input' onChange={(e)=>setTradeDate((e.target.value))} value={tradeDate}  type="datetime-local" ></input>
+                                    <input className='modal--chart--input' onChange={(e)=>setTradeDate(new Date(e.target.value))} value={formatDateTime(tradeDate)} type='date' ></input>
 
 
 
@@ -497,9 +503,11 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                             </div>
                             <div className='trades--wrapper'>
                                 {trades.map((trade,i)=>{
+                                    
                                 return ( 
                                 <div className='tradesGroup--table--content--organizer'  key={i}>
                                     <motion.div className='singleTrade--wrapper'
+                                        onMouseEnter={()=>{console.log('seks')}}
                                           whileHover={{scale:1.01,backgroundColor:'rgba(253, 253, 253,0.1)',
                                             boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
                                             transition={{type:"tween",duration:0.1}}

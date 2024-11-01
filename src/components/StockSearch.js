@@ -37,7 +37,7 @@ const StockSearch = ({symbols}) => {
     const addStocks = async (e)=>{
       // console.log(e)
 
-       const body = JSON.stringify({"email":user.email,"stocks":[{"symbol": e.symbol,"description":e.description,"categoryName":e.categoryName, "buy": 0, "sell": 0,"period":240,"ticks":1095,"start":last6Months}]})
+       const body = JSON.stringify({"email":user.email,"stocks":[{"symbol": e.symbol,"description":e.description,"categoryName":e.categoryName, "buy": 0, "sell": 0,"period":240,"ticks":2502,"start":last6Months}]})
 
   
           // const response = await fetch('http://localhost:10000/stocks/addStock',{

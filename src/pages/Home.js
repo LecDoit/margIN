@@ -7,6 +7,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import Loading from '../components/Loading'
 import StockSearch from "../components/StockSearch";
 import StockGroup from "../components/StockGroup";
+import LineChartWithDynamicDot from '../components/TestLine'
 
 
 
@@ -100,7 +101,7 @@ const conditionalRenderContent=(arg)=>{
       :
       <Loading/>
   } else if (arg=='dashboard'){
-    return <div>here will be dashbard</div>
+    return <div><LineChartWithDynamicDot/></div>
   } else {
 
     return <div>here will be soemthing else</div>

@@ -1,6 +1,19 @@
 import {format} from 'date-fns'
 import { get } from 'react-hook-form'
 
+export function formatDateTime(isoString) {
+    const date = new Date(isoString);
+
+    // Extract year, month, day, hours, and minutes
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+    // Format as "YYYY-MM-DD HH:MM"
+    // return `${year}-${month}-${day} ${hours}:${minutes}`;
+    return `${year}-${month}-${day}`;
+}
+
+
 export const chartRangeFactory = (start,end,symbol,ticks,period)=>{
     const chartRange = {
         "command": "getChartRangeRequest",
@@ -47,9 +60,13 @@ export const getSymbolFactory = (symbol)=>{
     
 }
 
+export const lineChartDotsFactory = (date,price,type)=>{
 
-export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
-    // console.log(arg.returnData.rateInfos)
+    return 
+}
+
+
+export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell,trades)=>{
 
     const labels = []
     const datasets = [{
@@ -60,7 +77,8 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
         borderColor:arg3,
         borderWidth:thicknes,
         tension:tension,
-        pointRadius:0,        
+        pointRadius:0,    
+       
     },
     {
         label:"buy",
@@ -82,10 +100,15 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
         tension:tension,
         pointRadius:0,        
     },
+    {
+        label:"trade",
+        data:[],
+        pointBackgroundColor:[],
+        pointBorderColor:[],
+        pointRadius:5,
+        showLine:true,
+    }
 ]
-
-    // const year = new Date(arg.returnData.rateInfos[0].ctm).getFullYear()
-    // const month = new Date(arg.returnData.rateInfos[0].ctm).getMonth()
 
     
     for (let i = 0;i<arg.returnData.rateInfos.length;i++){
@@ -93,9 +116,7 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
         const day = date.getDate().toString().padStart(2, '0');  // Gets the day and pads it to 2 digits
         const month = date.toLocaleString('en-US', { month: 'short' });  // Gets the abbreviated month name
         const year = date.getFullYear();  // Gets the full year
-
         const formattedDate = `${day} ${month} ${year}`;
-
         const open = (arg.returnData.rateInfos[i].open)/100
 
         labels.push(formattedDate)
@@ -106,10 +127,35 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell)=>{
         if (sell>0){
             datasets[2].data.push(sell)
         }
-        
-        
+        if (trades){
+            const searchPrice = trades.find((trade)=>trade.price==open)
+
+            if (searchPrice){
                 
-    
+                const tradeDate = new Date(searchPrice.tradeDate) 
+                const options = { day: 'numeric', month: 'short', year: 'numeric' };
+                const formattedTradeDate = tradeDate.toLocaleDateString('en-GB', options);
+
+                if(formatDateTime(formattedTradeDate)==formatDateTime(formattedDate)) {
+                    datasets[3].data.push(open)
+                    if (searchPrice.type=='buy'){
+                        datasets[3].pointBackgroundColor.push('#00b232')
+                        datasets[3].pointBorderColor.push('#00b232')
+                    } else {
+                         datasets[3].pointBackgroundColor.push('#d60000')
+                         datasets[3].pointBorderColor.push('#d60000')
+                    }
+                }
+            }else {
+                datasets[3].data.push(null)
+                datasets[3].pointBackgroundColor.push(null)
+                datasets[3].pointBorderColor.push(null)
+            }
+            
+            
+        } 
+
+        
     }
 
     const chartjsObj = {
@@ -178,12 +224,12 @@ export const oneDaysInMilliseconds = 1*24*60*60*1000
 
 
 export const ticksAndPeriods = [
-    {name:'IW',ticks:2017,period:5,state:endDate-oneWeekInMilliseconds},
-    {name:'IM',ticks:1460,period:30,state:endDate-oneMonthInMilliseconds},
-    {name:'6M',ticks:1095,period:240,state:endDate-sixMonthsInMilliseconds},
-    {name:'IY',ticks:2016,period:240,state:endDate-oneYearsInMilliseconds},
-    {name:'5Y',ticks:1825,period:1440,state:endDate-fiveYearsInMilliseconds},
-    {name:'IOY',ticks:520,period:10080,state:endDate-tenYearsInMilliseconds},        
+    {name:'IW',ticks:2500,period:1440,state:endDate-oneWeekInMilliseconds},
+    {name:'IM',ticks:2501,period:1440,state:endDate-oneMonthInMilliseconds},
+    {name:'6M',ticks:2602,period:1440,state:endDate-sixMonthsInMilliseconds},
+    {name:'IY',ticks:2503,period:1440,state:endDate-oneYearsInMilliseconds},
+    {name:'5Y',ticks:2504,period:1440,state:endDate-fiveYearsInMilliseconds},
+    {name:'IOY',ticks:5005,period:1440,state:endDate-tenYearsInMilliseconds},        
 ]
 
 export function convertMsToDate(ms) {
@@ -204,16 +250,5 @@ export const formatDateTo12Hour = (dateTime) => {
     return date.toLocaleString('en-US', options);
 };
 
-export function formatDateTime(isoString) {
-    const date = new Date(isoString);
 
-    // Extract year, month, day, hours, and minutes
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
 
-    // Format as "YYYY-MM-DD HH:MM"
-    return `${year}-${month}-${day} ${hours}:${minutes}`;
-}
