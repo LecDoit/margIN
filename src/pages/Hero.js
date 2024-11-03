@@ -7,6 +7,7 @@ import News from '../img/News'
 import Logo from '../img/Logo'
 import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
 import Navbar from '../components/Navbar'
+import solution from '../img/solution.png'
 
 const Hero = () => {
   const targetRef = useRef(null);
@@ -26,10 +27,10 @@ const Hero = () => {
                   animate={{opacity:1,x:0}}
                   transition={{duration:0.6,ease:backInOut}}
         >
-          <div className='hero--header'> 
+          <div className='hero--header oswald'> 
             Invest in your future
           </div>
-          <div className='hero--desc'>Set your <strong>buy</strong> and <strong>sell</strong> levels easily, maximize profits, and trade smarter with our intuitive app.
+          <div className='hero--desc lato'>Set your <span className='lato bold'>buy</span> and  <span className='bold lato'>sell</span> levels easily, maximize profits, and trade smarter with our intuitive app.
           </div>
           <div className='hero--1--button'>
             <Link className='hero--buttons' id='navbar--signup' to='/signup'>Sign up</Link>
@@ -108,11 +109,11 @@ const Hero = () => {
 
 
                       viewport={{amount:"all"}}>
-            placeholder for picture of finished platform
+            <img style={{height:"auto",width:"650px"}} src={solution}></img>
           </motion.div>
           <div className='hero--2--steps'>
-            <div className='hero--2--steps--title'>MargIn Platform</div>
-            <div className='hero--2--steps--action'>Set margin in minutes</div>
+            <div className='hero--2--steps--title lato title '>MargIn Platform</div>
+            <div className='hero--2--steps--action lato'>Set margin in seconds</div>
             <div className='hero--2--steps--containter'>
               <div className='hero--2--steps--step'>
                 <div className='hero--2--steps--number'>1</div>
@@ -141,7 +142,7 @@ const Hero = () => {
       </div>
       <div className='hero--3'>
         {/* app notifications news */}
-        <div className='hero--3--header' >Why MargIn?</div>
+        <div className='hero--3--header oswald' >Why MargIn?</div>
         <motion.div
         initial={{opacity:0,x:-1500}}
         whileInView={{opacity:1,x:0}}

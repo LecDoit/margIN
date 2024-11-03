@@ -5,6 +5,8 @@ import Delete from './Delete'
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
 import {lineChartFactory} from '../helpers/webSocketHelpers'
+import {TfiClose} from 'react-icons/tfi'
+import {motion} from 'framer-motion'
 
 
 
@@ -88,8 +90,23 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine,stock}) {
             {chartData ?
                 <div className='basic--line--chart'><Line data={lineChartFactory(chartData,symbol,colorLine,0.6,1,0)} options={options} /></div>
               :<div></div>}   
-             
-            <div className='delete--stock' onClick={handleClickDeleteStock}><Delete/></div>
+
+            <motion.div
+                initial={{ scale: 1 }}
+                whileHover={{
+
+                scale: 1.8, 
+                transition: { duration: 0.2 } 
+                }}
+                whileTap={{
+                scale: 0.9,
+                transition: { duration: 0.1 } 
+                }}
+                style={{ 
+                cursor: "pointer",
+                }}
+                onClick={handleClickDeleteStock} className='tradesGroup--table--content modal--title--right'><TfiClose className={'tficlose'}/>
+            </motion.div>  
         </div> 
         
         : <div>no</div>}

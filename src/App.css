@@ -43,9 +43,25 @@
     font-family:"Cormorant Garamond";
 
 }
+
 .number{
   font-family: 'Oswald',sans-serif;
   letter-spacing: "20px";
+}
+
+.oswald{
+  font-family: 'Oswald',sans-serif;
+  font-weight: 200;
+}
+.lato{
+  font-family: 'Lato',sans-serif;
+   font-weight: 300;
+  
+}
+.bold{
+  color:var(--BLUE);
+  font-weight: 600; 
+  
 }
 body{
   margin:0px;
@@ -348,7 +364,7 @@ color: var(--DARKBLUE);
   grid-row-start: 2;
   grid-row-end: 3;
 
-  padding:270px 450px 160px 450px;
+  padding:270px 350px 160px 350px;
   color: var(--BLACK);
   height: 440px;
   display: grid;
@@ -370,6 +386,8 @@ color: var(--DARKBLUE);
   animation-name: hero--header ;
   animation-duration:var(--hero-header-load-time);
   animation-timing-function: ease-in;
+  height:400px;
+  width:600px;
 }
 
 .hero--header{
@@ -384,7 +402,7 @@ color: var(--DARKBLUE);
 .hero--desc{
   font-size: 30px;
   margin-bottom: 45px;
-  font-weight: 400;
+ 
 
 }
 
@@ -917,7 +935,7 @@ input:focus{
 }
 .stockGroup--table--graph{
   width:200px;
-  margin-left:80px;
+
 }
 
 .basicLineChart{
@@ -925,7 +943,8 @@ input:focus{
   flex-direction: row;
   width:340px;
   height:100px;
-  margin-left:90px;
+  /* margin-left:90px; */
+  gap:35px;
 }
 .basic--line--chart{
   width: 170px;

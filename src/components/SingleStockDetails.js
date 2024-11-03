@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react'
-import {motion,easeInOut} from 'framer-motion'
+import {motion} from 'framer-motion'
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {Line} from 'react-chartjs-2'
 import {ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,calculatePortfolio,formatDateTime,endDate} from '../helpers/webSocketHelpers'
@@ -318,7 +318,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                     }
                 }
             }
-        }
+        },
+
         
     }
 

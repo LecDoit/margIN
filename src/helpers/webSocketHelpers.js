@@ -78,6 +78,7 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell,tra
         borderWidth:thicknes,
         tension:tension,
         pointRadius:0,    
+        
        
     },
     {
@@ -107,6 +108,7 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell,tra
         pointBorderColor:[],
         pointRadius:5,
         showLine:true,
+
     }
 ]
 
