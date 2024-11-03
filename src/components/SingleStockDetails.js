@@ -1,8 +1,8 @@
 import React, { useEffect,useState } from 'react'
-import {motion} from 'framer-motion'
+import {motion,easeInOut} from 'framer-motion'
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {Line} from 'react-chartjs-2'
-import {ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,convertMsToDate,formatDateTime,endDate} from '../helpers/webSocketHelpers'
+import {ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,calculatePortfolio,formatDateTime,endDate} from '../helpers/webSocketHelpers'
 import {useStocksContext } from "../hooks/useStocksContext";
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -10,8 +10,6 @@ import {TfiClose} from 'react-icons/tfi'
 import Loading from '../components/Loading'
 import SingleStockDetailsPrice from './SingleStockDetailsPrice'
 import LoadingSmall from '../components/LoadingSmall'
-import { valid } from 'semver'
-import { setDate } from 'date-fns'
 
 
 
@@ -38,9 +36,10 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const [triggerApiCall,setTriggerApiCall] = useState('')
     const [activeRange,setActiveRange] = useState('')
     const [trades,setTrades] = useState('')
-
     const [errors, setErrors] = useState({});
 
+
+    
     const validate = () => {
         const newErrors = {};
 
@@ -48,6 +47,10 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         if (!quantity) {
             newErrors.quantity = 'Quantity is required';
         } 
+
+        if (quantity>calculatePortfolio(stock) && type==='sell'){
+            newErrors.quantity='Trade quantity exceeds asset balance'
+        }
         // Price validation (must be a positive number)
         if (!price) {
             newErrors.price = 'Price is required';
@@ -62,6 +65,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         if (!type) {
             newErrors.typeOfTrade = 'Type of trade is required';
         }
+
+
 
         setErrors(newErrors);
         
@@ -107,7 +112,6 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const updateTrade = async (e)=>{
 
         if (validate()){
-        // const td = new Date(tradeDate)
 
         const transaction = tradeFactory(tradeDate,price,quantity,type)
 
@@ -207,7 +211,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
 
     }
 
-    
+
 
     useEffect(()=>{
             setBuy(stock.buy)
@@ -218,7 +222,8 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             setTicks(stock.ticks)
             setStartDate(stock.start)
             setActiveRange(findItemByProperty(ticksAndPeriods,"ticks",stock.ticks).name)
-            setTrades(stock.trades)
+            setTrades(stock.trades)             
+            calculatePortfolio(stock)
 
 
             
@@ -388,8 +393,23 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                             <SingleStockDetailsPrice stock={stock}/>
                         </div>
                         <div className='modal--title--right'>
-                            <div onClick={()=>setShowModal(false)}><TfiClose className={'tficlose'}/>
-                        </div>
+                        <motion.div 
+                            initial={{ scale: 1 }}
+                            whileHover={{
+
+                            scale: 1.2, 
+                            transition: { duration: 0.2 } 
+                            }}
+                            whileTap={{
+                            scale: 0.9,
+                            transition: { duration: 0.1 } 
+                            }}
+                            style={{ 
+                            cursor: "pointer",
+                            }}
+                        onClick={()=>setShowModal(false)}>
+                            <TfiClose className={'tficlose'}/>
+                        </motion.div>
                         </div>
                     </div>
 
@@ -496,6 +516,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                     <div className='tradesGroup--table--content'>Trade Date</div>
                                     <div className='tradesGroup--table--content'>Price</div>
                                     <div className='tradesGroup--table--content'>Quantity</div>
+                                    <div className='tradesGroup--table--content'>Value</div>
                                     <div className='tradesGroup--table--content'>Type</div>    
                                     <div className='tradesGroup--table--content'>Remove</div>    
                                 </div>
@@ -507,24 +528,41 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
                                 return ( 
                                 <div className='tradesGroup--table--content--organizer'  key={i}>
                                     <motion.div className='singleTrade--wrapper'
-                                        onMouseEnter={()=>{console.log('seks')}}
-                                          whileHover={{scale:1.01,backgroundColor:'rgba(253, 253, 253,0.1)',
+                                             whileHover={{scale:1.001,backgroundColor:'rgba(253, 253, 253,0.1)',
                                             boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
                                             transition={{type:"tween",duration:0.1}}
                                            >
                                         <motion.div
                                                 whileHover={{color:'#0043f1'}}
                                                 transition={{type:"easeOut",duration:0.1}}
-                                         className='tradesGroup--table--content'>{i+1}</motion.div>
+                                         className='tradesGroup--table--content number tableContent'>{i+1}</motion.div>
                                         <motion.div whileHover={{color:'#0043f1'}}
-                                                transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content'>{formatDateTime(trade.tradeDate)}</motion.div>
+                                                transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content number tableContent'>{formatDateTime(trade.tradeDate)}</motion.div>
                                         <motion.div whileHover={{color:'#0043f1'}}
-                                                transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content'>{trade.price}</motion.div>
+                                                transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content number tableContent'>{trade.price}</motion.div>
                                         <motion.div whileHover={{color:'#0043f1'}}
-                                                transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content'>{trade.quantity}</motion.div>
-                                        <motion.div whileHover={{color:'#0043f1'}}
-                                                transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content'>{trade.type}</motion.div>
-                                        <div  onClick={(e)=>removeTrade(trade._id)} className='tradesGroup--table--content modal--title--right'><TfiClose className={'tficlose'}/></div>  
+                                                transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content number tableContent'>{trade.quantity}</motion.div>
+                                        <motion.div                                             
+                                            whileHover={{color:'#0043f1'}}
+                                            transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content number tableContent'>{trade.quantity*trade.price}</motion.div>
+                                        <motion.div 
+                                            style={{backgroundColor:(trade.type==='buy'? '#00b232':'#d60000'),margin:"10px",borderRadius:"25px",color:"rgb(253, 253, 253)"}}
+                                            // whileHover={{backgroundColor:'#002c58'}}
+                                            transition={{type:"easeOut",duration:0.1}} className='tradesGroup--table--content number tableContent'>{trade.type}</motion.div>
+                                        <motion.div
+                                            initial={{ scale: 1 }}
+                                            whileHover={{
+                                            scale: 1.01, 
+                                            transition: { duration: 0.2 } 
+                                            }}
+                                            whileTap={{
+                                            scale: 0.9,
+                                            transition: { duration: 0.1 } 
+                                            }}
+                                            style={{ 
+                                            cursor: "pointer",
+                                            }}
+                                          onClick={(e)=>removeTrade(trade._id)} className='tradesGroup--table--content modal--title--right'><TfiClose className={'tficlose'}/></motion.div>  
                                     </motion.div>
                                     <div></div>                                  
                                 </div>

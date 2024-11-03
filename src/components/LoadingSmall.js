@@ -4,22 +4,18 @@ import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionVal
 
 
 
-const LoadingSmall = () => {
+const LoadingSmall = ({width,height}) => {
+
   return (
     <motion.div className='loading--small'
-    // style={{opacity:0}}
     initial={{opacity:0}}
     animate={{opacity:1}}
-
-    
     >
-        <motion.div        
+        <motion.div  
         style={{opacity:0.9}}
         animate={{
                 rotate:[0,360,360,0],
               
-        
-        
             }}
         transition={{
         
@@ -28,9 +24,8 @@ const LoadingSmall = () => {
                 ease:easeInOut,
                 repeatType:"loop",
                 opacity:1
-
             }}>
-            <Logo className='loading--logo'  w={30} h={30} fill={'#002c58'} 
+            <Logo className='loading--logo'  w={height} h={height} fill={'#002c58'} 
             background='transparent'/>
         </motion.div>
     </motion.div>

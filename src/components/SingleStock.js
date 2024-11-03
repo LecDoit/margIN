@@ -91,7 +91,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
       whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}} 
       >
         {!hookIsLoaded ? 
-        <LoadingSmall/> :
+        <LoadingSmall width={30} height={30}/> :
         <div className='singleStock-wrapper'>   
           <div className='singleStock' onClick={renderWindow}>
             <div className='stockGroup--table--no'>{order}</div> 

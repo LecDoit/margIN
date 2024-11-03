@@ -226,7 +226,7 @@ export const oneDaysInMilliseconds = 1*24*60*60*1000
 export const ticksAndPeriods = [
     {name:'IW',ticks:2500,period:1440,state:endDate-oneWeekInMilliseconds},
     {name:'IM',ticks:2501,period:1440,state:endDate-oneMonthInMilliseconds},
-    {name:'6M',ticks:2602,period:1440,state:endDate-sixMonthsInMilliseconds},
+    {name:'6M',ticks:2502,period:1440,state:endDate-sixMonthsInMilliseconds},
     {name:'IY',ticks:2503,period:1440,state:endDate-oneYearsInMilliseconds},
     {name:'5Y',ticks:2504,period:1440,state:endDate-fiveYearsInMilliseconds},
     {name:'IOY',ticks:5005,period:1440,state:endDate-tenYearsInMilliseconds},        
@@ -252,3 +252,19 @@ export const formatDateTo12Hour = (dateTime) => {
 
 
 
+export const calculatePortfolio = (stock)=>{
+    const trades = stock.trades
+    let holdingAsset = 0
+    trades.map((trade)=>{
+        if(trade.type==='buy'){
+            holdingAsset= holdingAsset+trade.quantity
+        } else if(trade.type==='sell'){
+            holdingAsset= holdingAsset-trade.quantity
+        }
+        
+    })
+    // console.log(holdingAsset)
+    return holdingAsset
+    
+
+}

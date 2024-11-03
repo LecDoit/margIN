@@ -20,12 +20,9 @@ const StockSearch = ({symbols}) => {
     const [toggleButton,setToggleButton] = useState(true)
     const {stocks,dispatch} = useStocksContext()
     const [last6Months, set6Months] = useState(endDate-sixMonthsInMilliseconds)
- 
-
-
-    
     
  
+
     useEffect(()=>{
       if (isLoggedIn){
         functionCall(getAllSymbols)   
@@ -79,16 +76,15 @@ const StockSearch = ({symbols}) => {
         setChosenSymbol(searchTerm)
 
     }
-
-
-    
+ 
+  
 
 
  
   return (
     <div>
       
-      {!hookIsLoaded ?  <LoadingSmall/> :
+      {!hookIsLoaded ?  <LoadingSmall width={30} height={30}/> :
     <div>
       {data ?
         <div className='search'>          
@@ -114,9 +110,7 @@ const StockSearch = ({symbols}) => {
                   color:"#0043F1"}}
                   transition={{type:"tween",duration:0.1}}
                   whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}} 
-                
-
-                 className='search--result--item'  onClick={()=>onSearch(item)} key={i}>{item.description} </motion.div>
+                  className='search--result--item'  onClick={()=>onSearch(item)} key={i}>{item.description} </motion.div>
               }
           )
               }
