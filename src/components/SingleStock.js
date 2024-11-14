@@ -5,7 +5,8 @@ import BasicLineChart from "./BasicLineChart"
 import LoadingSmall from '../components/LoadingSmall'
 import {motion} from 'framer-motion'
 import SingleStockDetails from './SingleStockDetails';
-import {chartRangeFactory,endDate,getSymbolFactory} from '../helpers/webSocketHelpers'
+import {chartRangeFactory,endDate,actionResult} from '../helpers/webSocketHelpers'
+import { act } from 'react';
 
 
 const SingleStock = ({chartRangeArgument,order,stock}) => {
@@ -26,10 +27,12 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   const [centerX,setCenterX] = useState(0)
   const [centerY,setCenterY] = useState(0)
 
+  const [action,setAction]= useState('')
+
+
 
 
   useEffect(()=>{
-    // console.log(data,chartRangeArgument.arguments.info)
     if (data){
       const p = data.returnData.rateInfos[data.returnData.rateInfos.length-1].open
       const last24hp = data.returnData.rateInfos[data.returnData.rateInfos.length-2].open
@@ -41,6 +44,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
       setActualPrice(actualPrice)
       setLast24HPrice(last24HPrice)
       setLast7DPrice(last7DPrice)
+      setAction(actionResult(stock.buy,stock.sell,actualPrice))
       if ((actualPrice-last7DPrice)>0){
         setColorLine('#00b232')
         setColor7('#00b232')
@@ -72,17 +76,16 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   useEffect(()=>{  
     if (isLoggedIn){
       functionCall(chartRangeArgument)   
-
     }
   },[isLoggedIn,functionCall])
 
-
+ 
 
 
   return (
     <div>
       { showModal ? <SingleStockDetails  showModal={showModal} setShowModal={setShowModal} centerX={centerX} centerY={centerY}
-      chartData={data} chartRangeArgument={chartRangeFactory(stock.start,endDate,stock.symbol,stock.ticks,stock.period)} stock={stock}/>:<div></div>}
+      chartData={data} chartRangeArgument={chartRangeFactory(stock.start,endDate,stock.symbol,stock.ticks,stock.period)} stock={stock} setAction={setAction}/>:<div></div>}
     
       <motion.div 
       whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',
@@ -99,6 +102,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
             <div className='stockGroup--table--price' >{actualPrice}</div>
             <div className='stockGroup--table--24'style={{color:color24}}>{(((actualPrice/last24HPrice)-1)*100).toFixed(2)}%</div>
             <div className='stockGroup--table--7' style={{color:color7}}>{(((actualPrice/last7DPrice)-1)*100).toFixed(2)}%</div>
+            <div className='stockGroup--table--action'>{action}</div>
 
           </div> 
           <BasicLineChart className='stockGroup--table--graph' colorLine={colorLine} chartData={data} chartRangeArgument={chartRangeArgument} stock={stock}/> 

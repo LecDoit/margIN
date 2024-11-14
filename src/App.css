@@ -927,8 +927,8 @@ input:focus{
 .stockGroup--table--no{
   width: 30px;
 }
-.stockGroup--table--name,.stockGroup--table--price,.stockGroup--table--24,.stockGroup--table--7{
-  width: 200px;
+.stockGroup--table--name,.stockGroup--table--price,.stockGroup--table--24,.stockGroup--table--7,.stockGroup--table--action{
+  width: 180px;
 }
 .stockGroup--table--name{
   font-weight: 600;
@@ -943,7 +943,7 @@ input:focus{
   flex-direction: row;
   width:340px;
   height:100px;
-  /* margin-left:90px; */
+  margin-left:20px;
   gap:35px;
 }
 .basic--line--chart{

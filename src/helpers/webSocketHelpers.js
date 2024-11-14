@@ -13,6 +13,19 @@ export function formatDateTime(isoString) {
     return `${year}-${month}-${day}`;
 }
 
+export   const actionResult = (buy,sell,actual)=>{
+
+    if (actual>buy && actual<sell){
+      return "keep"
+    }
+    if (actual>buy && actual>sell){
+      return 'sell'
+    } 
+    if( actual<sell && actual<buy){
+      return 'buy'
+    }
+  }
+
 
 export const chartRangeFactory = (start,end,symbol,ticks,period)=>{
     const chartRange = {

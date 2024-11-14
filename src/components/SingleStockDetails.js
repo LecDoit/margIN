@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react'
 import {motion} from 'framer-motion'
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {Line} from 'react-chartjs-2'
-import {ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,calculatePortfolio,formatDateTime,endDate} from '../helpers/webSocketHelpers'
+import {ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,calculatePortfolio,formatDateTime,endDate,actionResult} from '../helpers/webSocketHelpers'
 import {useStocksContext } from "../hooks/useStocksContext";
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -14,7 +14,7 @@ import LoadingSmall from '../components/LoadingSmall'
 
 
 
-const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeArgument,chartData, stock}) => {
+const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeArgument,chartData, stock,setAction}) => {
 
     // const {data,error,isLoading} = useWebsocketHook(chartRangeArgument)
     const {data,error,hookIsLoaded,isLoggedIn,functionCall} = useWebsocketHook()
@@ -150,11 +150,13 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             setTrades(splicedStock[0].trades)
         }     
     }
+
     const updateMargin = async (e)=>{
         if (e){
             e.preventDefault()
         }        
-              
+            
+
 
         const findStock = stocks.find(item=>item._id===particularStock._id)
         const index = stocks.indexOf(findStock)
@@ -164,7 +166,9 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         splicedStock[0].sell=sell
         splicedStock[0].period=period
         splicedStock[0].ticks=ticks
-        splicedStock[0].start=startDate 
+        splicedStock[0].start=startDate     
+
+        setAction(actionResult(splicedStock[0].buy,splicedStock[0].sell,price))
         stocks.splice(index, 0, splicedStock[0])
       
         
