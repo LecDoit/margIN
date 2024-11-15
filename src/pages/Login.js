@@ -26,6 +26,13 @@ const Login = () => {
         await login(email,password)
     }   
 
+    const handleKeyDown = (event)=>{
+        if (event.key==='Enter'){
+            event.preventDefault();
+            submitForm()
+        }
+    }
+
 
 
   return (
@@ -37,7 +44,7 @@ const Login = () => {
         <div className='signup'>
 
             <h1>Sign in to MargIn</h1>
-            <form className='signup--form' onSubmit={handleSubmit(submitForm)}>
+            <form onKeyDown={handleKeyDown} className='signup--form' onSubmit={handleSubmit(submitForm)}>
                 <label>Email:</label>
                 <input 
                     {...register('email',{required:true})}

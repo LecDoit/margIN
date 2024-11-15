@@ -91,6 +91,10 @@ a:visited{
   gap:20px
 
 }
+.home--dashboard{
+  border: 1px solid black;
+  
+}
 
 
 .sidebar{
@@ -893,7 +897,10 @@ input:focus{
   grid-row-start: 2;
   grid-row-end: 2;
   height: 100px;
-  line-height: 100px;
+  /* line-height: 100px; */
+  /* display: flex; */
+  justify-items: center;
+  align-items: center;
  
 
 }
@@ -926,9 +933,28 @@ input:focus{
 }
 .stockGroup--table--no{
   width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 .stockGroup--table--name,.stockGroup--table--price,.stockGroup--table--24,.stockGroup--table--7,.stockGroup--table--action{
   width: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.stockGroup--table--action{
+
+  border-radius: 20px;
+  height: 25px;
+  margin-top: 35px;
+  border:1px solid var(--DARKBLUE);
+  width:120px
+}
+.stockGroup--table--action--header{
+  width:120px
+
 }
 .stockGroup--table--name{
   font-weight: 600;

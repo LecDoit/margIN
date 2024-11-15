@@ -7,7 +7,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import Loading from '../components/Loading'
 import StockSearch from "../components/StockSearch";
 import StockGroup from "../components/StockGroup";
-import LineChartWithDynamicDot from '../components/TestLine'
+import Dashboard from "../components/Dashboard";
 
 
 
@@ -16,7 +16,7 @@ const Home = () => {
   const {stocks,dispatch} = useStocksContext()
   const {user} = useAuthContext()
   const [loaded,setLoaded] = useState(false)
-  const [bottom,setBottom] =useState('stocks')
+  const [bottom,setBottom] =useState(()=>localStorage.getItem('selectedSidebarItem') || 'dashboard');
 
   
 
@@ -101,7 +101,13 @@ const conditionalRenderContent=(arg)=>{
       :
       <Loading/>
   } else if (arg=='dashboard'){
-    return <div><LineChartWithDynamicDot/></div>
+    return loaded ?
+      <motion.div className="home--dashboard"> 
+        <Dashboard/>
+      </motion.div> 
+      :
+      <Loading/>
+
   } else {
 
     return <div>here will be soemthing else</div>

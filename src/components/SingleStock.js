@@ -79,6 +79,17 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
     }
   },[isLoggedIn,functionCall])
 
+                // {backgroundColor:(action==='Buy'? '#00b232':'#d60000'),
+              // borderRadius:"25px",color:"rgb(253, 253, 253)"
+
+  const styles={
+    "Buy":{backgroundColor:'#0043f1',color:'#EAEAEA'},
+    "Sell":{backgroundColor:'#0043f1',color:'#EAEAEA'},
+    "Hold":{backgroundColor:'rgb(129, 161, 248)',color:'#EAEAEA'},
+    "Set margin":{backgroundColor:'#002c58',color:'#EAEAEA'},
+  }
+
+
  
 
 
@@ -102,7 +113,15 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
             <div className='stockGroup--table--price' >{actualPrice}</div>
             <div className='stockGroup--table--24'style={{color:color24}}>{(((actualPrice/last24HPrice)-1)*100).toFixed(2)}%</div>
             <div className='stockGroup--table--7' style={{color:color7}}>{(((actualPrice/last7DPrice)-1)*100).toFixed(2)}%</div>
-            <div className='stockGroup--table--action'>{action}</div>
+            <motion.div 
+
+            style={styles[action]}
+
+            // whileHover={{backgroundColor:'#002c58'}}
+            transition={{type:"easeOut",duration:0.1}} 
+            
+
+            className='stockGroup--table--action'>{action}</motion.div>
 
           </div> 
           <BasicLineChart className='stockGroup--table--graph' colorLine={colorLine} chartData={data} chartRangeArgument={chartRangeArgument} stock={stock}/> 

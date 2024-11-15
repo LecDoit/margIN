@@ -22,8 +22,10 @@ const Sidebar = ({onSelect}) => {
 
     const [isCollapsed,setIsCollapsed] = useState(true);
     const [isHover,setIsHover] = useState(false);
-    const [activeTab, setActiveTab] = useState(SIDEBAR_ITEMS[1].id);
-    const [clickedTab, setClickedTab] = useState(SIDEBAR_ITEMS[1].id);
+    // const [activeTab, setActiveTab] = useState(SIDEBAR_ITEMS[1].id);
+    // const [clickedTab, setClickedTab] = useState(SIDEBAR_ITEMS[1].id);
+    const [activeTab, setActiveTab] = useState(()=>localStorage.getItem('selectedSidebarItem') || 'dashboard');
+    const [clickedTab, setClickedTab] = useState(()=>localStorage.getItem('selectedSidebarItem') || 'dashboard');
     const [showSidebar,setShowSidebar] = useState(false)
     const [pined,setPined] = useState('unpined')
 
@@ -59,15 +61,21 @@ const Sidebar = ({onSelect}) => {
     }
 
     useEffect(()=>{
+
         const myFunc = ()=>{
             setActiveTab(clickedTab)
         } 
-        const timer = setTimeout(myFunc,7000)
+        if (!isHover){
+            const timer = setTimeout(myFunc,5000)
+        }
+
+
         
 
-      },[activeTab])
+      },[activeTab,isHover])
     
     const handleClick=(e)=>{
+        localStorage.setItem('selectedSidebarItem',e.id)
         onSelect(e.id)
     }
     useEffect(()=>{

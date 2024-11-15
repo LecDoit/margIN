@@ -49,7 +49,7 @@ const StockGroup = () => {
         <div className='stockGroup--table--price'>Price</div>
         <div className='stockGroup--table--24'>24h %</div>
         <div className='stockGroup--table--7'>7d %</div>
-        <div className='stockGroup--table--7'>Action</div>
+        <div className='stockGroup--table--action--header'>Action</div>
         <div className='stockGroup--table--graph'>Last 7 Days</div>
 
       </div>

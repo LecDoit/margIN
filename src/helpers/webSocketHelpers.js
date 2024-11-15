@@ -14,15 +14,19 @@ export function formatDateTime(isoString) {
 }
 
 export   const actionResult = (buy,sell,actual)=>{
+    if (buy==0 && sell==0 || buy==0 || sell==0){
+        return "Set margin"
+      }
+
 
     if (actual>buy && actual<sell){
-      return "keep"
+      return "Hold"
     }
     if (actual>buy && actual>sell){
-      return 'sell'
+      return 'Sell'
     } 
     if( actual<sell && actual<buy){
-      return 'buy'
+      return 'Buy'
     }
   }
 

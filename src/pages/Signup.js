@@ -27,6 +27,13 @@ const Signup = () => {
         
         await signup(email,password)
     }
+
+    const handleKeyDown = (event)=>{
+        if (event.key==='Enter'){
+            event.preventDefault();
+            submitForm()
+        }
+    }
  
 
 
@@ -41,7 +48,7 @@ const Signup = () => {
         <div className='signup'>
 
             <h1>Create your MargIn account</h1>
-            <form className='signup--form' onSubmit={handleSubmit(submitForm)}>
+            <form onKeyDown={handleKeyDown} className='signup--form' onSubmit={handleSubmit(submitForm)}>
 
 
                 <label>Email:</label>
