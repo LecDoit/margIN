@@ -13,12 +13,10 @@ export function formatDateTime(isoString) {
     return `${year}-${month}-${day}`;
 }
 
-export   const actionResult = (buy,sell,actual)=>{
+export const actionResult = (buy,sell,actual)=>{
     if (buy==0 && sell==0 || buy==0 || sell==0){
         return "Set margin"
       }
-
-
     if (actual>buy && actual<sell){
       return "Hold"
     }

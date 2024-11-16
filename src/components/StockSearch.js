@@ -21,7 +21,7 @@ const StockSearch = ({symbols}) => {
     const {stocks,dispatch} = useStocksContext()
     const [last6Months, set6Months] = useState(endDate-sixMonthsInMilliseconds)
     
- 
+
 
     useEffect(()=>{
       if (isLoggedIn){
@@ -29,6 +29,23 @@ const StockSearch = ({symbols}) => {
       }
     },[isLoggedIn,functionCall,hookIsLoaded])
 
+    useEffect(()=>{
+      const tempArr= []
+      
+      if (data){
+        for (const stock of data.returnData){
+          tempArr.push(stock.categoryName)
+          if (stock.categoryName==='ETF'){
+            console.log(stock)
+          }
+        }
+        const uniqueSet = [...new Set(tempArr)]
+        console.log(uniqueSet)
+        //  ['STC', 'CRT', 'ETF', 'IND', 'FX', 'CMD']
+      }
+
+
+    },[data])
 
 
     const addStocks = async (e)=>{
