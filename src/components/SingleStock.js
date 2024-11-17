@@ -5,8 +5,9 @@ import BasicLineChart from "./BasicLineChart"
 import LoadingSmall from '../components/LoadingSmall'
 import {motion} from 'framer-motion'
 import SingleStockDetails from './SingleStockDetails';
-import {chartRangeFactory,endDate,actionResult} from '../helpers/webSocketHelpers'
+import {chartRangeFactory,endDate,findItemByProperty,actionResult} from '../helpers/webSocketHelpers'
 import { act } from 'react';
+
 
 
 const SingleStock = ({chartRangeArgument,order,stock}) => {
@@ -30,7 +31,14 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   const [action,setAction]= useState('')
 
 
+  const priceFactory = (symbol,p)=>{
+    return {symbol,p}
 
+  }
+
+  const actionFactory = (symbol,action)=>{
+    return {symbol,action}
+  }
 
   useEffect(()=>{
     if (data){
@@ -45,6 +53,11 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
       setLast24HPrice(last24HPrice)
       setLast7DPrice(last7DPrice)
       setAction(actionResult(stock.buy,stock.sell,actualPrice))
+
+
+      
+
+
       if ((actualPrice-last7DPrice)>0){
         setColorLine('#00b232')
         setColor7('#00b232')
@@ -59,6 +72,34 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
       }
     }
   },[data])
+
+  useEffect(()=>{
+    if (actualPrice){
+      const currentPrices = JSON.parse(localStorage.getItem('prices'))
+      const findCurrentPrices = findItemByProperty(currentPrices,"symbol",stock.symbol)
+
+      const currentActions = JSON.parse(localStorage.getItem('actions'))
+      const findCurrentActions = findItemByProperty(currentActions,"symbol",stock.symbol)
+      
+      if (findCurrentPrices){
+        findCurrentPrices.p=actualPrice        
+      } else{
+        currentPrices.push(priceFactory(stock.symbol,actualPrice))
+      }
+
+      if (findCurrentActions){
+        findCurrentActions.action=action
+      } else {
+        currentActions.push(actionFactory(stock.symbol,actionResult(stock.buy,stock.sell,actualPrice)))
+      }
+
+      localStorage.setItem('prices',JSON.stringify(currentPrices))
+      localStorage.setItem('actions',JSON.stringify(currentActions))
+    }
+
+    
+
+  },[actualPrice])
 
 
   const renderWindow = (e)=>{

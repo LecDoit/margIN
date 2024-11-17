@@ -16,7 +16,14 @@ const Home = () => {
   const {stocks,dispatch} = useStocksContext()
   const {user} = useAuthContext()
   const [loaded,setLoaded] = useState(false)
-  const [bottom,setBottom] =useState(()=>localStorage.getItem('selectedSidebarItem') || 'dashboard');
+  const [bottom,setBottom] =useState(()=>localStorage.getItem('selectedSidebarItem') || 'stocks');
+
+  if (!localStorage.getItem('prices')){
+    localStorage.setItem('prices',JSON.stringify([]));
+  }
+  if (!localStorage.getItem('actions')){
+    localStorage.setItem('actions',JSON.stringify([]));
+  }
 
   
 

@@ -20,15 +20,8 @@ ChartJS.register(
   Legend
 );
 
-const BarChart = () => {
-  const assetType = {
-    STC: 10,
-    CRT: 6,
-    ETF: 4,
-    IND: 12,
-    FX: 2,
-    CMD: 100,
-  };
+const BarChart = ({assetType}) => {
+
 
   const data = {
     labels: Object.keys(assetType),

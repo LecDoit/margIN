@@ -167,7 +167,6 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         splicedStock[0].period=period
         splicedStock[0].ticks=ticks
         splicedStock[0].start=startDate     
-
         setAction(actionResult(splicedStock[0].buy,splicedStock[0].sell,price))
         stocks.splice(index, 0, splicedStock[0])
       
@@ -229,7 +228,7 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
             setTrades(stock.trades)             
             calculatePortfolio(stock)
 
-
+            // setAction(actionResult(stock.buy,stock.sell,price))
             
         const handleEsc=(e)=>{
             if (e.key==='Escape'){

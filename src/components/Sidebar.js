@@ -24,8 +24,8 @@ const Sidebar = ({onSelect}) => {
     const [isHover,setIsHover] = useState(false);
     // const [activeTab, setActiveTab] = useState(SIDEBAR_ITEMS[1].id);
     // const [clickedTab, setClickedTab] = useState(SIDEBAR_ITEMS[1].id);
-    const [activeTab, setActiveTab] = useState(()=>localStorage.getItem('selectedSidebarItem') || 'dashboard');
-    const [clickedTab, setClickedTab] = useState(()=>localStorage.getItem('selectedSidebarItem') || 'dashboard');
+    const [activeTab, setActiveTab] = useState(()=>localStorage.getItem('selectedSidebarItem') || 'stocks');
+    const [clickedTab, setClickedTab] = useState(()=>localStorage.getItem('selectedSidebarItem') || 'stocks');
     const [showSidebar,setShowSidebar] = useState(false)
     const [pined,setPined] = useState('unpined')
 
