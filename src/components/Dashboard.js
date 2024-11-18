@@ -2,6 +2,7 @@ import React,{useEffect,useState} from 'react';
 import { useStocksContext } from "../hooks/useStocksContext";
 import {calculatePortfolio,actionResult,findItemByProperty} from '../helpers/webSocketHelpers';
 import BarChart from './BarChart'
+import Actions from './Actions';
 
 
 const Dashboard = () => {
@@ -14,6 +15,9 @@ const [assetType,setAssetType] = useState({})
 const [marginReminder,setMarginReminder] = useState([])
 const [buyReminder,setBuyReminder ] = useState([])
 const [sellReminder,setSellReminder ] = useState([])
+
+const [lsActionState,setLsActionState] = useState(JSON.parse(localStorage.getItem('actions')))
+const [lsPricesState,setLsPricesState] = useState(JSON.parse(localStorage.getItem('prices')))
 
 
 const gatherTrades = (arg)=>{
@@ -57,7 +61,7 @@ const gatherTrades = (arg)=>{
     setSellReminder(tempSellReminderArr)
 
 }
-console.log(marginReminder,sellReminder,buyReminder)
+// console.log(marginReminder,sellReminder,buyReminder)
 
 useEffect(()=>{
   gatherTrades(stocks)
@@ -68,12 +72,31 @@ useEffect(()=>{
 
   return (
     <div className='Dashboard'>
-        <div>Number of transaction: {noTrades} </div>
-        <div>Number of Assets:{noAssets}</div>
-        <div>NPV:{npv}</div>
-        <div>actions to do</div>
-        <div>Margin to setup</div>
-        <BarChart assetType={assetType}/>
+      <div className='dashboard--tiles'>
+        <div className='dashboard--tiles--tile'>
+          <div className='dashboard--tiles--tile--number lato'>{noTrades}</div>
+          <div className='dashboard--tiles--tile--header'>No of transaction</div>
+        </div>
+        <div className='dashboard--tiles--tile'>
+          <div className='dashboard--tiles--tile--number lato'>{noAssets}</div>
+          <div className='dashboard--tiles--tile--header'>No of Assets</div>
+        </div>
+        <div className='dashboard--tiles--tile'>
+          <div className='dashboard--tiles--tile--number lato'>{npv.toFixed(2)}</div>
+          <div className='dashboard--tiles--tile--header'>NPV</div>
+        </div>
+        <div className='dashboard--tiles--tile'>
+          <div className='dashboard--tiles--tile--number lato'>{marginReminder.length+buyReminder.length+sellReminder.length}</div>
+          <div className='dashboard--tiles--tile--header'>No of actions</div>
+        </div>
+      </div>
+
+      <div className='dashboard--action'>
+        <Actions buyReminder={buyReminder} lsActionState={lsActionState} lsPricesState={lsPricesState}/>
+        
+      </div>
+        {/* <div>Margin to setup</div> */}
+        {/* <BarChart assetType={assetType}/> */}
 
     </div>
   )

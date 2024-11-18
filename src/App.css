@@ -92,8 +92,10 @@ a:visited{
 
 }
 .home--dashboard{
-  border: 1px solid black;
-  
+  display: flex;
+  flex-direction: column;
+  gap:20px;
+  width:100%;
 }
 
 
@@ -847,10 +849,7 @@ input:focus{
   /* grid-template-rows: 1fr 1fr; */
   /* border: 1px solid black; */
   text-align: center;
-  gap:10px;
- 
- 
-  
+  gap:10px;  
 }
 .stockGroup--table--header{
   display: flex;
@@ -1309,8 +1308,52 @@ input:focus{
   /* padding-bottom: 10px; */
 }
 
+.Dashboard{
+  display: grid;
+  grid-template-columns: 2fr 4fr 4fr 2fr;
+  grid-template-rows: 1fr 1fr;
+  /* border: 1px solid black; */
+  text-align: center;
+  gap:10px;  
+  border:1px solid black;
+  grid-auto-flow:row;
+   
+}
+
+.dashboard--tiles{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    gap:50px
+}
+
+.dashboard--tiles--tile{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 120px;
+  width:  200px;
+  border:1px solid var(--BLACK);
   
+}
   
+.dashboard--tiles--tile--number{
+  font-size: 40px;
+}
+
+.dashboard--action{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
 
 
  
