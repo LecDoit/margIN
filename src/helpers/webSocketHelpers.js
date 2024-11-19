@@ -285,3 +285,6 @@ export const calculatePortfolio = (stock)=>{
     
 
 }
+export const priceDiff = (price,buyMargin)=>{
+    return -(price/buyMargin-1)
+}

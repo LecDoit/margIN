@@ -92,7 +92,8 @@ useEffect(()=>{
       </div>
 
       <div className='dashboard--action'>
-        <Actions buyReminder={buyReminder} lsActionState={lsActionState} lsPricesState={lsPricesState}/>
+        <Actions action={"Buy"} actionReminder={buyReminder} lsActionState={lsActionState} lsPricesState={lsPricesState}/>
+        <Actions action={"Sell"} actionReminder={sellReminder} lsActionState={lsActionState} lsPricesState={lsPricesState}/>
         
       </div>
         {/* <div>Margin to setup</div> */}

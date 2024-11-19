@@ -96,6 +96,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
       localStorage.setItem('prices',JSON.stringify(currentPrices))
       localStorage.setItem('actions',JSON.stringify(currentActions))
     }
+    
 
     
 
@@ -129,6 +130,10 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
     "Hold":{backgroundColor:'rgb(129, 161, 248)',color:'#EAEAEA'},
     "Set margin":{backgroundColor:'#002c58',color:'#EAEAEA'},
   }
+  useEffect(()=>{
+    console.log('action is being changed')
+
+  },[action])
 
 
  
