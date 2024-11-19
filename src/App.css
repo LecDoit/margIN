@@ -1403,7 +1403,7 @@ input:focus{
 
 .actions--content--fill{
 width:25px;
-background-color: var(--GREEN)
+/* background-color: var(--GREEN) */
 
 }
   

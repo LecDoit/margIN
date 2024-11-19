@@ -14,7 +14,7 @@ import LoadingSmall from '../components/LoadingSmall'
 
 
 
-const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeArgument,chartData, stock,setAction}) => {
+const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRangeArgument,chartData, stock,setAction}) => {
 
     // const {data,error,isLoading} = useWebsocketHook(chartRangeArgument)
     const {data,error,hookIsLoaded,isLoggedIn,functionCall} = useWebsocketHook()
@@ -166,8 +166,11 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
         splicedStock[0].sell=sell
         splicedStock[0].period=period
         splicedStock[0].ticks=ticks
-        splicedStock[0].start=startDate     
-        setAction(actionResult(splicedStock[0].buy,splicedStock[0].sell,price))
+        splicedStock[0].start=startDate    
+        console.log(buy,sell,actualPrice)
+
+        console.log(actionResult(buy,sell,actualPrice)) 
+        setAction(actionResult(splicedStock[0].buy,splicedStock[0].sell,actualPrice))
         stocks.splice(index, 0, splicedStock[0])
       
         
@@ -331,7 +334,6 @@ const SingleStockDetails = ({showModal,setShowModal,centerX,centerY,chartRangeAr
     const sendStartDate=  (e)=>{
         setStartDate(e.state)
         setTicks(e.ticks)
-        console.log(e.ticks)
         setPeriod(e.period)
         setTriggerApiCall(true)
         setActiveRange(e.name)

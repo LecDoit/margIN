@@ -130,10 +130,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
     "Hold":{backgroundColor:'rgb(129, 161, 248)',color:'#EAEAEA'},
     "Set margin":{backgroundColor:'#002c58',color:'#EAEAEA'},
   }
-  useEffect(()=>{
-    console.log('action is being changed')
 
-  },[action])
 
 
  
@@ -142,7 +139,7 @@ const SingleStock = ({chartRangeArgument,order,stock}) => {
   return (
     <div>
       { showModal ? <SingleStockDetails  showModal={showModal} setShowModal={setShowModal} centerX={centerX} centerY={centerY}
-      chartData={data} chartRangeArgument={chartRangeFactory(stock.start,endDate,stock.symbol,stock.ticks,stock.period)} stock={stock} setAction={setAction}/>:<div></div>}
+      chartData={data} chartRangeArgument={chartRangeFactory(stock.start,endDate,stock.symbol,stock.ticks,stock.period)} stock={stock} setAction={setAction} actualPrice={actualPrice}/>:<div></div>}
     
       <motion.div 
       whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',
