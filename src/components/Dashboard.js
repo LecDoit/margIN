@@ -3,6 +3,7 @@ import { useStocksContext } from "../hooks/useStocksContext";
 import {calculatePortfolio,actionResult,findItemByProperty} from '../helpers/webSocketHelpers';
 import BarChart from './BarChart'
 import Actions from './Actions';
+import ActionMargin from  './ActionMargin'
 
 
 const Dashboard = () => {
@@ -94,6 +95,7 @@ useEffect(()=>{
       <div className='dashboard--action'>
         <Actions action={"Buy"} actionReminder={buyReminder} lsPricesState={lsPricesState}/>
         <Actions action={"Sell"} actionReminder={sellReminder} lsPricesState={lsPricesState}/>
+        <ActionMargin action={"Margin"} actionReminder={marginReminder} lsPricesState={lsPricesState}/>
         
       </div>
         {/* <div>Margin to setup</div> */}
