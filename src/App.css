@@ -1414,28 +1414,22 @@ width:25px;
 
 }
 .switch {
-  width: 170px;
-  height: 100px;
-  border-radius: 100px;
-  padding: 10px;
+  
+  background-color: var(--BLUE);
   display: flex;
+  justify-content: flex-start;
+  border-radius: 50px;
+  padding: 10px;
   cursor: pointer;
 }
 
-.switch.on {
-  background-color: #22cc88;
+.switch[data-isOn="true"] {
   justify-content: flex-end;
 }
 
-.switch.off {
-  background-color: #dddddd;
-  justify-content: flex-start;
-}
-
-.switch div {
+.handle {
   width: 80px;
   height: 80px;
-  background-color: #ffffff;
-  border-radius: 200px;
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.02);
+  background-color: var(--WHITE);
+  border-radius: 40px;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -24,14 +24,26 @@ ChartJS.register(
 );
 
 const BarChart = ({ assetType,assetTypeTotalWorth }) => {
-  const sorted = sortAssetTypeAndRemove(assetType)
-  const values = Object.values(sorted);
-  const [isOn,setIsOn] = useState(false)
+  const sortedAndRemoved =  sortAssetTypeAndRemove(assetType)
+  const sorted = sortAssetType(assetType)
 
-  // console.log(assetTypeTotalWorth,assetType,sortAssetTypeAndRemove(assetType))
+  const [possesedToggle,setPossesedToggle] = useState(false)
+  const [value2Use,setValue2Use] = useState('')
+
+  const values = Object.values(value2Use);
+  useEffect(()=>{
+    if (possesedToggle){
+      setValue2Use(sortedAndRemoved)
+      console.log(sortedAndRemoved)
+    } else {
+      setValue2Use(sorted)
+      console.log(sortedAndRemoved)
+    }
+  },[possesedToggle])
+
 
   const data = {
-    labels: Object.keys(sorted),
+    labels:   Object.keys(sorted),
     datasets: [
       {
         label: 'Assets',
@@ -101,12 +113,14 @@ const BarChart = ({ assetType,assetTypeTotalWorth }) => {
     },
   };
 
+
+
   return (
     <div>
       <div className='barchart--title oswald'>Asset Allocation Overview</div>
       
       <Bar data={data} options={options} />
-      <Switch isOn={isOn} onClick={()=>setIsOn(!isOn)} />
+      <Switch setPossesedToggle={setPossesedToggle} possesedToggle={possesedToggle}/>
     </div>
 
   );
