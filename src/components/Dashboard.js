@@ -6,6 +6,7 @@ import Actions from './Actions';
 import ActionMargin from  './ActionMargin'
 
 
+
 const Dashboard = () => {
 
 const {stocks,dispatch} = useStocksContext() 
@@ -16,16 +17,24 @@ const [assetType,setAssetType] = useState({})
 const [marginReminder,setMarginReminder] = useState([])
 const [buyReminder,setBuyReminder ] = useState([])
 const [sellReminder,setSellReminder ] = useState([])
+const [portfolioEvaluation,setPortfolioEvaluation ] = useState([])
+const [assetTypeTotalWorth,setAssetTypeTotalWorth] = useState('')
 
 const [lsActionState,setLsActionState] = useState(JSON.parse(localStorage.getItem('actions')))
 const [lsPricesState,setLsPricesState] = useState(JSON.parse(localStorage.getItem('prices')))
 
+const evaluationFactory = (symbol,evaluation,type)=>{
+  return {symbol,evaluation,type}
+
+
+}
 
 const gatherTrades = (arg)=>{
     const tempArr = []
     let tempNpv = 0
-    let tempAssetType = {'STC':0,'CRT':0,'ETF':0,'IND':0,'FX':0,'CMD':0,
-      }
+    let tempAssetType = {'STC':0,'CRT':0,'ETF':0,'IND':0,'FX':0,'CMD':0}
+    let tempAssetTypeEval = {'STC':0,'CRT':0,'ETF':0,'IND':0,'FX':0,'CMD':0}
+    let tempEvaluationArr = []
     const tempMarginReminderArr = []
     const tempBuyReminderArr = []
     const tempSellReminderArr = []
@@ -36,6 +45,14 @@ const gatherTrades = (arg)=>{
       const lsAction = (findItemByProperty(lsActions,'symbol',asset.symbol))
          
       tempNpv = tempNpv + (calculatePortfolio(asset)*lsPrice.p)
+      
+      tempAssetTypeEval[asset.categoryName] = (tempAssetTypeEval[asset.categoryName]+(calculatePortfolio(asset)*lsPrice.p))
+      console.log(tempAssetTypeEval,asset.trades,asset.categoryName)
+
+
+      tempEvaluationArr.push(evaluationFactory(asset.symbol,calculatePortfolio(asset)*lsPrice.p,asset.categoryName))
+      
+      // console.log(tempNpv,asset)
       tempAssetType[asset.categoryName] =tempAssetType[asset.categoryName] +1
 
       if (lsAction.action=='Set margin'){
@@ -60,6 +77,8 @@ const gatherTrades = (arg)=>{
     setMarginReminder(tempMarginReminderArr)
     setBuyReminder(tempBuyReminderArr)
     setSellReminder(tempSellReminderArr)
+    setPortfolioEvaluation(tempEvaluationArr)
+    setAssetTypeTotalWorth(tempAssetTypeEval)
 
 }
 // console.log(marginReminder,sellReminder,buyReminder)
@@ -69,6 +88,7 @@ useEffect(()=>{
   setNoAssets(stocks.length)
    
 },[])
+
 
 
   return (
@@ -99,7 +119,9 @@ useEffect(()=>{
         
       </div>
         {/* <div>Margin to setup</div> */}
-        {/* <BarChart assetType={assetType}/> */}
+        <div>
+        <BarChart assetType={assetType} assetTypeTotalWorth={assetTypeTotalWorth}/>
+        </div>
 
     </div>
   )

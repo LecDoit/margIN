@@ -287,4 +287,49 @@ export const calculatePortfolio = (stock)=>{
 }
 export const priceDiff = (price,buyMargin)=>{
     return Math.abs(price/buyMargin-1)
+
 }
+
+
+export function sortAssetType(tempAssetType) {
+    // Convert object to array of [key, value] pairs
+    const sortedArray = Object.entries(tempAssetType)
+      // Sort array by the value (index 1) in descending order
+      .sort((a, b) => b[1] - a[1]);
+  
+    // Convert sorted array back to object (if needed)
+    const sortedObject = Object.fromEntries(sortedArray);
+  
+    return sortedObject;
+  }
+
+  export function sortAssetTypeAndRemove(tempAssetType) {
+    // Remove items with a value of 0
+    const filteredAssetType = Object.entries(tempAssetType).filter(([key, value]) => value !== 0);
+  
+    // Sort the filtered array by the value (index 1) in descending order
+    const sortedArray = filteredAssetType.sort((a, b) => b[1] - a[1]);
+  
+    // Convert sorted array back to an object
+    const sortedObject = Object.fromEntries(sortedArray);
+  
+    return sortedObject;
+  }
+export const colors = {
+    DARKBLUE: "#002c58",
+    BLUE: "#0043f1",
+    LIGHTBLUE: "rgb(129, 161, 248)",
+    BLACK: "#000014",
+    WHITE: "rgb(253, 253, 253)",
+    WHITER: "#fdfdfd99",
+    LIGHTGRAY: "#EAEAEA",
+    LIGHTERGRAY: "#F3F3F3",
+    COAL: "rgb(120, 120, 120)",
+    LOADINGLIGHTGRAY: "#0000143a",
+    GREEN: "#00b232",
+    GREENF: "rgb(0, 178, 50,0.3)",
+    RED: "#d60000",
+    REDF: "rgb(214, 0, 0,0.2)"
+  }
+  
+//   export default colors;

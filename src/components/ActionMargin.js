@@ -5,7 +5,6 @@ import {motion} from 'framer-motion'
 const ActionMargin = ({action,actionReminder,lsPricesState}) => {
 
     const [actionReminderState,setActionReminderState] = useState([])
-    console.log(actionReminder)
 
     useEffect(()=>{
         if (actionReminder){

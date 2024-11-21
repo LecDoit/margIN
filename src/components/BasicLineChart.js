@@ -76,8 +76,11 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine,stock}) {
             },
             legend:{
                 display:false
-            }
-        }
+            },
+            datalabels: {
+                display: false}
+            },
+
     }
 
 

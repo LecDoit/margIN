@@ -294,6 +294,12 @@ const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRange
                 
             },
 
+            datalabels: {
+                display: false}
+            
+            
+            
+
         },
         elements:{
             line:{
