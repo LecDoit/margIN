@@ -1370,6 +1370,7 @@ input:focus{
   grid-column-end: 6;
   grid-row-start: 3;
   grid-row-end: 3;
+  
 
 }
 .actions{
@@ -1388,17 +1389,19 @@ input:focus{
   display: flex;
   flex-direction: column;
   gap:10px;
-  background-color: var(--WHITE);
+  background-color: var(--WHITER);
   padding: 20px;
   border-radius: 20px;
+  height: 100%;
 }
 .piechart{
   display: flex;
   flex-direction: column;
   gap:10px;
-  background-color: var(--WHITE);
+  background-color: var(--WHITER);
   padding: 20px;
   border-radius: 20px;
+  height: 100%;
 }
 .barchart--title,.piechart--title {
   display: flex;
@@ -1477,5 +1480,5 @@ width:25px;
 .piechart--chart{
   display: flex;
   justify-content: center;
-  margin-top:20px;
+  margin-top:40px;
 }

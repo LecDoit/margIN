@@ -83,7 +83,7 @@ const PieChart = ({ portfolioEvaluation }) => {
         boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)',
         border:`1px solid ${colors.LIGHTBLUE}`}}
         transition={{type:"tween",duration:0.1}}
-         style={{ width: '300px', height: '300px' }}
+         
         className='piechart'
     >
         <div className='piechart--title oswald'>Asset Distribution Overview</div>
