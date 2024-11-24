@@ -12,6 +12,8 @@ import {
 import {colors,sortAssetType,sortAssetTypeAndRemove} from '../helpers/webSocketHelpers';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Switch from './Switch'
+import { sort } from 'semver';
+import { motion } from "framer-motion";
 // Register Chart.js components
 ChartJS.register(
   CategoryScale,
@@ -23,6 +25,7 @@ ChartJS.register(
   ChartDataLabels
 );
 
+
 const BarChart = ({ assetType,assetTypeTotalWorth }) => {
   const sortedAndRemoved =  sortAssetTypeAndRemove(assetType)
   const sorted = sortAssetType(assetType)
@@ -30,26 +33,25 @@ const BarChart = ({ assetType,assetTypeTotalWorth }) => {
   const [possesedToggle,setPossesedToggle] = useState(false)
   const [value2Use,setValue2Use] = useState('')
 
-  const values = Object.values(value2Use);
+
+
   useEffect(()=>{
     if (possesedToggle){
       setValue2Use(sortedAndRemoved)
-      console.log(sortedAndRemoved)
     } else {
       setValue2Use(sorted)
-      console.log(sortedAndRemoved)
     }
-  },[possesedToggle])
+  },[possesedToggle,assetType])
 
 
   const data = {
-    labels:   Object.keys(sorted),
+    labels:   Object.keys(value2Use),
     datasets: [
       {
         label: 'Assets',
-        data: values,
-        backgroundColor: values.map(() => colors.DARKBLUE), // Default color
-        hoverBackgroundColor: values.map(() => colors.LIGHTBLUE), // Hover color
+        data: value2Use,
+        backgroundColor:  Object.values(value2Use).map(() => possesedToggle ? colors.BLUE : colors.DARKBLUE), // Default color
+        hoverBackgroundColor:  Object.values(value2Use).map(() => colors.LIGHTBLUE), // Hover color
         borderColor: colors.BLACK,
         borderWidth: 1,
       },
@@ -57,7 +59,7 @@ const BarChart = ({ assetType,assetTypeTotalWorth }) => {
   };
 
   const options = {
-    responsive: false,
+    responsive: true,
     plugins: {
       legend: {
         display: false,
@@ -116,13 +118,22 @@ const BarChart = ({ assetType,assetTypeTotalWorth }) => {
 
 
   return (
-    <div>
-      <div className='barchart--title oswald'>Asset Allocation Overview</div>
-      
-      <Bar data={data} options={options} />
-      <Switch setPossesedToggle={setPossesedToggle} possesedToggle={possesedToggle}/>
-    </div>
+    <motion.div 
+      whileHover={{scale:1.02,backgroundColor:colors.WHITE,
+      boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)',
+      border:`1px solid ${colors.LIGHTBLUE}`}}
+      transition={{type:"tween",duration:0.1}}
+      className='barchart' style={{ width: '500px' }}>
 
+      <div className='barchart--toggle'> 
+      <div className='barchart--title oswald'>{possesedToggle ? 'Portfolio': 'All' } Asset Allocation Overview</div>
+      <Switch setPossesedToggle={setPossesedToggle} 
+        possesedToggle={possesedToggle}/>
+      </div>
+      <Bar  data={data} options={options} />
+    
+
+    </motion.div>
   );
 };
 

@@ -76,6 +76,8 @@ function HeroLineChart() {
             displayColors:false,         
             
         },
+        datalabels: {
+          display: false}
 
     },
     elements:{

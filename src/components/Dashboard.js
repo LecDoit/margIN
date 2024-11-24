@@ -1,9 +1,12 @@
 import React,{useEffect,useState} from 'react';
 import { useStocksContext } from "../hooks/useStocksContext";
-import {calculatePortfolio,actionResult,findItemByProperty} from '../helpers/webSocketHelpers';
+import {calculatePortfolio,colors,findItemByProperty} from '../helpers/webSocketHelpers';
 import BarChart from './BarChart'
 import Actions from './Actions';
 import ActionMargin from  './ActionMargin'
+import PieChart from './PieChart';
+import { motion } from "framer-motion";
+
 
 
 
@@ -47,7 +50,7 @@ const gatherTrades = (arg)=>{
       tempNpv = tempNpv + (calculatePortfolio(asset)*lsPrice.p)
       
       tempAssetTypeEval[asset.categoryName] = (tempAssetTypeEval[asset.categoryName]+(calculatePortfolio(asset)*lsPrice.p))
-      console.log(tempAssetTypeEval,asset.trades,asset.categoryName)
+      // console.log(tempAssetTypeEval,asset.trades,asset.categoryName)
 
 
       tempEvaluationArr.push(evaluationFactory(asset.symbol,calculatePortfolio(asset)*lsPrice.p,asset.categoryName))
@@ -79,6 +82,7 @@ const gatherTrades = (arg)=>{
     setSellReminder(tempSellReminderArr)
     setPortfolioEvaluation(tempEvaluationArr)
     setAssetTypeTotalWorth(tempAssetTypeEval)
+   
 
 }
 // console.log(marginReminder,sellReminder,buyReminder)
@@ -92,36 +96,59 @@ useEffect(()=>{
 
 
   return (
-    <div className='Dashboard'>
+    <div className='dashboard'>
       <div className='dashboard--tiles'>
-        <div className='dashboard--tiles--tile'>
-          <div className='dashboard--tiles--tile--number lato'>{noTrades}</div>
-          <div className='dashboard--tiles--tile--header'>No of transaction</div>
-        </div>
-        <div className='dashboard--tiles--tile'>
-          <div className='dashboard--tiles--tile--number lato'>{noAssets}</div>
-          <div className='dashboard--tiles--tile--header'>No of Assets</div>
-        </div>
-        <div className='dashboard--tiles--tile'>
-          <div className='dashboard--tiles--tile--number lato'>{npv.toFixed(2)}</div>
-          <div className='dashboard--tiles--tile--header'>NPV</div>
-        </div>
-        <div className='dashboard--tiles--tile'>
-          <div className='dashboard--tiles--tile--number lato'>{marginReminder.length+buyReminder.length+sellReminder.length}</div>
-          <div className='dashboard--tiles--tile--header'>No of actions</div>
-        </div>
+        <motion.div className='dashboard--tiles--tile'
+          whileHover={{scale:1.02,backgroundColor:colors.WHITE,
+          boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)',
+          border:`1px solid ${colors.LIGHTBLUE}`}}
+          transition={{type:"tween",duration:0.1}}
+          whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}} >
+          <motion.div
+              whileHover={{color:colors.BLUE}}
+           className='dashboard--tiles--tile--number lato'>{noTrades}</motion.div>
+          <motion.div className='dashboard--tiles--tile--header'>No of transaction</motion.div>
+        </motion.div>
+        <motion.div className='dashboard--tiles--tile'
+                  whileHover={{scale:1.02,backgroundColor:colors.WHITE,
+                    boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)',
+                    border:`1px solid ${colors.LIGHTBLUE}`}}
+                    transition={{type:"tween",duration:0.1}}
+                    whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}}>
+          <motion.div className='dashboard--tiles--tile--number lato'               whileHover={{color:colors.BLUE}}>{noAssets}</motion.div>
+          <motion.div className='dashboard--tiles--tile--header'>No of Assets</motion.div>
+        </motion.div>
+        <motion.div className='dashboard--tiles--tile'
+        whileHover={{scale:1.02,backgroundColor:colors.WHITE,
+          boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)',
+          border:`1px solid ${colors.LIGHTBLUE}`}}
+          transition={{type:"tween",duration:0.1}}
+          whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}}>
+          <motion.div className='dashboard--tiles--tile--number lato'               whileHover={{color:colors.BLUE}}>{npv.toFixed(2)}</motion.div>
+          <motion.div className='dashboard--tiles--tile--header'>NPV</motion.div>
+        </motion.div>
+        <motion.div className='dashboard--tiles--tile'
+        whileHover={{scale:1.02,backgroundColor:colors.WHITE,
+          boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)',
+          border:`1px solid ${colors.LIGHTBLUE}`}}
+          transition={{type:"tween",duration:0.1}}
+          whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}}>
+          <motion.div className='dashboard--tiles--tile--number lato'               whileHover={{color:colors.BLUE}}>{marginReminder.length+buyReminder.length+sellReminder.length}</motion.div>
+          <motion.div className='dashboard--tiles--tile--header'>No of actions</motion.div>
+        </motion.div>
       </div>
 
       <div className='dashboard--action'>
         <Actions action={"Buy"} actionReminder={buyReminder} lsPricesState={lsPricesState}/>
         <Actions action={"Sell"} actionReminder={sellReminder} lsPricesState={lsPricesState}/>
-        <ActionMargin action={"Margin"} actionReminder={marginReminder} lsPricesState={lsPricesState}/>
-        
+        <ActionMargin action={"Margin"} actionReminder={marginReminder} lsPricesState={lsPricesState}/>        
       </div>
-        {/* <div>Margin to setup</div> */}
-        <div>
+      <div className='dashboard--barchart'>
         <BarChart assetType={assetType} assetTypeTotalWorth={assetTypeTotalWorth}/>
-        </div>
+      </div>
+      <div className='dashboard--piechart'>
+        <PieChart portfolioEvaluation={portfolioEvaluation}/>
+      </div>
 
     </div>
   )
