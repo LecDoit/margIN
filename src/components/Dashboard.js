@@ -5,7 +5,18 @@ import BarChart from './BarChart'
 import Actions from './Actions';
 import ActionMargin from  './ActionMargin'
 import PieChart from './PieChart';
+import BubbleChart from './BubbleChart';
 import { motion } from "framer-motion";
+
+const dataset1 = [
+  { date: "2024-01-01", value: 5000, type: "Buy" },
+  { date: "2024-01-05", value: 10000, type: "Sell" },
+  { date: "2024-01-10", value: 7500, type: "Buy" },
+  { date: "2024-01-03", value: 3000, type: "Sell" },
+  { date: "2024-01-08", value: 12000, type: "Buy" },
+  { date: "2024-01-15", value: 2000, type: "Sell" },
+];
+
 
 
 
@@ -26,14 +37,19 @@ const [assetTypeTotalWorth,setAssetTypeTotalWorth] = useState('')
 const [lsActionState,setLsActionState] = useState(JSON.parse(localStorage.getItem('actions')))
 const [lsPricesState,setLsPricesState] = useState(JSON.parse(localStorage.getItem('prices')))
 
+const [bubbleData,setBubbleData] = useState([])
+
 const evaluationFactory = (symbol,evaluation,type)=>{
   return {symbol,evaluation,type}
+}
 
-
+const bubbleTradeFactory = (date,value,type,symbol)=>{
+  return {date,value,type,symbol}
 }
 
 const gatherTrades = (arg)=>{
     const tempArr = []
+    const tempBubble = []
     let tempNpv = 0
     let tempAssetType = {'STC':0,'CRT':0,'ETF':0,'IND':0,'FX':0,'CMD':0}
     let tempAssetTypeEval = {'STC':0,'CRT':0,'ETF':0,'IND':0,'FX':0,'CMD':0}
@@ -50,13 +66,11 @@ const gatherTrades = (arg)=>{
       tempNpv = tempNpv + (calculatePortfolio(asset)*lsPrice.p)
       
       tempAssetTypeEval[asset.categoryName] = (tempAssetTypeEval[asset.categoryName]+(calculatePortfolio(asset)*lsPrice.p))
-      // console.log(tempAssetTypeEval,asset.trades,asset.categoryName)
 
 
       tempEvaluationArr.push(evaluationFactory(asset.symbol,calculatePortfolio(asset)*lsPrice.p,asset.categoryName))
       
-      // console.log(tempNpv,asset)
-      tempAssetType[asset.categoryName] =tempAssetType[asset.categoryName] +1
+      tempAssetType[asset.categoryName] = tempAssetType[asset.categoryName] +1
 
       if (lsAction.action=='Set margin'){
         tempMarginReminderArr.push(asset)
@@ -72,6 +86,7 @@ const gatherTrades = (arg)=>{
 
       for (const trade of asset.trades){
         tempArr.push(trade)
+        tempBubble.push(bubbleTradeFactory(trade.tradeDate,(trade.price*trade.quantity),trade.type,asset.symbol))
       }
     }
     setNoTrades(tempArr.length)
@@ -82,6 +97,8 @@ const gatherTrades = (arg)=>{
     setSellReminder(tempSellReminderArr)
     setPortfolioEvaluation(tempEvaluationArr)
     setAssetTypeTotalWorth(tempAssetTypeEval)
+    setBubbleData(tempBubble)
+    console.log(tempBubble)
    
 
 }
@@ -150,6 +167,9 @@ useEffect(()=>{
       
       <div className='dashboard--piechart'>
         <PieChart portfolioEvaluation={portfolioEvaluation}/>
+      </div>
+      <div className='dashboard--bubble'>
+        <BubbleChart  bubbleData={bubbleData} />
       </div>
 
     </div>
