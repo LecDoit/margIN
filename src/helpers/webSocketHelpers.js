@@ -79,6 +79,10 @@ export const lineChartDotsFactory = (date,price,type)=>{
 
     return 
 }
+export const scalePrice = (receivedPrice,digits) =>{
+    return receivedPrice/Math.pow(10,digits)
+
+}
 
 
 export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell,trades)=>{
@@ -126,6 +130,7 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell,tra
 
     }
 ]
+    const digits = arg.returnData.digits
 
     
     for (let i = 0;i<arg.returnData.rateInfos.length;i++){
@@ -134,10 +139,15 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell,tra
         const month = date.toLocaleString('en-US', { month: 'short' });  // Gets the abbreviated month name
         const year = date.getFullYear();  // Gets the full year
         const formattedDate = `${day} ${month} ${year}`;
-        const open = (arg.returnData.rateInfos[i].open)/100
+        console.log(arg.returnData.rateInfos[i].open)
+        
+        const open = scalePrice(arg.returnData.rateInfos[i].open,digits)
+        console.log(open)
+        
 
         labels.push(formattedDate)
         datasets[0].data.push(open)
+
         if (buy>0){
             datasets[1].data.push(buy)
         }

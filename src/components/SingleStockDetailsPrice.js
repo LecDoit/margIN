@@ -37,6 +37,7 @@ const SingleStockDetailsPrice = (stock) => {
 
       },[data])
 
+
   return (
         <div className='modal--title--details'>
             <div>{hookIsLoaded ? <div className='title--modal number'>{symbol}</div> :<LoadingSmall width={15} height={15}/>}</div>

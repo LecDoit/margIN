@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react'
 import {motion} from 'framer-motion'
 import useWebsocketHook from '../hooks/useWebSocketHook'
 import {Line} from 'react-chartjs-2'
-import {ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,calculatePortfolio,formatDateTime,endDate,actionResult} from '../helpers/webSocketHelpers'
+import {scalePrice,ticksAndPeriods,lineChartFactory,findItemByProperty, tradeFactory,calculatePortfolio,formatDateTime,endDate,actionResult} from '../helpers/webSocketHelpers'
 import {useStocksContext } from "../hooks/useStocksContext";
 import axios from'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -37,6 +37,7 @@ const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRange
     const [activeRange,setActiveRange] = useState('')
     const [trades,setTrades] = useState('')
     const [errors, setErrors] = useState({});
+    const [digits,setDigits] = useState('')
 
 
     
@@ -167,9 +168,6 @@ const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRange
         splicedStock[0].period=period
         splicedStock[0].ticks=ticks
         splicedStock[0].start=startDate    
-        console.log(buy,sell,actualPrice)
-
-        console.log(actionResult(buy,sell,actualPrice)) 
         setAction(actionResult(splicedStock[0].buy,splicedStock[0].sell,actualPrice))
         stocks.splice(index, 0, splicedStock[0])
       
@@ -230,6 +228,8 @@ const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRange
             setActiveRange(findItemByProperty(ticksAndPeriods,"ticks",stock.ticks).name)
             setTrades(stock.trades)             
             calculatePortfolio(stock)
+            
+            
 
             // setAction(actionResult(stock.buy,stock.sell,price))
             
@@ -260,11 +260,12 @@ const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRange
     }
 
     const options = {
+
         onClick: (event, elements) => {
               const elementIndex = elements[0].index;
+            //   console.log
               setTradeDate(formatDateTime(data.returnData.rateInfos[elementIndex].ctm));
-              setPrice(data.returnData.rateInfos[elementIndex].open/100);
-            
+              setPrice(scalePrice(data.returnData.rateInfos[elementIndex].open,digits))
           },
          
         responsive:true,
@@ -350,7 +351,6 @@ const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRange
         if (triggerApiCall){
             updateRange()
             setTriggerApiCall(false)
-
         }
     },[triggerApiCall])
 
@@ -385,6 +385,13 @@ const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRange
             
                
     }
+    useEffect(()=>{
+        if (data){
+            const digits = (data.returnData.digits)
+            setDigits(digits)
+        }
+
+    },[data])
 
 
   return (
