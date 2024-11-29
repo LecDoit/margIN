@@ -60,6 +60,7 @@ const BarChart = ({ assetType,assetTypeTotalWorth }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
@@ -123,15 +124,15 @@ const BarChart = ({ assetType,assetTypeTotalWorth }) => {
       boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)',
       border:`1px solid ${colors.LIGHTBLUE}`}}
       transition={{type:"tween",duration:0.1}}
-      className='barchart' style={{ width: '500px' }}>
-
+      className='barchart'
+      >
       <div className='barchart--toggle'> 
-      <div className='barchart--title oswald'>{possesedToggle ? 'Portfolio': 'All' } Asset Allocation Overview</div>
-      <Switch setPossesedToggle={setPossesedToggle} 
-        possesedToggle={possesedToggle}/>
+        <div className='barchart--title oswald'>{possesedToggle ? 'Portfolio': 'All' } Monitored Asset Overview</div>
+        <Switch setPossesedToggle={setPossesedToggle} possesedToggle={possesedToggle}/>
       </div>
-      <Bar  data={data} options={options} />
-    
+      <div className='barchart--control'>
+      <Bar data={data} options={options} />
+      </div>
 
     </motion.div>
   );

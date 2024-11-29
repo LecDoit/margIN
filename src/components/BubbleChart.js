@@ -43,7 +43,7 @@ const TradeBubbleChart = ({ bubbleData }) => {
             symbol:item.symbol
           })),
           backgroundColor: data.map((item) =>
-            item.type === "buy" ? colors.GREENF : colors.REDF
+            item.type === "buy" ? colors.GREEN : colors.RED
           ),
           borderColor: data.map((item) =>
             item.type === "buy" ? colors.GREEN : colors.RED
@@ -59,6 +59,7 @@ const TradeBubbleChart = ({ bubbleData }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         type: "time", // Use a time scale for the X-axis
@@ -117,7 +118,10 @@ const TradeBubbleChart = ({ bubbleData }) => {
     },
   };
 
-  return <Bubble className="dashboard--bubble" data={data} options={options} />;
+  return (
+      <div className="dashboard--bubble--bubble">
+        <Bubble  data={data} options={options} />
+      </div>)
 };
 
 export default TradeBubbleChart;

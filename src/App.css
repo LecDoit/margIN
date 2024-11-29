@@ -1311,13 +1311,13 @@ input:focus{
 .dashboard{
   display: grid;
   grid-template-columns: 2fr 2fr 2fr  2fr 2fr 2fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr ;
+  grid-template-rows: 15% 20% 1fr 100%;
   text-align: center;
   gap:10px;  
   grid-auto-flow:row;
   padding-top: 50px;
   height:100%;
-   
+  gap:20px;
 }
 
 .dashboard--tiles{
@@ -1337,9 +1337,16 @@ input:focus{
   justify-content: center;
   grid-column-start: 2;
   grid-column-end: 6;
-  grid-row-start: 4;
-  grid-row-end: 5;
-  height: 350px;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  height: 100%;
+  width: 100%;
+}
+.dashboard--bubble--bubble{
+  height: 100%;
+  width: 100%;
+  /* width: 100%;
+  display: flex; */
 }
 
 .dashboard--tiles--tile{
@@ -1364,22 +1371,35 @@ input:focus{
   justify-content: center;
   grid-column-start: 2;
   grid-column-end: 6;
-  grid-row-start: 2;
-  grid-row-end: 2;
+  grid-row-start: 4;
+  grid-row-end: 4;
 
 }
-.dashboard--barchart{
+.dashboard--pieBar{
+  display: flex;
+  gap: 50px;
+  justify-content: center;
   grid-column-start: 2;
-  grid-column-end: 4;
-  grid-row-start: 3;
-  grid-row-end: 3;
-}
-
-.dashboard--piechart{
-  grid-column-start: 5;
   grid-column-end: 6;
   grid-row-start: 3;
   grid-row-end: 3;
+
+}
+.dashboard--barchart{
+  width: 100%;
+  /* grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 3;
+  grid-row-end: 3; */
+}
+
+.dashboard--piechart{
+  width: 100%;
+  /* grid-column-start: 4;
+  grid-column-end: 6;
+  grid-row-start: 3;
+  grid-row-end: 3; */
+  
   
 
 }
@@ -1402,16 +1422,19 @@ input:focus{
   background-color: var(--WHITER);
   padding: 20px;
   border-radius: 20px;
-  height: 100%;
+
+}
+.barchart--control{
+  height: 200px;
 }
 .piechart{
   display: flex;
   flex-direction: column;
-  gap:10px;
+  
   background-color: var(--WHITER);
   padding: 20px;
   border-radius: 20px;
-  height: 100%;
+
 }
 .barchart--title,.piechart--title {
   display: flex;
@@ -1490,5 +1513,7 @@ width:25px;
 .piechart--chart{
   display: flex;
   justify-content: center;
-  margin-top:40px;
+  height: 210px
+
+  
 }

@@ -48,9 +48,18 @@ const PieChart = ({ portfolioEvaluation }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
+    
     plugins: {
       legend: {
-        display:false
+        display: true, // Ensure the legend is displayed
+        position: 'right', // Position the legend to the right of the chart
+        labels: {
+          color: colors.DARKBLUE, // Customize label text color if needed
+          font: {
+            size: 12, // Customize font size
+          },
+        },
       },
       tooltip: {
         callbacks: {

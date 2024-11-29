@@ -160,13 +160,14 @@ useEffect(()=>{
         <Actions action={"Sell"} actionReminder={sellReminder} lsPricesState={lsPricesState}/>
         <ActionMargin action={"Margin"} actionReminder={marginReminder} lsPricesState={lsPricesState}/>        
       </div>
-
-      <div className='dashboard--barchart'>
-        <BarChart assetType={assetType} assetTypeTotalWorth={assetTypeTotalWorth}/>
-      </div>
-      
-      <div className='dashboard--piechart'>
-        <PieChart portfolioEvaluation={portfolioEvaluation}/>
+      <div className='dashboard--pieBar'>
+        <div className='dashboard--barchart'>
+          <BarChart assetType={assetType} assetTypeTotalWorth={assetTypeTotalWorth}/>
+        </div>
+        
+        <div className='dashboard--piechart'>
+          <PieChart portfolioEvaluation={portfolioEvaluation}/>
+        </div>
       </div>
       <div className='dashboard--bubble'>
         <BubbleChart  bubbleData={bubbleData} />
