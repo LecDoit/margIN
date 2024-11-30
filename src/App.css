@@ -1311,7 +1311,7 @@ input:focus{
 .dashboard{
   display: grid;
   grid-template-columns: 2fr 2fr 2fr  2fr 2fr 2fr;
-  grid-template-rows: 15% 20% 1fr 100%;
+  grid-template-rows: 15% 21% 33% 100%;
   text-align: center;
   gap:10px;  
   grid-auto-flow:row;
@@ -1377,12 +1377,13 @@ input:focus{
 }
 .dashboard--pieBar{
   display: flex;
-  gap: 50px;
+  gap: 37px;
   justify-content: center;
   grid-column-start: 2;
   grid-column-end: 6;
   grid-row-start: 3;
   grid-row-end: 3;
+  height: 110%;
 
 }
 .dashboard--barchart{
@@ -1436,7 +1437,7 @@ input:focus{
   border-radius: 20px;
 
 }
-.barchart--title,.piechart--title {
+.barchart--title,.piechart--title,.bubble--title {
   display: flex;
   color: var(--DARKBLUE);
   font-size: 25px;
