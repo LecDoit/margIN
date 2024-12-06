@@ -43,6 +43,15 @@ const Home = () => {
             },
             body:body
           })
+
+
+          if (response.status === 401) {
+            localStorage.removeItem('user'); // Clear user data from localStorage
+            dispatch({ type: "LOGOUT" });   // Dispatch a logout action
+            window.location.href = "/login"; // Redirect to login page
+            return;
+          }
+
           const json = await response.json()
           if (response.ok){
 
@@ -57,42 +66,8 @@ const Home = () => {
           }
         }
 
-        // const fetchCredentials = async()=>{
-        //   if (sessionStorage.getItem('xtbCredentials')){
-        //       const xtbCredentials = (JSON.parse(sessionStorage.getItem('xtbCredentials')))
-        //       setUserXtb(xtbCredentials.user)
-        //       setPasswordXtb(xtbCredentials.password)
-        //       // setXtbMessage(xtbMessageArg)
-  
-        //   } else{       
-          
-        //   // const response = await fetch('http://localhost:10000/stocks/getCredentials',{
-        //   const response = await fetch('https://xtbbackend.onrender.com/stocks/getCredentials',{
-        //       method:'GET',
-        //       headers:{
-        //       'Content-Type':'application/json',
-        //       'Authorization':`Bearer ${user.token}`
-        //       }
-        //   })
-        //   const json = await response.json()
-        //   setUserXtb(json.user)
-        //   setPasswordXtb(json.password)
-        //   // setXtbMessage(xtbMessageArg)
-        //   sessionStorage.setItem('xtbCredentials',JSON.stringify(json))
-        //   }
-      
-          
-
-
-
-        // }
-
-
-
-
         if (user){
             fetchStocks()
-            // fetchCredentials()
         }
 
     },[dispatch,user])
@@ -146,14 +121,3 @@ const conditionalRenderContent=(arg)=>{
 
 export default Home
 
-
-// <BrowserRouter>
-// <Routes>
-//   {/* <Route path='/test' element={<Test/>}/> */}
-
-//   <Route path='/testforloggedin' 
-//   element={user ? <TestforLoggedIn /> : <TestforLoggedIn /> }/>
-  
-//   {/* <div className="home--content">seks</div> */}
-// </Routes>
-// </BrowserRouter>

@@ -1,12 +1,9 @@
-import React,{useEffect,useState,useCallback} from 'react'
-import {backIn, backInOut, easeIn, easeInOut, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
+import React,{useEffect,useState} from 'react'
+import {motion} from 'framer-motion'
 import { LuHome ,LuMail,LuFolderClosed,LuStickyNote,LuBell,LuPin} from "react-icons/lu";
 
 // import * as newz  from "react-icons/lu";
 import SidebarItem from './SidebarItem.js';
-import { json, useFetcher } from 'react-router-dom';
-import { stringify } from 'json5';
-import Delete from './Delete.js';
 
 const SIDEBAR_ITEMS = [
     { id: "dashboard", title: "Dashboard", icon: LuHome },

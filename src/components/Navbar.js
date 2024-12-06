@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import {Link} from 'react-router-dom'
 import { useLogout } from '../hooks/useLogout'
 import { useAuthContext } from '../hooks/useAuthContext'
-import {backIn, backInOut, easeIn, motion,useMotionValue,useMotionValueEvent,useScroll, useTransform} from 'framer-motion'
+import {motion} from 'framer-motion'
 import Logo from '../img/Logo'
+import { colors } from '../helpers/webSocketHelpers'
 
 const Navbar = ({id}) => {
 
@@ -68,16 +69,32 @@ const Navbar = ({id}) => {
                 {user && (
                 <div className='navbar--buttons--nav'>
                     <div className='navbar--email'>{user.email}</div>
-                    <div className='navbar--buttons' onClick={handleClick}>Log out</div>
+                    <motion.div
+                        whileHover={{backgroundColor:colors.LIGHTBLUE,
+                        boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
+                        transition={{type:"tween",duration:0.1}}
+                        whileTap={{scale:0.98,backgroundColor:colors.BLUE,color:colors.WHITE}} 
+                        className='navbar--buttons' onClick={handleClick}>Log out</motion.div>
+                        
                 </div>
                 )}
                 {!user && (
                     <div className='navbar--buttons--nav'>
                         <Link  to='/login'>
-                            <div className='navbar--buttons' id={id}>Sign in</div>
+                            <motion.div
+                                whileHover={{backgroundColor:colors.LIGHTBLUE,
+                                boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
+                                transition={{type:"tween",duration:0.1}}
+                                whileTap={{scale:0.98,backgroundColor:colors.BLUE,color:colors.WHITE}} 
+                             className='navbar--buttons' id={id}>Sign in</motion.div>
                         </Link>
                         <Link to='/signup'>
-                            <div className='navbar--buttons'id={id} >Sign up</div>
+                            <motion.div 
+                                whileHover={{backgroundColor:colors.LIGHTBLUE,
+                                boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
+                                transition={{type:"tween",duration:0.1}}
+                                whileTap={{scale:0.98,backgroundColor:colors.BLUE,color:colors.WHITE}} 
+                            className='navbar--buttons'id={id} >Sign up</motion.div>
                         </Link>
                     </div>
                 )}

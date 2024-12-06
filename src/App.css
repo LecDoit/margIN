@@ -82,13 +82,15 @@ a:visited{
   display: grid;
   /* grid-template-columns: 10vw 90vw; */
   grid-template-columns: auto 1fr ;
-  grid-template-rows: 7vh 93vh ;
+  grid-template-rows: 7vh auto ;
   
 }
 .home--stocks{
   display: flex;
   flex-direction: column;
-  gap:20px
+  gap:20px;
+  height: 100vh;
+  overflow: auto;
 
 }
 .home--dashboard{
@@ -96,6 +98,8 @@ a:visited{
   flex-direction: column;
   gap:20px;
   width:100%;
+  height: 100vh;
+  overflow: auto;
 }
 
 
@@ -103,12 +107,13 @@ a:visited{
 
   grid-column-start:1 ;
   grid-column-end: 2;
-  grid-row-start: 2;
-  grid-row-end: 3;
+  /* grid-row-start: 2;
+  grid-row-end: 3; */
+  grid-row: 2/-1;
   background-color: var(--LIGHTGRAY);
   position: relative;
   padding-top: 10px;
-
+  height: 100vh;
   
 }
 .search{
@@ -306,8 +311,6 @@ color: var(--DARKBLUE);
   align-items: center;
   justify-content: center;
   font-weight: 800;
-
-
 }
 
 
@@ -814,11 +817,6 @@ input:focus{
   height: 100%;
   background-color: var(--LIGHTGRAY);
   opacity: 0.7;
-}
-.center--loading{
-
-  height: 90vh;
-
 }
 
 

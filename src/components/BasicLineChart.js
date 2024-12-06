@@ -98,7 +98,7 @@ function BasicLineChart({chartData,chartRangeArgument,colorLine,stock}) {
                 initial={{ scale: 1 }}
                 whileHover={{
 
-                scale: 1.8, 
+                scale: 1.3, 
                 transition: { duration: 0.2 } 
                 }}
                 whileTap={{

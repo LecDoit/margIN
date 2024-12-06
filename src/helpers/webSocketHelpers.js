@@ -139,11 +139,7 @@ export const lineChartFactory = (arg,arg2,arg3,tension,thicknes,bgO,buy,sell,tra
         const month = date.toLocaleString('en-US', { month: 'short' });  // Gets the abbreviated month name
         const year = date.getFullYear();  // Gets the full year
         const formattedDate = `${day} ${month} ${year}`;
-        console.log(arg.returnData.rateInfos[i].open)
-        
         const open = scalePrice(arg.returnData.rateInfos[i].open,digits)
-        console.log(open)
-        
 
         labels.push(formattedDate)
         datasets[0].data.push(open)
