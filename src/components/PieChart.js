@@ -78,7 +78,6 @@ const PieChart = ({ portfolioEvaluation }) => {
         },
         formatter: (value, context) => {
           const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-          console.log(context.dataset.label)
           const percentage = ((value / total) * 100).toFixed(1);
           return `${percentage}%` ; // Show percentage
         },

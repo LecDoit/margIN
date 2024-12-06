@@ -98,7 +98,6 @@ const gatherTrades = (arg)=>{
     setPortfolioEvaluation(tempEvaluationArr)
     setAssetTypeTotalWorth(tempAssetTypeEval)
     setBubbleData(tempBubble)
-    console.log(tempBubble)
    
 
 }
