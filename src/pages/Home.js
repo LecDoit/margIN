@@ -8,6 +8,7 @@ import Loading from '../components/Loading'
 import StockSearch from "../components/StockSearch";
 import StockGroup from "../components/StockGroup";
 import Dashboard from "../components/Dashboard";
+import Portfolio from "../components/Portfolio";
 
 
 
@@ -25,75 +26,80 @@ const Home = () => {
     localStorage.setItem('actions',JSON.stringify([]));
   }
 
-  
+  useEffect(()=>{
+
+      const fetchStocks = async ()=>{
+
+        const body = JSON.stringify({'email':user.email})
+
+        const response = await fetch('https://xtbbackend.onrender.com/stocks/getUser',{
+        // const response = await fetch('http://localhost:10000/stocks/getUser',{
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${user.token}`
+          },
+          body:body
+        })
 
 
-      useEffect(()=>{
-
-        const fetchStocks = async ()=>{
-
-          const body = JSON.stringify({'email':user.email})
-  
-          const response = await fetch('https://xtbbackend.onrender.com/stocks/getUser',{
-          // const response = await fetch('http://localhost:10000/stocks/getUser',{
-            method:'POST',
-            headers:{
-              'Content-Type':'application/json',
-              'Authorization':`Bearer ${user.token}`
-            },
-            body:body
-          })
-
-
-          if (response.status === 401) {
-            localStorage.removeItem('user'); // Clear user data from localStorage
-            dispatch({ type: "LOGOUT" });   // Dispatch a logout action
-            window.location.href = "/login"; // Redirect to login page
-            return;
-          }
-
-          const json = await response.json()
-          if (response.ok){
-
-            // console.log(json.stocks)
-            dispatch({type:"SET_STOCKS",payload:json.stocks})
-            setLoaded(true)
-            
-          }
-  
-          if (!response.ok){
-            console.log('its not ok',response)
-          }
+        if (response.status === 401) {
+          localStorage.removeItem('user'); // Clear user data from localStorage
+          dispatch({ type: "LOGOUT" });   // Dispatch a logout action
+          window.location.href = "/login"; // Redirect to login page
+          return;
         }
 
-        if (user){
-            fetchStocks()
+        const json = await response.json()
+        if (response.ok){
+
+          // console.log(json.stocks)
+          dispatch({type:"SET_STOCKS",payload:json.stocks})
+          setLoaded(true)
+          
         }
 
-    },[dispatch,user])
+        if (!response.ok){
+          console.log('its not ok',response)
+        }
+      }
+
+      if (user){
+          fetchStocks()
+      }
+
+  },[dispatch,user])
 
 
-const conditionalRenderContent=(arg)=>{
-  if (arg=='stocks'){
-    return loaded ? 
-      <motion.div className="home--stocks">    
-        <StockSearch/>
-        <StockGroup/>
-      </motion.div> 
-      :
-      <Loading/>
-  } else if (arg=='dashboard'){
-    return loaded ?
-      <motion.div className="home--dashboard"> 
-        <Dashboard/>
-      </motion.div> 
-      :
-      <Loading/>
+  const conditionalRenderContent=(arg)=>{
+    if (arg=='stocks'){
+      return loaded ? 
+        <motion.div className="home--stocks">    
+          <StockSearch/>
+          <StockGroup/>
+        </motion.div> 
+        :
+        <Loading/>
+    } else if (arg=='dashboard'){
+      return loaded ?
+        <motion.div className="home--dashboard"> 
+          <Dashboard/>
+        </motion.div> 
+        :
+        <Loading/>
 
-  } else {
+    }else if (arg=='portfolio'){
+      return loaded? 
+        <motion.div className="home--portfolio"> 
+          <Portfolio/>
+        </motion.div> 
+        :
+        <Loading/>
+    
+    } else {
 
-    return <div>here will be soemthing else</div>
-  }
+      return <div>here will be soemthing else</div>
+    }
 
 
 }

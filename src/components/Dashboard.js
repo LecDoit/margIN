@@ -8,17 +8,6 @@ import PieChart from './PieChart';
 import BubbleChart from './BubbleChart';
 import { motion } from "framer-motion";
 
-const dataset1 = [
-  { date: "2024-01-01", value: 5000, type: "Buy" },
-  { date: "2024-01-05", value: 10000, type: "Sell" },
-  { date: "2024-01-10", value: 7500, type: "Buy" },
-  { date: "2024-01-03", value: 3000, type: "Sell" },
-  { date: "2024-01-08", value: 12000, type: "Buy" },
-  { date: "2024-01-15", value: 2000, type: "Sell" },
-];
-
-
-
 
 
 const Dashboard = () => {
