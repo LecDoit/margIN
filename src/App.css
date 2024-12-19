@@ -110,6 +110,15 @@ a:visited{
   overflow: auto;
 }
 
+.home--news{
+  display: flex;
+  flex-direction: column;
+  gap:20px;
+  width:100%;
+  height: 100vh;
+  overflow: auto;
+}
+
 
 .sidebar{
 
@@ -1328,8 +1337,7 @@ input:focus{
 .portfolio{
   display: grid;
   grid-template-columns: 2fr 4fr 4fr 2fr;
-  grid-template-rows: 1fr 8fr 1fr ;
-  
+  grid-template-rows: 1fr 8fr 1fr ;  
   gap:10px;  
   grid-auto-flow:row;
   height: 100%;
@@ -1346,7 +1354,8 @@ input:focus{
   font-size: 28px;
   color: var(--DARKBLUE);
   font-weight: 400;
-  border-bottom: 1px solid var(--BLUE);
+
+  height: 50px;
 
 }
 .portfolio--header{
@@ -1355,7 +1364,8 @@ input:focus{
   justify-content: space-around;
   gap:10px;
   align-items: center;
-  border-bottom: 1px solid var(--LOADINGLIGHTGRAY);  
+  border-bottom: 1px solid var(--BLUE);
+ 
 }
 .portfolio--header--item{
   height: 40px;
@@ -1369,7 +1379,8 @@ input:focus{
 .portfolio--content--group{
   display: flex;
   flex-direction: column;
-  gap:20px;
+  /* gap:20px; */
+  padding-top: 10px;
   
 }
 .portfolio--content--item{
@@ -1377,7 +1388,7 @@ input:focus{
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-
+  border-bottom: 1px solid var(--LIGHTGRAY); 
   gap:10px;
 }
 .portfolio--content--item--stock{
@@ -1585,4 +1596,48 @@ width:25px;
   height: 210px
 
   
+}
+
+.news{
+  display: grid;
+  grid-template-columns: 1fr 3fr 3fr 1fr;
+  grid-template-rows: 100px 7fr 1fr ;  
+  gap:10px;  
+  grid-auto-flow:row;
+  height: 100%;
+  width: 100%;
+}
+
+.news--options--wrapper{
+  display: flex;
+  gap:10px;
+  grid-column-start:2 ;
+  grid-column-end: 4;
+  grid-row-start:1 ;
+  grid-row-end: 1;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+}
+.news--wrapper{
+  grid-column-start:2 ;
+  grid-column-end: 4;
+  grid-row-start:2;
+  grid-row-end: 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap:10px;
+}
+.news--item{
+  border:1px solid var(--BLACK);
+  background-color: var(--LIGHTGRAY);
+}
+.news--item--title{
+  font-weight: 500;
+}
+.news--item--more{
+  display: flex;
+  justify-content: end;
+  margin: 7px;
+  font-size: 12px;
 }

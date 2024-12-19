@@ -402,7 +402,7 @@ const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRange
             animate='visible'
             exit='hidden'
             onClick={handleBackdropClick}>  
-                <motion.div className='modal'
+                <motion.div className='modal'state
                     variants={modal}
                     initial="hidden"
                     animate='visible'
@@ -435,8 +435,8 @@ const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRange
                     <div className='modal--chart--group'>
                         <div className='modal--form'>
                             {ticksAndPeriods.map((item,i)=>
-                            <div key={item.ticks}   className='modal--form--period--button'>                
-                                <motion.div   className='modal--form--period--button'                                
+                            <div key={item.ticks}   className='modal--form--period--button '>                
+                                <motion.div   className='modal--form--period--button lato'                                
                                     whileHover={{backgroundColor:'rgb(253, 253, 253)',color:'rgb(0, 67, 241)',}}
                                     transition={{duration:0}}
                                     onClick={()=>sendStartDate(item)}

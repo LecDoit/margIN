@@ -24,12 +24,16 @@ const Portfolio = () => {
                 {stocks.map((stock,i)=>{
                     if (stock.trades.length>0){
                         return(
-                            <div className='portfolio--content--item ' key={i}>
+                            <motion.div className='portfolio--content--item ' key={i}
+                            whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',
+                                boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
+                                transition={{type:"tween",duration:0.1}}
+                                whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}}>
                                 <div className='portfolio--content--item--stock lato' >{stock.description}</div>
                                 <div className='portfolio--content--item--stock lato'>{stock.categoryName}</div>
                                 <div className='portfolio--content--item--stock lato'>{calculatePortfolio(stock)}</div>
                                 <div className='portfolio--content--item--stock lato'>{calculatePortfolio(stock)*findItemByProperty(lsPricesState,'symbol',stock.symbol).p}</div>
-                            </div> 
+                            </motion.div> 
                             )
                     }
                 })}

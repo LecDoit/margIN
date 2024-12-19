@@ -9,6 +9,7 @@ import StockSearch from "../components/StockSearch";
 import StockGroup from "../components/StockGroup";
 import Dashboard from "../components/Dashboard";
 import Portfolio from "../components/Portfolio";
+import News from "../components/News";
 
 
 
@@ -92,6 +93,14 @@ const Home = () => {
       return loaded? 
         <motion.div className="home--portfolio"> 
           <Portfolio/>
+        </motion.div> 
+        :
+        <Loading/>
+
+    }else if (arg=='news'){
+      return loaded? 
+        <motion.div className="home--news"> 
+          <News/>
         </motion.div> 
         :
         <Loading/>

@@ -2,7 +2,7 @@ import {useCallback, useEffect,useState} from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { useStocksContext } from "./useStocksContext";
 import { useAuthContext } from "./useAuthContext";
-import {chartRangeFactory,lineChartFactory,logIn,getAllSymbols,getEurUsd,credentials} from '../helpers/webSocketHelpers'
+import {logIn,credentials} from '../helpers/webSocketHelpers'
 
 
 

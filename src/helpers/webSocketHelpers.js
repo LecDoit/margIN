@@ -1,6 +1,3 @@
-import {format} from 'date-fns'
-import { get } from 'react-hook-form'
-
 export function formatDateTime(isoString) {
     const date = new Date(isoString);
 
@@ -75,10 +72,7 @@ export const getSymbolFactory = (symbol)=>{
     
 }
 
-export const lineChartDotsFactory = (date,price,type)=>{
 
-    return 
-}
 export const scalePrice = (receivedPrice,digits) =>{
     return receivedPrice/Math.pow(10,digits)
 
@@ -253,6 +247,12 @@ export const ticksAndPeriods = [
     {name:'IY',ticks:2503,period:1440,state:endDate-oneYearsInMilliseconds},
     {name:'5Y',ticks:2504,period:1440,state:endDate-fiveYearsInMilliseconds},
     {name:'IOY',ticks:5005,period:1440,state:endDate-tenYearsInMilliseconds},        
+]
+export const daysOfNews = [
+    {name:'1 Day',state:endDate-oneDaysInMilliseconds},
+    {name:'2 Days',state:endDate-twoDaysInMilliseconds},
+    {name:'1 Week',state:endDate-sevenDaysInMilliseconds},
+    
 ]
 
 export function convertMsToDate(ms) {

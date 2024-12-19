@@ -26,7 +26,7 @@ const ActionMargin = ({action,actionReminder,lsPricesState}) => {
         </div>
         {actionReminderState.map((item,i)=>
             <motion.div className='actions--content' key={i}
-            whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',
+                whileHover={{scale:1.02,backgroundColor:'rgba(253, 253, 253,0.1)',
                 boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
                 transition={{type:"tween",duration:0.1}}
                 whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}}>

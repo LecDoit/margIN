@@ -6,8 +6,6 @@ import LoadingSmall from '../components/LoadingSmall'
 import {motion} from 'framer-motion'
 import SingleStockDetails from './SingleStockDetails';
 import {chartRangeFactory,endDate,findItemByProperty,actionResult} from '../helpers/webSocketHelpers'
-import { act } from 'react';
-
 
 
 const SingleStock = ({chartRangeArgument,order,stock}) => {

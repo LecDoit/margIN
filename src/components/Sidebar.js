@@ -1,8 +1,6 @@
 import React,{useEffect,useState} from 'react'
 import {motion} from 'framer-motion'
 import { LuHome ,LuMail,LuFolderClosed,LuStickyNote,LuBell,LuPin} from "react-icons/lu";
-
-// import * as newz  from "react-icons/lu";
 import SidebarItem from './SidebarItem.js';
 
 const SIDEBAR_ITEMS = [
@@ -15,7 +13,6 @@ const SIDEBAR_ITEMS = [
   ];
 
 const Sidebar = ({onSelect}) => {
-    // console.log(newz.module)
 
     const [isCollapsed,setIsCollapsed] = useState(true);
     const [isHover,setIsHover] = useState(false);
