@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/margIN/static/css/main.7f16037f.css",
-    "main.js": "/margIN/static/js/main.80fbab0b.js",
+    "main.css": "/margIN/static/css/main.393e3c7b.css",
+    "main.js": "/margIN/static/js/main.b7d0fa07.js",
     "static/media/solution.png": "/margIN/static/media/solution.88ad19b019a6453b28ff.png",
     "index.html": "/margIN/index.html",
-    "main.7f16037f.css.map": "/margIN/static/css/main.7f16037f.css.map",
-    "main.80fbab0b.js.map": "/margIN/static/js/main.80fbab0b.js.map"
+    "main.393e3c7b.css.map": "/margIN/static/css/main.393e3c7b.css.map",
+    "main.b7d0fa07.js.map": "/margIN/static/js/main.b7d0fa07.js.map"
   },
   "entrypoints": [
-    "static/css/main.7f16037f.css",
-    "static/js/main.80fbab0b.js"
+    "static/css/main.393e3c7b.css",
+    "static/js/main.b7d0fa07.js"
   ]
 }

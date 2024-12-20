@@ -6,6 +6,7 @@ import {motion} from 'framer-motion'
 import {daysOfNews,endDate,colors} from '../helpers/webSocketHelpers'
 
 
+
 const News = () => {
     
     const [newsDate,setNewsDate] = useState(1734529038928)
@@ -14,13 +15,6 @@ const News = () => {
     const [isHovered, setIsHovered] = useState(false);
     const [hoveredIndex, setHoveredIndex] = useState(null);
 
-    const test = {
-        "command": "getNews",
-        "arguments": {
-            "end": endDate,
-            "start": newsDate
-        }
-    }
 
     const getNewsFactory = (end,start)=>{
         return {
