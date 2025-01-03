@@ -402,7 +402,7 @@ const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRange
             animate='visible'
             exit='hidden'
             onClick={handleBackdropClick}>  
-                <motion.div className='modal'state
+                <motion.div className='modal'
                     variants={modal}
                     initial="hidden"
                     animate='visible'
@@ -412,23 +412,23 @@ const SingleStockDetails = ({actualPrice,setShowModal,centerX,centerY,chartRange
                             <SingleStockDetailsPrice stock={stock}/>
                         </div>
                         <div className='modal--title--right'>
-                        <motion.div 
-                            initial={{ scale: 1 }}
-                            whileHover={{
+                            <motion.div 
+                                initial={{ scale: 1 }}
+                                whileHover={{
 
-                            scale: 1.2, 
-                            transition: { duration: 0.2 } 
-                            }}
-                            whileTap={{
-                            scale: 0.9,
-                            transition: { duration: 0.1 } 
-                            }}
-                            style={{ 
-                            cursor: "pointer",
-                            }}
-                        onClick={()=>setShowModal(false)}>
-                            <TfiClose className={'tficlose'}/>
-                        </motion.div>
+                                scale: 1.2, 
+                                transition: { duration: 0.2 } 
+                                }}
+                                whileTap={{
+                                scale: 0.9,
+                                transition: { duration: 0.1 } 
+                                }}
+                                style={{ 
+                                cursor: "pointer",
+                                }}
+                                onClick={()=>setShowModal(false)}>
+                                <TfiClose className={'tficlose'}/>
+                            </motion.div>
                         </div>
                     </div>
 

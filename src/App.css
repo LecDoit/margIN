@@ -1040,10 +1040,30 @@ input:focus{
   border-radius: 10px;
   grid-template-columns:55vw 25vw;
   grid-template-rows:6vh 54vh 20vh ;
+  padding: 30px;   
+}
+.modal--news{
+  display: grid;
+  grid-column-start:2 ;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  background-color: var(--LIGHTERGRAY);
+  border-radius: 10px;
+  grid-template-columns:95% 5%;
+  grid-template-rows:10% 90% ;
+  padding: 30px;  
+}
+.modal--body--news{
+  grid-column-start:1 ;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 
-  padding: 30px;;
- 
-  
+
 }
 .modal--title{
   grid-column-start:1 ;
@@ -1051,9 +1071,6 @@ input:focus{
   grid-row-start:1;
   grid-row-end: 1;
   padding-left: 40px;
-
-  
-
   display: flex;
   flex-direction: row;
   gap:20px;

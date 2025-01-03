@@ -4,6 +4,7 @@ import { useStocksContext } from "../hooks/useStocksContext";
 import LoadingSmall from '../components/LoadingSmall'
 import {motion} from 'framer-motion'
 import {daysOfNews,endDate,colors} from '../helpers/webSocketHelpers'
+import NewsDetails from './NewsDetails';
 
 
 
@@ -12,8 +13,9 @@ const News = () => {
     const [newsDate,setNewsDate] = useState(1734529038928)
     const [activeRange,setActiveRange] = useState("1 Day")
     const {data,error,hookIsLoaded,isLoggedIn,functionCall} = useWebsocketHook()
-    const [isHovered, setIsHovered] = useState(false);
+    const [showModal,setShowModal] = useState(false)
     const [hoveredIndex, setHoveredIndex] = useState(null);
+    const [dataToPass,setDataToPass] = useState('')
 
 
     const getNewsFactory = (end,start)=>{
@@ -33,6 +35,11 @@ const News = () => {
         setActiveRange(e.name)
 
     }
+
+    const renderWindow = (e)=>{
+        setDataToPass(e.target.id)
+        setShowModal(true)
+      }
 
   useEffect(()=>{  
     if (isLoggedIn){
@@ -57,6 +64,8 @@ const News = () => {
 
   return (
     <div className='news'>
+        { showModal ? <NewsDetails  showModal={showModal} setShowModal={setShowModal} data={data.returnData[dataToPass]} />:<div></div>}
+
         <div className='news--options--wrapper'>
             {daysOfNews.map((item)=>{
                 return (
@@ -81,14 +90,17 @@ const News = () => {
                     const { width, height } = getBoxSize(item.title);
                     return(
                         <motion.div 
+                        
+                        onClick={renderWindow}
                         onHoverStart={() => setHoveredIndex(i)} // Set hovered index
                         onHoverEnd={() => setHoveredIndex(null)}   // Clear hovered index
+                        
                             whileHover={{scale:1.3,backgroundColor:colors.WHITE,
                             boxShadow:'5px 14px 8px -6px  rgba(129, 161, 248,0.1)'}}
                             transition={{type:"tween",duration:0.1}}
                             whileTap={{scale:0.98,backgroundColor:"#002c58",color:"#FDFDFD"}}
                             className='news--item' key={i}>
-                            <div className='news--item--title lato'style={{width: `${width}px`,height: `${height}px`,padding:"25px"} }>
+                            <div id={i} className='news--item--title lato'style={{width: `${width}px`,height: `${height}px`,padding:"25px"} }>
                             {item.title}                            
 
                             </div>
@@ -97,7 +109,7 @@ const News = () => {
                                 color: hoveredIndex===i ? colors.BLUE : colors.BLACK,
                                 transition: 'color 0.3s', // Smooth transition
                                 }} className='news--item--more lato'>Click for More</div>
-                            {/* <div dangerouslySetInnerHTML={{ __html: item.body}}></div> */}
+  
                         </motion.div>
                     )
                 })}</div> 
