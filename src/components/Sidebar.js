@@ -1,13 +1,13 @@
 import React,{useEffect,useState} from 'react'
 import {motion} from 'framer-motion'
-import { LuHome ,LuMail,LuFolderClosed,LuStickyNote,LuBell,LuPin} from "react-icons/lu";
+import { LuHome ,LuMail,LuFolderClosed,LuStickyNote,LuBitcoin,LuPin} from "react-icons/lu";
 import SidebarItem from './SidebarItem.js';
 
 const SIDEBAR_ITEMS = [
     { id: "dashboard", title: "Dashboard", icon: LuHome },
     { id: "stocks", title: "Stocks", icon: LuStickyNote },
     { id: "portfolio", title: "Portfolio", icon: LuFolderClosed },
-    { id: "indicators", title: "Indicators", icon: LuBell },
+    { id: "crypto", title: "Crypto", icon: LuBitcoin },
     { id: "news", title: "News", icon: LuMail }
 ,
   ];

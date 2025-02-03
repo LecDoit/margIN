@@ -1,6 +1,6 @@
 {
   "homepage": "http://LecDoit.github.io/margIN",
-  "proxy": "http://localhost:10000",
+  "proxy": "https://freecryptoapi.com",
   "name": "margIN",
   "version": "0.1.0",
   "private": true,

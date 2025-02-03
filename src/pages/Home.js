@@ -10,6 +10,7 @@ import StockGroup from "../components/StockGroup";
 import Dashboard from "../components/Dashboard";
 import Portfolio from "../components/Portfolio";
 import News from "../components/News";
+import Crypto from "../components/Crypto";
 
 
 
@@ -105,9 +106,14 @@ const Home = () => {
         :
         <Loading/>
     
-    } else {
-
-      return <div>here will be soemthing else</div>
+    } else if (arg=='crypto') {
+      return loaded? 
+        <motion.div className="home--crypto"> 
+          <Crypto/>
+        </motion.div> 
+        :
+        <Loading/>
+    
     }
 
 
