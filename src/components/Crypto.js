@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 const API_KEY = "ercrr9r41lv7unre1fmx"; // Replace this with your actual API key
-const API_URL = "https://cors-anywhere.herokuapp.com/https://freecryptoapi.com/api/v1/cryptocurrency/list";
+// const API_URL = "https://cors-anywhere.herokuapp.com/https://freecryptoapi.com/api/v1/cryptocurrency/list";
+const API_URL = "https://freecryptoapi.com/api/v1/cryptocurrency/list";
 
 const Crypto = () => {
   const [cryptoData, setCryptoData] = useState([]);
